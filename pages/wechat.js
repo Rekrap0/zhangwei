@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import { useGameState } from '../hooks/useGameState';
 import { getPlayerCookies } from '../utils/cookies';
-import { formatDateFull, formatDateShort, shouldShowDateSeparator, shouldShowTime, formatTime, getRelativeDate } from '../utils/chatDates';
+import { formatDateShort, shouldShowTimestamp, formatTimestamp, getRelativeDate } from '../utils/chatDates';
 import { generateZhangweiMessages, getZhangweiContact } from '../data/zhangweiChat';
 import { IoChatbubbleEllipsesSharp, IoPersonSharp, IoCompassSharp, IoPersonCircleSharp } from 'react-icons/io5';
 import { IoMdArrowBack, IoMdCall } from 'react-icons/io';
@@ -178,12 +178,12 @@ function ChatListItem({ contact, isActive, onClick }) {
   );
 }
 
-// 日期分隔符组件
-function DateSeparator({ date }) {
+// 时间戳分隔符组件
+function TimestampSeparator({ timestamp }) {
   return (
-    <div className="flex justify-center my-4">
-      <span className="bg-gray-200 text-gray-500 text-xs px-3 py-1 rounded-full">
-        {formatDateFull(new Date(date))}
+    <div className="flex justify-center my-3">
+      <span className="text-gray-400 text-xs">
+        {formatTimestamp(timestamp)}
       </span>
     </div>
   );
@@ -275,7 +275,7 @@ function MediaMessage({ message, contact, isMe, onAvatarClick }) {
 }
 
 // 聊天气泡
-function ChatBubble({ message, contact, isMe, onAvatarClick, showTime }) {
+function ChatBubble({ message, contact, isMe, onAvatarClick }) {
   const myContact = {
     avatarImg: '/avatarPlayer.jpg',
     name: '我',
@@ -291,11 +291,6 @@ function ChatBubble({ message, contact, isMe, onAvatarClick, showTime }) {
         onClick={() => !isMe && onAvatarClick?.()}
       />
       <div className={`max-w-[70%] flex flex-col ${isMe ? 'items-end' : 'items-start'}`}>
-        {showTime && (
-          <span className={`text-xs text-gray-400 mb-1 ${isMe ? 'text-right' : ''}`}>
-            {formatTime(message.timestamp)}
-          </span>
-        )}
         <div
           className={`px-3 py-2 rounded-lg ${
             isMe
@@ -341,16 +336,19 @@ function ChatView({ contact, messages, onBack, onSendMessage, onAvatarClick, isM
   // 渲染单条消息
   const renderMessage = (msg, index, allMessages) => {
     const prevMsg = index > 0 ? allMessages[index - 1] : null;
-    const showDateSep = shouldShowDateSeparator(prevMsg, msg);
-    const showTime = shouldShowTime(prevMsg, msg);
     const isMe = msg.sender === 'player' || msg.sender === 'me';
+    
+    // 判断是否显示时间戳（玩家新发的消息不显示时间戳）
+    // 通过检查 id 是否为数字（时间戳）来判断是否是新发送的消息
+    const isPlayerNewMessage = isMe && typeof msg.id === 'number' && msg.id > 1000000000;
+    const showTimestamp = !isPlayerNewMessage && shouldShowTimestamp(prevMsg, msg);
 
     const elements = [];
 
-    // 添加日期分隔符
-    if (showDateSep) {
+    // 添加时间戳分隔符
+    if (showTimestamp) {
       elements.push(
-        <DateSeparator key={`date-${msg.id}`} date={msg.timestamp} />
+        <TimestampSeparator key={`ts-${msg.id}`} timestamp={msg.timestamp} />
       );
     }
 
@@ -386,7 +384,6 @@ function ChatView({ contact, messages, onBack, onSendMessage, onAvatarClick, isM
           message={msg}
           contact={contact}
           isMe={isMe}
-          showTime={showTime}
           onAvatarClick={() => onAvatarClick(contact)}
         />
       );
@@ -783,7 +780,7 @@ export default function Wechat() {
   // 等待客户端水合和初始化完成，避免 hydration mismatch
   if (!isHydrated || !isInitialized) {
     return (
-      <div className="h-screen flex flex-col bg-[#EDEDED]">
+      <div className="flex flex-col bg-[#EDEDED]" style={{ height: '100dvh' }}>
         <main className="flex-1 overflow-hidden flex items-center justify-center">
           <p className="text-gray-400">加载中...</p>
         </main>
@@ -793,7 +790,7 @@ export default function Wechat() {
   }
 
   return (
-    <div className="h-screen flex flex-col bg-[#EDEDED]">
+    <div className="flex flex-col bg-[#EDEDED]" style={{ height: '100dvh' }}>
       {/* 主内容区域 */}
       <main className="flex-1 overflow-hidden">
         {activeTab === 'chat' ? (

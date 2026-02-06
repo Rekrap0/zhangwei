@@ -31,17 +31,15 @@ export function getRelativeDate(daysOffset) {
 }
 
 /**
- * 格式化日期为 "YYYY年 M月 D日 (周X)" 格式
+ * 格式化日期为 "YYYY年 M月 D日" 格式（不显示周几）
  * @param {Date} date - 日期对象
  * @returns {string} 格式化的日期字符串
  */
 export function formatDateFull(date) {
-  const weekDays = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
   const day = date.getDate();
-  const weekDay = weekDays[date.getDay()];
-  return `${year}年 ${month}月 ${day}日 (${weekDay})`;
+  return `${year}年${month}月${day}日`;
 }
 
 /**
@@ -108,39 +106,44 @@ export function getChatTimeline() {
 }
 
 /**
- * 判断两个消息之间是否需要显示日期分隔符
+ * 判断两个消息之间是否需要显示时间戳
+ * 规则：第一条消息或与上一条间隔超过5分钟时显示
  * @param {Object} prevMessage - 上一条消息
  * @param {Object} currentMessage - 当前消息
- * @returns {boolean} 是否需要显示日期分隔符
+ * @returns {boolean} 是否需要显示时间戳
  */
-export function shouldShowDateSeparator(prevMessage, currentMessage) {
-  if (!prevMessage) return true; // 第一条消息始终显示日期
-  
-  const prevDate = new Date(prevMessage.timestamp);
-  const currDate = new Date(currentMessage.timestamp);
-  
-  // 如果日期不同，显示分隔符
-  return prevDate.toDateString() !== currDate.toDateString();
-}
-
-/**
- * 判断是否需要显示时间（与上一条消息间隔超过5分钟）
- * @param {Object} prevMessage - 上一条消息
- * @param {Object} currentMessage - 当前消息
- * @returns {boolean} 是否需要显示时间
- */
-export function shouldShowTime(prevMessage, currentMessage) {
-  if (!prevMessage) return true; // 第一条消息显示时间
+export function shouldShowTimestamp(prevMessage, currentMessage) {
+  if (!prevMessage) return true; // 第一条消息始终显示
   
   const prevTime = new Date(prevMessage.timestamp);
   const currTime = new Date(currentMessage.timestamp);
   
-  // 如果发送者不同，显示时间
-  if (prevMessage.sender !== currentMessage.sender) return true;
-  
-  // 如果间隔超过5分钟，显示时间
+  // 如果间隔超过5分钟，显示时间戳
   const diffMinutes = (currTime - prevTime) / (1000 * 60);
   return diffMinutes > 5;
+}
+
+/**
+ * 格式化消息时间戳显示
+ * 今天只显示时间，其他日期显示 "日期 时间"
+ * @param {Date|string} timestamp - 消息时间戳
+ * @returns {string} 格式化的时间戳显示
+ */
+export function formatTimestamp(timestamp) {
+  const date = new Date(timestamp);
+  const today = getStartDate();
+  const todayDateOnly = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  const dateOnly = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  
+  const time = formatTime(date);
+  
+  // 如果是今天，只显示时间
+  if (todayDateOnly.getTime() === dateOnly.getTime()) {
+    return time;
+  }
+  
+  // 其他日期显示“日期 时间”
+  return `${formatDateFull(date)} ${time}`;
 }
 
 /**
@@ -154,7 +157,7 @@ export function formatTime(timestamp) {
 }
 
 /**
- * 格式化消息时间显示
+ * 格式化消息时间显示（用于联系人列表）
  * @param {Date|string} timestamp - 消息时间戳
  * @param {Date} referenceDate - 参考日期
  * @returns {string} 格式化的时间显示
