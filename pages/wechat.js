@@ -404,7 +404,7 @@ function ChatView({ contact, messages, onBack, onSendMessage, onAvatarClick, isM
           )}
           <h2 className="font-medium text-gray-900">{contact.name}</h2>
         </div>
-        <button className="p-1 text-gray-600">
+        <button onClick={() => onAvatarClick(contact)} className="p-1 text-gray-600">
           <BsThreeDots className="w-5 h-5" />
         </button>
       </header>
@@ -447,15 +447,20 @@ function ChatView({ contact, messages, onBack, onSendMessage, onAvatarClick, isM
 }
 
 // 用户详情页
-function ProfileView({ contact, onBack, isMobile }) {
+function ProfileView({ contact, onBack, onOpenSettings, isMobile }) {
   return (
     <div className="flex flex-col h-full bg-white">
       {/* 头部 */}
-      <header className="bg-[#EDEDED] px-4 py-3 flex items-center gap-3 border-b border-gray-300">
-        <button onClick={onBack} className="p-1 -ml-1 text-gray-600">
-          <IoMdArrowBack className="w-6 h-6" />
+      <header className="bg-[#EDEDED] px-4 py-3 flex items-center justify-between border-b border-gray-300">
+        <div className="flex items-center gap-3">
+          <button onClick={onBack} className="p-1 -ml-1 text-gray-600">
+            <IoMdArrowBack className="w-6 h-6" />
+          </button>
+          <h2 className="font-medium text-gray-900">个人信息</h2>
+        </div>
+        <button onClick={onOpenSettings} className="p-1 text-gray-600">
+          <BsThreeDots className="w-5 h-5" />
         </button>
-        <h2 className="font-medium text-gray-900">个人信息</h2>
       </header>
 
       {/* 用户信息卡片 */}
@@ -494,6 +499,144 @@ function ProfileView({ contact, onBack, isMobile }) {
           </button>
           <button className="w-full py-3 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition-colors">
             音视频通话
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// 好友设置页面
+function FriendSettingsView({ contact, onBack, onDeleteFriend }) {
+  const [isBlocked, setIsBlocked] = useState(false);
+  const [loadingAction, setLoadingAction] = useState(null); // 当前正在加载的操作
+
+  const handleAction = (action) => {
+    // 如果点击的是当前正在加载的操作，则关闭加载
+    if (loadingAction === action) {
+      setLoadingAction(null);
+      return;
+    }
+    // 显示加载状态
+    setLoadingAction(action);
+  };
+
+  const handleDeleteFriend = () => {
+    // 只有张薇的好友设置才会触发删除结局
+    if (contact.id === 'zhangwei') {
+      onDeleteFriend();
+    } else {
+      handleAction('delete');
+    }
+  };
+
+  return (
+    <div className="flex flex-col h-full bg-[#F5F5F5]">
+      {/* 头部 */}
+      <header className="bg-[#EDEDED] px-4 py-3 flex items-center gap-3 border-b border-gray-300">
+        <button onClick={onBack} className="p-1 -ml-1 text-gray-600">
+          <IoMdArrowBack className="w-6 h-6" />
+        </button>
+        <h2 className="font-medium text-gray-900">好友设置</h2>
+      </header>
+
+      {/* 设置选项 */}
+      <div className="flex-1 overflow-y-auto">
+        {/* 用户信息 */}
+        <div className="bg-white px-4 py-3 flex items-center gap-3 mb-2">
+          <Avatar contact={contact} size="md" />
+          <div>
+            <h3 className="font-medium text-gray-900">{contact.name}</h3>
+            <p className="text-sm text-gray-500">微信号：{contact.id}</p>
+          </div>
+        </div>
+
+        {/* 设置项 */}
+        <div className="bg-white divide-y divide-gray-100">
+          {/* 修改好友备注 */}
+          <button
+            onClick={() => handleAction('remark')}
+            className="w-full px-4 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
+          >
+            <span className="text-gray-900">修改好友备注</span>
+            {loadingAction === 'remark' ? (
+              <div className="w-5 h-5 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
+            ) : (
+              <IoMdArrowBack className="w-5 h-5 text-gray-400 rotate-180" />
+            )}
+          </button>
+
+          {/* 隐私 */}
+          <button
+            onClick={() => handleAction('privacy')}
+            className="w-full px-4 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
+          >
+            <span className="text-gray-900">隐私</span>
+            {loadingAction === 'privacy' ? (
+              <div className="w-5 h-5 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
+            ) : (
+              <IoMdArrowBack className="w-5 h-5 text-gray-400 rotate-180" />
+            )}
+          </button>
+
+          {/* 分享用户 */}
+          <button
+            onClick={() => handleAction('share')}
+            className="w-full px-4 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
+          >
+            <span className="text-gray-900">分享用户</span>
+            {loadingAction === 'share' ? (
+              <div className="w-5 h-5 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
+            ) : (
+              <IoMdArrowBack className="w-5 h-5 text-gray-400 rotate-180" />
+            )}
+          </button>
+
+          {/* 屏蔽 */}
+          <button
+            onClick={() => {
+              if (loadingAction === 'block') {
+                setLoadingAction(null);
+              } else {
+                setLoadingAction('block');
+              }
+            }}
+            className="w-full px-4 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
+          >
+            <span className="text-gray-900">屏蔽</span>
+            {loadingAction === 'block' ? (
+              <div className="w-5 h-5 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
+            ) : (
+              <div
+                className={`w-12 h-7 rounded-full transition-colors relative ${
+                  isBlocked ? 'bg-[#07C160]' : 'bg-gray-300'
+                }`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsBlocked(!isBlocked);
+                }}
+              >
+                <div
+                  className={`absolute top-0.5 w-6 h-6 bg-white rounded-full shadow transition-transform ${
+                    isBlocked ? 'translate-x-5' : 'translate-x-0.5'
+                  }`}
+                />
+              </div>
+            )}
+          </button>
+        </div>
+
+        {/* 删除好友 */}
+        <div className="mt-4 bg-white">
+          <button
+            onClick={handleDeleteFriend}
+            className="w-full px-4 py-4 flex items-center justify-center hover:bg-gray-50 transition-colors"
+          >
+            {loadingAction === 'delete' ? (
+              <div className="w-5 h-5 border-2 border-red-300 border-t-red-500 rounded-full animate-spin" />
+            ) : (
+              <span className="text-red-500 font-medium">删除好友</span>
+            )}
           </button>
         </div>
       </div>
@@ -580,6 +723,7 @@ export default function Wechat() {
   // 按联系人ID存储消息 { contactId: [...messages] }
   const [messagesByContact, setMessagesByContact] = useState({});
   const [showProfile, setShowProfile] = useState(false);
+  const [showFriendSettings, setShowFriendSettings] = useState(false);
   const [profileContact, setProfileContact] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
   const [isHydrated, setIsHydrated] = useState(false);
@@ -695,27 +839,57 @@ export default function Wechat() {
   const handleViewProfile = (contact) => {
     setProfileContact(contact);
     setShowProfile(true);
+    setShowFriendSettings(false);
+  };
+
+  // 打开好友设置
+  const handleOpenFriendSettings = () => {
+    setShowFriendSettings(true);
+  };
+
+  // 返回用户资料页
+  const handleBackFromSettings = () => {
+    setShowFriendSettings(false);
+  };
+
+  // 删除好友（结局1）
+  const handleDeleteFriend = () => {
+    router.push('/end1_5zhUd_x7Kp');
   };
 
   // 返回聊天
   const handleBackFromProfile = () => {
     setShowProfile(false);
+    setShowFriendSettings(false);
   };
 
   // 返回消息列表（移动端）
   const handleBackToList = () => {
     setActiveContact(null);
     setShowProfile(false);
+    setShowFriendSettings(false);
   };
 
   // 渲染主内容区域
   const renderContent = () => {
+    // 显示好友设置页面
+    if (showFriendSettings && profileContact) {
+      return (
+        <FriendSettingsView
+          contact={profileContact}
+          onBack={handleBackFromSettings}
+          onDeleteFriend={handleDeleteFriend}
+        />
+      );
+    }
+
     // 显示用户资料页
     if (showProfile && profileContact) {
       return (
         <ProfileView
           contact={profileContact}
           onBack={handleBackFromProfile}
+          onOpenSettings={handleOpenFriendSettings}
           isMobile={isMobile}
         />
       );
