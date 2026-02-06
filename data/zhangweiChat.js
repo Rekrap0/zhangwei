@@ -402,9 +402,7 @@ export function getZhangweiContact() {
   return {
     id: 'zhangwei',
     name: '张薇',
-    avatar: '薇',
-    avatarBg: 'from-pink-400 to-purple-500',
-    status: '失联中...',
+    avatarImg: '/avatarWei.png',
     region: '北京',
     signature: '每天都要开心哦~',
   };

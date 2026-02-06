@@ -91,8 +91,7 @@ function getContacts() {
     {
       id: 'filehelper',
       name: '文件传输助手',
-      avatar: '文',
-      avatarBg: 'from-blue-400 to-blue-500',
+      avatarImg: '/avatarTransfer.jpg',
       lastMessage: '暂无新消息',
       time: '昨天',
       unread: 0,
@@ -100,8 +99,7 @@ function getContacts() {
     {
       id: 'wechatteam',
       name: '微信团队',
-      avatar: '微',
-      avatarBg: 'from-green-400 to-green-500',
+      avatarImg: '/avatarWechat.jpg',
       lastMessage: '欢迎使用微信',
       time: '3天前',
       unread: 0,
@@ -125,10 +123,27 @@ function Avatar({ contact, size = 'md', onClick }) {
     lg: 'w-20 h-20 text-3xl',
   };
 
+  // 如果有图片头像
+  if (contact.avatarImg) {
+    return (
+      <button
+        onClick={onClick}
+        className={`${sizeClasses[size]} rounded-lg overflow-hidden flex-shrink-0 hover:opacity-90 transition-opacity`}
+      >
+        <img 
+          src={contact.avatarImg} 
+          alt={contact.name || '头像'}
+          className="w-full h-full object-cover"
+        />
+      </button>
+    );
+  }
+
+  // 文字头像
   return (
     <button
       onClick={onClick}
-      className={`${sizeClasses[size]} rounded-lg bg-gradient-to-br ${contact.avatarBg} flex items-center justify-center text-white font-bold flex-shrink-0 hover:opacity-90 transition-opacity`}
+      className={`${sizeClasses[size]} rounded-lg bg-gradient-to-br ${contact.avatarBg || 'from-gray-400 to-gray-500'} flex items-center justify-center text-white font-bold flex-shrink-0 hover:opacity-90 transition-opacity`}
     >
       {contact.avatar}
     </button>
@@ -191,8 +206,8 @@ function SystemMessage({ message }) {
 // 通话消息组件
 function CallMessage({ message, contact, isMe, onAvatarClick }) {
   const myContact = {
-    avatar: '我',
-    avatarBg: 'from-blue-500 to-blue-600',
+    avatarImg: '/avatarPlayer.jpg',
+    name: '我',
   };
   const currentContact = isMe ? myContact : contact;
 
@@ -219,8 +234,8 @@ function CallMessage({ message, contact, isMe, onAvatarClick }) {
 // 图片/表情包消息组件
 function MediaMessage({ message, contact, isMe, onAvatarClick }) {
   const myContact = {
-    avatar: '我',
-    avatarBg: 'from-blue-500 to-blue-600',
+    avatarImg: '/avatarPlayer.jpg',
+    name: '我',
   };
   const currentContact = isMe ? myContact : contact;
 
@@ -262,8 +277,8 @@ function MediaMessage({ message, contact, isMe, onAvatarClick }) {
 // 聊天气泡
 function ChatBubble({ message, contact, isMe, onAvatarClick, showTime }) {
   const myContact = {
-    avatar: '我',
-    avatarBg: 'from-blue-500 to-blue-600',
+    avatarImg: '/avatarPlayer.jpg',
+    name: '我',
   };
 
   const currentContact = isMe ? myContact : contact;
