@@ -296,7 +296,11 @@ function ChatBubble({ message, contact, isMe, onAvatarClick }) {
                             : 'bg-white text-gray-900'
                         }`}
                 >
-                    <p className="text-sm leading-relaxed break-words">{message.content}</p>
+                    {message.isHtml ? (
+                        <p className="text-sm leading-relaxed break-words [&_a]:text-[#576B95] [&_a]:underline" dangerouslySetInnerHTML={{ __html: message.content }} />
+                    ) : (
+                        <p className="text-sm leading-relaxed break-words">{message.content}</p>
+                    )}
                 </div>
             </div>
         </div>
@@ -1011,6 +1015,33 @@ export default function Wechat() {
                     : c
             )
         );
+
+        // 微信团队自动回复
+        if (activeContact.id === 'wechatteam') {
+            setTimeout(() => {
+                const replyTime = new Date();
+                const autoReply = {
+                    id: Date.now() + 1,
+                    sender: 'wechatteam',
+                    content: '如果遇到问题，可<a href="https://support.weixin.qq.com/security/newreadtemplate?t=feedback/index#/list" target="_blank" rel="noopener noreferrer">轻触此处</a>反馈给我们。',
+                    isHtml: true,
+                    timestamp: replyTime.toISOString(),
+                    time: replyTime.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
+                    type: 'text',
+                };
+                setMessagesByContact((prev) => ({
+                    ...prev,
+                    wechatteam: [...(prev.wechatteam || []), autoReply],
+                }));
+                setContacts((prev) =>
+                    prev.map((c) =>
+                        c.id === 'wechatteam'
+                            ? { ...c, lastMessage: '如果遇到问题，可轻触此处反馈给我们。', time: autoReply.time }
+                            : c
+                    )
+                );
+            }, 1000);
+        }
     };
 
     // 查看用户资料
