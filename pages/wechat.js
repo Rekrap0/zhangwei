@@ -451,13 +451,49 @@ function ChatView({ contact, messages, onBack, onSendMessage, onAvatarClick, isM
 function MomentItem({ moment, contact }) {
     const [liked, setLiked] = useState(false);
     const [imgErrors, setImgErrors] = useState({});
+    const [lightboxImg, setLightboxImg] = useState(null); // 当前放大查看的图片
 
     const handleImgError = (idx) => {
         setImgErrors(prev => ({ ...prev, [idx]: true }));
     };
 
+    const openLightbox = (img) => {
+        setLightboxImg(img);
+    };
+
+    const closeLightbox = () => {
+        setLightboxImg(null);
+    };
+
     return (
         <div className="bg-white px-4 py-3 border-b border-gray-100">
+            {/* Lightbox 遮罩层 */}
+            {lightboxImg && (
+                <div 
+                    className="fixed inset-0 bg-black/90 z-[100] flex items-center justify-center p-4"
+                    onClick={closeLightbox}
+                >
+                    <button 
+                        onClick={closeLightbox}
+                        className="absolute top-4 right-4 text-white text-3xl font-light hover:text-gray-300 transition-colors z-10"
+                    >
+                        ×
+                    </button>
+                    <img 
+                        src={lightboxImg.src} 
+                        alt={lightboxImg.alt || ''} 
+                        className="max-w-full max-h-full object-contain"
+                        onClick={(e) => e.stopPropagation()}
+                    />
+                    {/* 图片描述/overlay 信息 */}
+                    {lightboxImg.overlay && (
+                        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 bg-black/70 text-white px-4 py-2 rounded-lg text-sm">
+                            {lightboxImg.overlay}
+                        </div>
+                    )}
+                </div>
+            )}
+
             <div className="flex gap-3">
                 <Avatar contact={contact} size="sm" />
                 <div className="flex-1 min-w-0">
@@ -468,7 +504,11 @@ function MomentItem({ moment, contact }) {
                     {moment.images && moment.images.length > 0 && (
                         <div className={`mt-2 grid gap-1 ${moment.images.length === 1 ? 'grid-cols-1 max-w-[200px]' : 'grid-cols-3 max-w-[280px]'}`}>
                             {moment.images.map((img, idx) => (
-                                <div key={idx} className="aspect-square bg-gray-100 rounded overflow-hidden relative">
+                                <div 
+                                    key={idx} 
+                                    className="aspect-square bg-gray-100 rounded overflow-hidden relative cursor-pointer hover:opacity-90 transition-opacity"
+                                    onClick={() => img.src && !imgErrors[idx] && openLightbox(img)}
+                                >
                                     {img.src && !imgErrors[idx] ? (
                                         <img 
                                             src={img.src} 
