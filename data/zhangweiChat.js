@@ -264,80 +264,35 @@ export function generateZhangweiMessages() {
   messages.push(createMessage({
     id: messageId++,
     sender: 'zhangwei',
-    content: '[语音通话]',
+    content: '对方已取消',
     date: day7Ago,
     time: '03:42',
     type: 'call',
-    meta: { status: '对方已取消', duration: null },
   }));
   
   messages.push(createMessage({
     id: messageId++,
     sender: 'zhangwei',
-    content: '[语音通话]',
+    content: '对方已取消',
     date: day7Ago,
     time: '03:42',
     type: 'call',
-    meta: { status: '对方已取消', duration: null },
-  }));
-  
-  messages.push(createMessage({
-    id: messageId++,
-    sender: 'zhangwei',
-    content: '这里的空调好冷。',
-    date: day7Ago,
-    time: '03:44',
-  }));
-  
-  messages.push(createMessage({
-    id: messageId++,
-    sender: 'zhangwei',
-    content: '我好像看见我自己了。',
-    date: day7Ago,
-    time: '03:44',
-  }));
-  
-  messages.push(createMessage({
-    id: messageId++,
-    sender: 'zhangwei',
-    content: '别来找我。',
-    date: day7Ago,
-    time: '03:44',
   }));
 
-  // ========== 生日当天 (birthdayDate) - 彻底异常 ==========
-  messages.push(createMessage({
-    id: messageId++,
-    sender: 'system',
-    content: `张薇 发起语音通话`,
-    date: birthdayDate,
-    time: '03:00',
-    type: 'system',
-    meta: { subtext: '(玩家此时在睡觉，未接听)' },
-  }));
-  
-  messages.push(createMessage({
-    id: messageId++,
-    sender: 'system',
-    content: '通话时长 00:00，对方已挂断',
-    date: birthdayDate,
-    time: '03:00',
-    type: 'system',
-  }));
   
   messages.push(createMessage({
     id: messageId++,
     sender: 'zhangwei',
     content: 'pleh',
-    date: birthdayDate,
+    date: day7Ago,
     time: '03:01',
   }));
-  
-  messages.push(createMessage({
+
+    messages.push(createMessage({
     id: messageId++,
     sender: 'player',
     content: '？',
-    date: birthdayDate,
+    date: day7Ago,
     time: '09:30',
   }));
   
@@ -345,9 +300,12 @@ export function generateZhangweiMessages() {
     id: messageId++,
     sender: 'player',
     content: '昨晚咋了？三点多给我打电话？',
-    date: birthdayDate,
+    date: day7Ago,
     time: '09:30',
   }));
+
+  // ========== 生日当天 (birthdayDate) - 彻底异常 ==========
+
   
   messages.push(createMessage({
     id: messageId++,
@@ -363,6 +321,15 @@ export function generateZhangweiMessages() {
     content: '人呢？',
     date: birthdayDate,
     time: '09:35',
+  }));
+
+    messages.push(createMessage({
+    id: messageId++,
+    sender: 'player',
+    content: '已取消',
+    date: birthdayDate,
+    time: '09:58',
+    type: 'call',
   }));
 
   // ========== 5天前 (day5Ago) ==========
