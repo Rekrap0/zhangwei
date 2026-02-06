@@ -147,6 +147,17 @@ export function formatTimestamp(timestamp) {
 }
 
 /**
+ * 格式化朋友圈日期显示（M月D日格式）
+ * @param {Date} date - 日期对象
+ * @returns {string} 格式化的日期字符串
+ */
+export function formatMomentDate(date) {
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  return `${month}月${day}日`;
+}
+
+/**
  * 格式化时间戳为 HH:MM 格式
  * @param {Date|string} timestamp - 时间戳
  * @returns {string} 格式化的时间字符串

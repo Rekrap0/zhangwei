@@ -2,12 +2,13 @@ import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import { useGameState } from '../hooks/useGameState';
 import { getPlayerCookies } from '../utils/cookies';
-import { formatDateShort, shouldShowTimestamp, formatTimestamp, getRelativeDate } from '../utils/chatDates';
+import { formatDateShort, shouldShowTimestamp, formatTimestamp, getRelativeDate, formatMomentDate } from '../utils/chatDates';
 import { generateZhangweiMessages, getZhangweiContact } from '../data/zhangweiChat';
-import { IoChatbubbleEllipsesSharp, IoPersonSharp, IoCompassSharp, IoPersonCircleSharp } from 'react-icons/io5';
+import { IoChatbubbleEllipsesSharp, IoPersonSharp, IoCompassSharp, IoPersonCircleSharp, IoHeartOutline, IoHeart, IoChatbubbleOutline } from 'react-icons/io5';
 import { IoMdArrowBack, IoMdCall } from 'react-icons/io';
 import { BsThreeDots, BsImage } from 'react-icons/bs';
 import { MdOutlineInsertEmoticon } from 'react-icons/md';
+import { FaCamera } from 'react-icons/fa';
 
 // 生成初始消息的函数（会在客户端调用以获取动态日期）
 function getInitialMessages() {
@@ -442,8 +443,171 @@ function ChatView({ contact, messages, onBack, onSendMessage, onAvatarClick, isM
     );
 }
 
+// 朋友圈单条动态组件
+function MomentItem({ moment, contact }) {
+    const [liked, setLiked] = useState(false);
+    const [imgErrors, setImgErrors] = useState({});
+
+    const handleImgError = (idx) => {
+        setImgErrors(prev => ({ ...prev, [idx]: true }));
+    };
+
+    return (
+        <div className="bg-white px-4 py-3 border-b border-gray-100">
+            <div className="flex gap-3">
+                <Avatar contact={contact} size="sm" />
+                <div className="flex-1 min-w-0">
+                    <h4 className="font-medium text-[#576B95] text-sm">{contact.name}</h4>
+                    <p className="text-sm text-gray-900 mt-1 whitespace-pre-wrap">{moment.content}</p>
+                    
+                    {/* 图片展示 */}
+                    {moment.images && moment.images.length > 0 && (
+                        <div className={`mt-2 grid gap-1 ${moment.images.length === 1 ? 'grid-cols-1 max-w-[200px]' : 'grid-cols-3 max-w-[280px]'}`}>
+                            {moment.images.map((img, idx) => (
+                                <div key={idx} className="aspect-square bg-gray-100 rounded overflow-hidden relative">
+                                    {img.src && !imgErrors[idx] ? (
+                                        <img 
+                                            src={img.src} 
+                                            alt={img.alt || ''} 
+                                            className="w-full h-full object-cover" 
+                                            onError={() => handleImgError(idx)}
+                                        />
+                                    ) : (
+                                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
+                                            <BsImage className="w-8 h-8 text-gray-300" />
+                                        </div>
+                                    )}
+                                    {/* 如果图片有特殊标记（如QQ号），显示图片描述 */}
+                                    {img.overlay && (
+                                        <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-xs px-1 py-0.5 text-center">
+                                            {img.overlay}
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                    {/* 时间和互动 */}
+                    <div className="flex items-center justify-between mt-2">
+                        <span className="text-xs text-gray-400">{moment.time}</span>
+                        <button 
+                            onClick={() => setLiked(!liked)}
+                            className="p-1 text-gray-400 hover:text-red-500 transition-colors"
+                        >
+                            {liked ? <IoHeart className="w-4 h-4 text-red-500" /> : <IoHeartOutline className="w-4 h-4" />}
+                        </button>
+                    </div>
+
+                    {/* 点赞列表 */}
+                    {moment.likes && moment.likes.length > 0 && (
+                        <div className="mt-2 bg-gray-50 px-2 py-1 rounded text-xs text-[#576B95]">
+                            <IoHeart className="w-3 h-3 inline mr-1 text-red-400" />
+                            {moment.likes.join('，')}
+                        </div>
+                    )}
+                </div>
+            </div>
+        </div>
+    );
+}
+
+// 朋友圈页面
+function MomentsView({ contact, onBack, playerName }) {
+    // 计算真实日期（基于开始日期）
+    const week1Ago = getRelativeDate(-7);  // 1周前
+    const week2Ago = getRelativeDate(-14); // 2周前
+    const week3Ago = getRelativeDate(-21); // 3周前
+    const week4Ago = getRelativeDate(-28); // 4周前
+
+    // 张薇的朋友圈数据（仅最近一个月可见，共4条）
+    // 张薇一周前失联，所以最新的朋友圈是1周前
+    const moments = [
+        {
+            id: 1,
+            content: '今天终于放假休息了，出来散步～阳光暖暖的(๑´0`๑)',
+            images: [
+                { src: '/momentsPark.png', alt: '公园散步' }
+            ],
+            time: formatMomentDate(week1Ago),
+            likes: [playerName || '我'],
+        },
+        {
+            id: 2,
+            content: '和新同事一起逛街～她人超好的！',
+            images: [
+                { src: '/momentsMeet1.png', alt: '逛街合照1' },
+                { 
+                    src: '/momentsMeet2.png', 
+                    alt: '逛街合照2',
+                },
+                { src: '/momentsMeet3.png', alt: '逛街合照3' },
+            ],
+            time: formatMomentDate(week2Ago),
+            likes: [playerName || '我'],
+        },
+        {
+            id: 3,
+            content: '又加班了，组长还带了杯咖啡，杀人诛心啊😭',
+            images: [
+                { src: '/momentsWorking.jpg', alt: '加班' }
+            ],
+            time: formatMomentDate(week3Ago),
+            likes: [playerName || '我'],
+        },
+        {
+            id: 4,
+            content: '妈的谁发明的这玩意儿？？？我以为是新口味可乐结果喝一口直接喷了🤮🤮🤮\n饺子味可乐，可乐味饺子，这世界疯了吧',
+            images: [
+                { src: '/momentsFun.jpg', alt: '饺子味可乐' }
+            ],
+            time: formatMomentDate(week4Ago),
+            likes: [playerName || '我'],
+        },
+    ];
+
+    return (
+        <div className="flex flex-col h-full bg-[#F5F5F5]">
+            {/* 头部 */}
+            <header className="bg-[#EDEDED] px-4 py-3 flex items-center gap-3 border-b border-gray-300">
+                <button onClick={onBack} className="p-1 -ml-1 text-gray-600">
+                    <IoMdArrowBack className="w-6 h-6" />
+                </button>
+                <h2 className="font-medium text-gray-900">朋友圈</h2>
+            </header>
+
+            {/* 封面和头像区域 */}
+            <div className="relative">
+                <div className="h-32 overflow-hidden">
+                    <img 
+                        src="/momentsBanner.jpg" 
+                        alt="朋友圈封面" 
+                        className="w-full h-full object-cover"
+                    />
+                </div>
+                <div className="absolute -bottom-8 right-4 flex items-end gap-2">
+                    <span className="text-white text-sm font-medium drop-shadow-md mb-10">{contact.name}</span>
+                    <Avatar contact={contact} size="lg" />
+                </div>
+            </div>
+
+            {/* 朋友圈内容 */}
+            <div className="flex-1 overflow-y-auto mt-10">
+                {moments.map((moment) => (
+                    <MomentItem key={moment.id} moment={moment} contact={contact} />
+                ))}
+
+                {/* 底部提示 */}
+                <div className="py-6 px-4 text-center">
+                    <p className="text-sm text-gray-400">—— 对方设置朋友圈仅近一个月内容可见 ——</p>
+                </div>
+            </div>
+        </div>
+    );
+}
+
 // 用户详情页
-function ProfileView({ contact, onBack, onOpenSettings, isMobile }) {
+function ProfileView({ contact, onBack, onOpenSettings, onOpenMoments, isMobile }) {
     return (
         <div className="flex flex-col h-full bg-white">
             {/* 头部 */}
@@ -471,6 +635,28 @@ function ProfileView({ contact, onBack, onOpenSettings, isMobile }) {
                         )}
                     </div>
                 </div>
+
+                {/* 朋友圈入口 - 仅张薇显示 */}
+                {contact.id === 'zhangwei' && (
+                    <button 
+                        onClick={onOpenMoments}
+                        className="w-full py-4 border-b border-gray-200 flex items-center justify-between hover:bg-gray-50 transition-colors"
+                    >
+                        <div className="flex items-center gap-3">
+                            <FaCamera className="w-5 h-5 text-gray-500" />
+                            <span className="text-gray-900">朋友圈</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            {/* 朋友圈预览小图 */}
+                            <div className="flex -space-x-1">
+                                <div className="w-8 h-8 bg-gray-200 rounded border border-white"></div>
+                                <div className="w-8 h-8 bg-gray-300 rounded border border-white"></div>
+                                <div className="w-8 h-8 bg-gray-200 rounded border border-white"></div>
+                            </div>
+                            <IoMdArrowBack className="w-5 h-5 text-gray-400 rotate-180" />
+                        </div>
+                    </button>
+                )}
 
                 {/* 个性签名 */}
                 {contact.signature && (
@@ -502,19 +688,29 @@ function ProfileView({ contact, onBack, onOpenSettings, isMobile }) {
     );
 }
 
+// 随机提示语
+const LAZY_HINTS = [
+    '还是之后再弄吧',
+    '现在不是做这件事的时候',
+    '这样应该也不会有线索吧',
+];
+
 // 好友设置页面
 function FriendSettingsView({ contact, onBack, onDeleteFriend }) {
     const [isBlocked, setIsBlocked] = useState(false);
-    const [showLoading, setShowLoading] = useState(false); // 全屏加载遮罩
+    const [showHint, setShowHint] = useState(false); // 全屏提示遮罩
+    const [hintText, setHintText] = useState('');
 
     const handleAction = () => {
-        // 如果已经在加载，点击关闭
-        if (showLoading) {
-            setShowLoading(false);
+        // 如果已经在显示，点击关闭
+        if (showHint) {
+            setShowHint(false);
             return;
         }
-        // 显示加载遮罩
-        setShowLoading(true);
+        // 随机选择一条提示
+        const randomHint = LAZY_HINTS[Math.floor(Math.random() * LAZY_HINTS.length)];
+        setHintText(randomHint);
+        setShowHint(true);
     };
 
     const handleDeleteFriend = () => {
@@ -528,13 +724,15 @@ function FriendSettingsView({ contact, onBack, onDeleteFriend }) {
 
     return (
         <div className="flex flex-col h-full bg-[#F5F5F5] relative">
-            {/* 全屏加载遮罩 */}
-            {showLoading && (
+            {/* 全屏提示遮罩 */}
+            {showHint && (
                 <div
-                    className="absolute inset-0 bg-black/50 z-50 flex items-center justify-center"
-                    onClick={() => setShowLoading(false)}
+                    className="absolute inset-0 bg-black/60 z-50 flex items-center justify-center"
+                    onClick={() => setShowHint(false)}
                 >
-                    <div className="w-12 h-12 border-3 border-white/30 border-t-white rounded-full animate-spin" />
+                    <p className="text-white text-lg font-medium px-6 text-center">
+                        {hintText}
+                    </p>
                 </div>
             )}
 
@@ -697,12 +895,14 @@ export default function Wechat() {
     const [messagesByContact, setMessagesByContact] = useState({});
     const [showProfile, setShowProfile] = useState(false);
     const [showFriendSettings, setShowFriendSettings] = useState(false);
+    const [showMoments, setShowMoments] = useState(false);
     const [profileContact, setProfileContact] = useState(null);
     const [isMobile, setIsMobile] = useState(false);
     const [isHydrated, setIsHydrated] = useState(false);
     const [isInitialized, setIsInitialized] = useState(false);
+    const [playerName, setPlayerName] = useState('');
 
-    // 检测屏幕宽度 - 仅在客户端执行
+    // 检测屏幕宽度和获取玩家名称 - 仅在客户端执行
     useEffect(() => {
         setIsHydrated(true);
         const checkMobile = () => {
@@ -710,6 +910,11 @@ export default function Wechat() {
         };
         checkMobile();
         window.addEventListener('resize', checkMobile);
+        
+        // 获取玩家名称
+        const { playerName: name } = getPlayerCookies();
+        if (name) setPlayerName(name);
+        
         return () => window.removeEventListener('resize', checkMobile);
     }, []);
 
@@ -813,11 +1018,24 @@ export default function Wechat() {
         setProfileContact(contact);
         setShowProfile(true);
         setShowFriendSettings(false);
+        setShowMoments(false);
     };
 
     // 打开好友设置
     const handleOpenFriendSettings = () => {
         setShowFriendSettings(true);
+        setShowMoments(false);
+    };
+
+    // 打开朋友圈
+    const handleOpenMoments = () => {
+        setShowMoments(true);
+        setShowFriendSettings(false);
+    };
+
+    // 返回用户资料页（从朋友圈或设置）
+    const handleBackFromMoments = () => {
+        setShowMoments(false);
     };
 
     // 返回用户资料页
@@ -834,6 +1052,7 @@ export default function Wechat() {
     const handleBackFromProfile = () => {
         setShowProfile(false);
         setShowFriendSettings(false);
+        setShowMoments(false);
     };
 
     // 返回消息列表（移动端）
@@ -841,10 +1060,22 @@ export default function Wechat() {
         setActiveContact(null);
         setShowProfile(false);
         setShowFriendSettings(false);
+        setShowMoments(false);
     };
 
     // 渲染主内容区域
     const renderContent = () => {
+        // 显示朋友圈页面
+        if (showMoments && profileContact) {
+            return (
+                <MomentsView
+                    contact={profileContact}
+                    onBack={handleBackFromMoments}
+                    playerName={playerName}
+                />
+            );
+        }
+
         // 显示好友设置页面
         if (showFriendSettings && profileContact) {
             return (
@@ -863,6 +1094,7 @@ export default function Wechat() {
                     contact={profileContact}
                     onBack={handleBackFromProfile}
                     onOpenSettings={handleOpenFriendSettings}
+                    onOpenMoments={handleOpenMoments}
                     isMobile={isMobile}
                 />
             );
