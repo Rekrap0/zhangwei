@@ -1,9 +1,20 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import { useGameState } from '../hooks/useGameState';
+import { getPlayerCookies } from '../utils/cookies';
 
 export default function Chrome() {
+  const router = useRouter();
   const { state, isHydrated, updateState } = useGameState();
   const [isFixing, setIsFixing] = useState(false);
+
+  // 检查是否有玩家cookies，没有则重定向到开始页面
+  useEffect(() => {
+    const { playerName, startDate } = getPlayerCookies();
+    if (!playerName || !startDate) {
+      router.replace('/');
+    }
+  }, [router]);
 
   // 修复网络
   const handleFixNetwork = async () => {
