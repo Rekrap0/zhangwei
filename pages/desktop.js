@@ -5,86 +5,39 @@ import { appList } from '../data/appList';
 
 const DESKTOP_ICONS_KEY = 'zhangwei_desktop_icons';
 
+// 图标路径映射
+const ICON_MAP = {
+  wechat: { src: '/icon-wechat.svg', bg: 'bg-green-500' },
+  chrome: { src: '/icon-chrome.svg', bg: 'bg-white' },
+  qq: { src: '/icon-qq.svg', bg: 'bg-white' },
+};
+
 // 应用图标组件（搜索下拉用）
 function AppIcon({ iconType }) {
-  switch (iconType) {
-    case 'wechat':
-      return (
-        <div className="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center">
-          <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 01.213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.326.326 0 00.167-.054l1.903-1.114a.864.864 0 01.717-.098 10.16 10.16 0 002.837.403c.276 0 .543-.027.811-.05-.857-2.578.157-4.972 1.932-6.446 1.703-1.415 3.882-1.98 5.853-1.838-.576-3.583-4.196-6.348-8.596-6.348zM5.785 5.991c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 01-1.162 1.178A1.17 1.17 0 014.623 7.17c0-.651.52-1.18 1.162-1.18zm5.813 0c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 01-1.162 1.178 1.17 1.17 0 01-1.162-1.178c0-.651.52-1.18 1.162-1.18zm5.34 2.867c-1.797-.052-3.746.512-5.28 1.786-1.72 1.428-2.687 3.72-1.78 6.22.942 2.453 3.666 4.229 6.884 4.229.826 0 1.622-.12 2.361-.336a.722.722 0 01.598.082l1.584.926a.272.272 0 00.14.045c.134 0 .24-.111.24-.247 0-.06-.024-.12-.04-.178l-.327-1.233a.49.49 0 01.177-.554C23.048 18.406 24 16.726 24 14.845c0-3.285-3.274-5.987-7.062-5.987zm-2.511 2.874c.535 0 .969.44.969.982a.976.976 0 01-.969.983.976.976 0 01-.969-.983c0-.542.434-.982.97-.982zm4.902 0c.535 0 .969.44.969.982a.976.976 0 01-.969.983.976.976 0 01-.969-.983c0-.542.434-.982.97-.982z"/>
-          </svg>
-        </div>
-      );
-    case 'chrome':
-      return (
-        <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
-          <svg className="w-7 h-7" viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="10" fill="#4285F4"/>
-            <circle cx="12" cy="12" r="4" fill="white"/>
-            <path d="M12 8 L21 8 A10 10 0 0 0 6 3.2 Z" fill="#EA4335"/>
-            <path d="M6 3.2 L10.5 11.5 A4 4 0 0 1 12 8 Z" fill="#EA4335"/>
-            <path d="M6 3.2 A10 10 0 0 0 6 20.8 L12 12 Z" fill="#FBBC05"/>
-            <path d="M10.5 12.5 L6 20.8 A4 4 0 0 0 12 16 Z" fill="#FBBC05"/>
-            <path d="M6 20.8 A10 10 0 0 0 21 8 L12 12 Z" fill="#34A853"/>
-            <path d="M12 16 A4 4 0 0 0 13.5 12.5 L21 8 Z" fill="#34A853"/>
-          </svg>
-        </div>
-      );
-    case 'qq':
-      return (
-        <div className="w-10 h-10 bg-sky-500 rounded-lg flex items-center justify-center">
-          <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12 2C8.1 2 5 5.1 5 9c0 1.4.4 2.7 1.1 3.8L4 18l2.5-1c.8.5 1.7.8 2.7.9C9.7 19.8 10.8 21 12 22c1.2-1 2.3-2.2 2.8-4.1 1-.1 1.9-.4 2.7-.9l2.5 1-2.1-5.2C18.6 11.7 19 10.4 19 9c0-3.9-3.1-7-7-7zm0 2c2.8 0 5 2.2 5 5s-2.2 5-5 5-5-2.2-5-5 2.2-5 5-5zm-2 3c-.6 0-1 .4-1 1s.4 1 1 1 1-.4 1-1-.4-1-1-1zm4 0c-.6 0-1 .4-1 1s.4 1 1 1 1-.4 1-1-.4-1-1-1z"/>
-          </svg>
-        </div>
-      );
-    default:
-      return (
-        <div className="w-10 h-10 bg-gray-500 rounded-lg flex items-center justify-center">
-          <span className="text-white text-lg">?</span>
-        </div>
-      );
+  const icon = ICON_MAP[iconType];
+  if (!icon) {
+    return (
+      <div className="w-10 h-10 bg-gray-500 rounded-lg flex items-center justify-center">
+        <span className="text-white text-lg">?</span>
+      </div>
+    );
   }
+  return (
+    <div className={`w-10 h-10 ${icon.bg} rounded-lg flex items-center justify-center ${iconType === 'qq' ? 'p-1' : ''}`}>
+      <img src={icon.src} alt={iconType} className="w-6 h-6" />
+    </div>
+  );
 }
 
 // 桌面应用大图标
 function DesktopAppIcon({ iconType }) {
-  switch (iconType) {
-    case 'wechat':
-      return (
-        <div className="w-16 h-16 bg-green-500 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
-          <svg className="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 01.213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.326.326 0 00.167-.054l1.903-1.114a.864.864 0 01.717-.098 10.16 10.16 0 002.837.403c.276 0 .543-.027.811-.05-.857-2.578.157-4.972 1.932-6.446 1.703-1.415 3.882-1.98 5.853-1.838-.576-3.583-4.196-6.348-8.596-6.348zM5.785 5.991c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 01-1.162 1.178A1.17 1.17 0 014.623 7.17c0-.651.52-1.18 1.162-1.18zm5.813 0c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 01-1.162 1.178 1.17 1.17 0 01-1.162-1.178c0-.651.52-1.18 1.162-1.18zm5.34 2.867c-1.797-.052-3.746.512-5.28 1.786-1.72 1.428-2.687 3.72-1.78 6.22.942 2.453 3.666 4.229 6.884 4.229.826 0 1.622-.12 2.361-.336a.722.722 0 01.598.082l1.584.926a.272.272 0 00.14.045c.134 0 .24-.111.24-.247 0-.06-.024-.12-.04-.178l-.327-1.233a.49.49 0 01.177-.554C23.048 18.406 24 16.726 24 14.845c0-3.285-3.274-5.987-7.062-5.987zm-2.511 2.874c.535 0 .969.44.969.982a.976.976 0 01-.969.983.976.976 0 01-.969-.983c0-.542.434-.982.97-.982zm4.902 0c.535 0 .969.44.969.982a.976.976 0 01-.969.983.976.976 0 01-.969-.983c0-.542.434-.982.97-.982z"/>
-          </svg>
-        </div>
-      );
-    case 'chrome':
-      return (
-        <div className="w-16 h-16 bg-white rounded-xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
-          <svg className="w-10 h-10" viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="10" fill="#4285F4"/>
-            <circle cx="12" cy="12" r="4" fill="white"/>
-            <path d="M12 8 L21 8 A10 10 0 0 0 6 3.2 Z" fill="#EA4335"/>
-            <path d="M6 3.2 L10.5 11.5 A4 4 0 0 1 12 8 Z" fill="#EA4335"/>
-            <path d="M6 3.2 A10 10 0 0 0 6 20.8 L12 12 Z" fill="#FBBC05"/>
-            <path d="M10.5 12.5 L6 20.8 A4 4 0 0 0 12 16 Z" fill="#FBBC05"/>
-            <path d="M6 20.8 A10 10 0 0 0 21 8 L12 12 Z" fill="#34A853"/>
-            <path d="M12 16 A4 4 0 0 0 13.5 12.5 L21 8 Z" fill="#34A853"/>
-          </svg>
-        </div>
-      );
-    case 'qq':
-      return (
-        <div className="w-16 h-16 bg-sky-500 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
-          <svg className="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12 2C8.1 2 5 5.1 5 9c0 1.4.4 2.7 1.1 3.8L4 18l2.5-1c.8.5 1.7.8 2.7.9C9.7 19.8 10.8 21 12 22c1.2-1 2.3-2.2 2.8-4.1 1-.1 1.9-.4 2.7-.9l2.5 1-2.1-5.2C18.6 11.7 19 10.4 19 9c0-3.9-3.1-7-7-7zm0 2c2.8 0 5 2.2 5 5s-2.2 5-5 5-5-2.2-5-5 2.2-5 5-5zm-2 3c-.6 0-1 .4-1 1s.4 1 1 1 1-.4 1-1-.4-1-1-1zm4 0c-.6 0-1 .4-1 1s.4 1 1 1 1-.4 1-1-.4-1-1-1z"/>
-          </svg>
-        </div>
-      );
-    default:
-      return null;
-  }
+  const icon = ICON_MAP[iconType];
+  if (!icon) return null;
+  return (
+    <div className={`w-16 h-16 ${icon.bg} rounded-xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform ${iconType === 'qq' ? 'p-2' : ''}`}>
+      <img src={icon.src} alt={iconType} className="w-10 h-10" />
+    </div>
+  );
 }
 
 // 从 localStorage 加载桌面图标
@@ -93,7 +46,7 @@ function loadDesktopIcons() {
   try {
     const stored = localStorage.getItem(DESKTOP_ICONS_KEY);
     if (stored) return JSON.parse(stored);
-  } catch (e) {}
+  } catch (e) { }
   return ['wechat'];
 }
 
@@ -102,7 +55,7 @@ function saveDesktopIcons(icons) {
   if (typeof window === 'undefined') return;
   try {
     localStorage.setItem(DESKTOP_ICONS_KEY, JSON.stringify(icons));
-  } catch (e) {}
+  } catch (e) { }
 }
 
 export default function Desktop() {
@@ -204,7 +157,7 @@ export default function Desktop() {
         <div className="max-w-lg mx-auto">
           <div className="flex items-center bg-white/10 backdrop-blur-md hover:bg-white/15 rounded-2xl px-4 py-2.5 transition-colors focus-within:bg-white/15 focus-within:ring-1 focus-within:ring-white/30">
             <svg className="w-4 h-4 text-gray-300 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
             <input
               type="text"
@@ -224,7 +177,7 @@ export default function Desktop() {
                 className="ml-2 text-gray-400 hover:text-gray-200 transition-colors"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"/>
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
             )}
@@ -264,7 +217,7 @@ export default function Desktop() {
                 >
                   <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
                     <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                   </div>
                   <span className="text-white text-sm">
