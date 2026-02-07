@@ -42,12 +42,12 @@ function DesktopAppIcon({ iconType }) {
 
 // 从 localStorage 加载桌面图标
 function loadDesktopIcons() {
-  if (typeof window === 'undefined') return ['wechat'];
+  if (typeof window === 'undefined') return [];
   try {
     const stored = localStorage.getItem(DESKTOP_ICONS_KEY);
     if (stored) return JSON.parse(stored);
   } catch (e) { }
-  return ['wechat'];
+  return [];
 }
 
 // 保存桌面图标到 localStorage
@@ -62,7 +62,7 @@ export default function Desktop() {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [showSearchResults, setShowSearchResults] = useState(false);
-  const [desktopIcons, setDesktopIcons] = useState(['wechat']);
+  const [desktopIcons, setDesktopIcons] = useState([]);
   const searchRef = useRef(null);
 
   // 检查是否有玩家cookies，没有则重定向到开始页面
@@ -102,13 +102,13 @@ export default function Desktop() {
     });
   };
 
-  // 根据搜索词匹配应用
+  // 根据搜索词匹配应用（精确匹配关键词）
   const getMatchingApps = () => {
     if (!searchQuery.trim()) return [];
-    const q = searchQuery.toLowerCase();
+    const q = searchQuery.trim().toLowerCase();
     return appList.filter(app =>
-      app.keywords.some(kw => kw.toLowerCase().includes(q)) ||
-      app.name.toLowerCase().includes(q)
+      app.keywords.some(kw => kw.toLowerCase() === q) ||
+      app.name.toLowerCase() === q
     );
   };
 

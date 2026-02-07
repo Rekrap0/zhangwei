@@ -41,10 +41,11 @@ export default function StartScreen() {
     const handleClearProgress = () => {
         if (confirm('确定要清空所有游戏进度吗？此操作不可撤销。')) {
             clearPlayerCookies();
-            // 同时清空 localStorage 中的聊天记录和联系人状态
+            // 同时清空 localStorage 中的聊天记录、联系人状态和桌面图标
             if (typeof window !== 'undefined') {
                 localStorage.removeItem('zhangwei_wechat_messages');
                 localStorage.removeItem('zhangwei_wechat_contacts');
+                localStorage.removeItem('zhangwei_desktop_icons');
             }
             setIsReturningPlayer(false);
         }
