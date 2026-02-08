@@ -120,23 +120,22 @@ function SearchResultItem({ qqNumber, nickname, avatarSrc, onClick }) {
 function SearchView({ onBack, onSelectQQ }) {
     const [query, setQuery] = useState('');
     const [searchResult, setSearchResult] = useState(null);
+    const [isSearching, setIsSearching] = useState(false);
     const inputRef = useRef(null);
+    const debounceRef = useRef(null);
 
     useEffect(() => {
         // 自动聚焦搜索框
         inputRef.current?.focus();
+        return () => {
+            if (debounceRef.current) clearTimeout(debounceRef.current);
+        };
     }, []);
 
-    // 处理搜索逻辑
-    const handleSearch = useCallback((value) => {
-        setQuery(value);
-        const trimmed = value.trim();
-
-        // 检查是否为纯数字且大于10000
+    // 执行实际搜索
+    const doSearch = useCallback((trimmed) => {
         if (/^\d+$/.test(trimmed) && parseInt(trimmed, 10) > 10000) {
             const qqNumber = trimmed;
-
-            // 特殊QQ号：2847593160
             if (qqNumber === '2847593160') {
                 setSearchResult({
                     qqNumber,
@@ -155,7 +154,26 @@ function SearchView({ onBack, onSelectQQ }) {
         } else {
             setSearchResult(null);
         }
+        setIsSearching(false);
     }, []);
+
+    // 处理搜索逻辑（带1秒延迟）
+    const handleSearch = useCallback((value) => {
+        setQuery(value);
+        if (debounceRef.current) clearTimeout(debounceRef.current);
+
+        const trimmed = value.trim();
+        if (!trimmed) {
+            setSearchResult(null);
+            setIsSearching(false);
+            return;
+        }
+
+        setIsSearching(true);
+        debounceRef.current = setTimeout(() => {
+            doSearch(trimmed);
+        }, 1000);
+    }, [doSearch]);
 
     return (
         <div className="flex flex-col h-full bg-white">
@@ -211,8 +229,21 @@ function SearchView({ onBack, onSelectQQ }) {
                     </div>
                 )}
 
+                {/* 搜索中提示 */}
+                {isSearching && (
+                    <div className="flex items-center justify-center py-16">
+                        <div className="flex items-center gap-2 text-gray-400">
+                            <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
+                            </svg>
+                            <span className="text-sm">搜索中...</span>
+                        </div>
+                    </div>
+                )}
+
                 {/* 空状态 */}
-                {query && !searchResult && (
+                {query && !searchResult && !isSearching && (
                     <div className="flex items-center justify-center py-16">
                         <p className="text-sm text-gray-400">未找到相关结果</p>
                     </div>
@@ -308,6 +339,204 @@ function MessageListView({ contacts, onStartSearch }) {
     );
 }
 
+// ============ 张薇QQ号常量 ============
+const ZHANGWEI_QQ = '2847593160';
+
+// ============ 用户详情页（亮色模式） ============
+function QQProfileView({ result, onBack, onOpenQZone }) {
+    const isZhangwei = result.qqNumber === ZHANGWEI_QQ;
+    const [imgError, setImgError] = useState(false);
+    const [showToast, setShowToast] = useState(false);
+
+    const handleAddFriend = () => {
+        setShowToast(true);
+        setTimeout(() => setShowToast(false), 2500);
+    };
+
+    return (
+        <div className="flex flex-col h-full bg-[#F5F5F5] relative">
+            {/* 气泡提示 */}
+            {showToast && (
+                <div className="absolute top-16 left-1/2 -translate-x-1/2 z-50 animate-fade-in">
+                    <div className="bg-gray-800/90 text-white text-sm px-4 py-2.5 rounded-lg shadow-lg flex items-center gap-2 whitespace-nowrap">
+                        <svg className="w-4 h-4 text-[#12B7F5] flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
+                        </svg>
+                        好友申请已发送
+                    </div>
+                </div>
+            )}
+
+            {/* 顶部导航 */}
+            <div className="relative z-10">
+                <div className="absolute top-0 left-0 right-0 px-4 py-3 flex items-center justify-between">
+                    <button onClick={onBack} className="w-9 h-9 rounded-full bg-white/80 shadow flex items-center justify-center">
+                        <IoMdArrowBack className="w-5 h-5 text-gray-700" />
+                    </button>
+                    <button className="w-9 h-9 rounded-full bg-white/80 shadow flex items-center justify-center">
+                        <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h.01M12 12h.01M19 12h.01" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            {/* 头图/封面区域 */}
+            <div className="h-48 bg-gradient-to-b from-[#A8D8EA] to-[#E8F4F8] relative overflow-hidden">
+                {/* 装饰性波浪背景 */}
+                <div className="absolute inset-0 opacity-30">
+                    <svg viewBox="0 0 400 200" className="w-full h-full" preserveAspectRatio="none">
+                        <path d="M0,100 C100,150 200,50 400,100 L400,0 L0,0 Z" fill="#87CEEB" />
+                        <path d="M0,120 C150,80 250,160 400,120 L400,0 L0,0 Z" fill="#B0E0E6" />
+                    </svg>
+                </div>
+            </div>
+
+            {/* 用户信息卡片 */}
+            <div className="bg-white rounded-t-2xl -mt-8 relative z-10 px-5 pt-5 pb-4 shadow-sm">
+                <div className="flex items-center gap-4">
+                    {/* 头像 */}
+                    <div className="w-20 h-20 rounded-full overflow-hidden border-3 border-white flex-shrink-0 bg-gray-100 shadow">
+                        {!imgError ? (
+                            <img
+                                src={result.avatarSrc}
+                                alt={result.nickname}
+                                className="w-full h-full object-cover"
+                                onError={() => setImgError(true)}
+                            />
+                        ) : (
+                            <div className="w-full h-full flex items-center justify-center bg-gray-200">
+                                <IoPersonSharp className="w-8 h-8 text-gray-400" />
+                            </div>
+                        )}
+                    </div>
+                    {/* 昵称和QQ号 */}
+                    <div className="flex-1 min-w-0">
+                        <h2 className="text-gray-900 text-xl font-bold truncate">{result.nickname}</h2>
+                        <p className="text-gray-500 text-sm mt-0.5">QQ号：{result.qqNumber}</p>
+                    </div>
+                </div>
+
+                {/* 张薇特有信息 */}
+                {isZhangwei && (
+                    <div className="mt-4 flex items-center gap-2 text-gray-500 text-sm">
+                        <span>女</span>
+                        <span className="text-gray-300">|</span>
+                        <span>26岁</span>
+                    </div>
+                )}
+            </div>
+
+            {/* 分隔 */}
+            <div className="h-2 bg-[#F5F5F5]" />
+
+            {/* QQ空间入口 */}
+            <button
+                onClick={onOpenQZone}
+                className="bg-white px-5 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
+            >
+                <div className="flex items-center gap-3">
+                    <svg className="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                    </svg>
+                    <span className="text-gray-900 text-[15px]">QQ空间</span>
+                </div>
+                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+            </button>
+
+            {/* 占位区域填充 */}
+            <div className="flex-1 bg-[#F5F5F5]" />
+
+            {/* 底部操作按钮 */}
+            <div className="bg-white px-4 py-4 border-t border-gray-200">
+                <button
+                    onClick={handleAddFriend}
+                    className="w-full py-3 rounded-lg bg-[#12B7F5] text-white text-sm font-medium hover:bg-[#0FA3DB] transition-colors"
+                >
+                    添加好友
+                </button>
+            </div>
+        </div>
+    );
+}
+
+// ============ QQ空间无权限页面（亮色模式） ============
+function QZoneNoPermissionView({ result, onBack }) {
+    const [imgError, setImgError] = useState(false);
+
+    return (
+        <div className="flex flex-col h-full bg-[#F5F5F5]">
+            {/* 顶部导航 */}
+            <div className="bg-white px-4 py-3 flex items-center justify-between border-b border-gray-200">
+                <button onClick={onBack} className="w-9 h-9 rounded-full hover:bg-gray-100 flex items-center justify-center transition-colors">
+                    <IoMdArrowBack className="w-5 h-5 text-gray-700" />
+                </button>
+                <button className="w-9 h-9 rounded-full hover:bg-gray-100 flex items-center justify-center transition-colors">
+                    <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h.01M12 12h.01M19 12h.01" />
+                    </svg>
+                </button>
+            </div>
+
+            {/* 头像 + 昵称 */}
+            <div className="bg-white px-5 py-4 flex items-center gap-3">
+                <div className="w-16 h-16 rounded-full overflow-hidden flex-shrink-0 bg-gray-100 shadow-sm">
+                    {!imgError ? (
+                        <img
+                            src={result.avatarSrc}
+                            alt={result.nickname}
+                            className="w-full h-full object-cover"
+                            onError={() => setImgError(true)}
+                        />
+                    ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-gray-200">
+                            <IoPersonSharp className="w-6 h-6 text-gray-400" />
+                        </div>
+                    )}
+                </div>
+                <div>
+                    <span className="text-gray-900 text-lg font-medium">{result.nickname}</span>
+                    <span className="text-gray-400 text-sm ml-1">（{result.qqNumber}）</span>
+                </div>
+            </div>
+
+            {/* 分隔线 */}
+            <div className="h-px bg-gray-200 mx-5" />
+
+            {/* 无权限提示 */}
+            <div className="flex-1 flex flex-col items-center justify-center px-6 bg-white">
+                {/* 锁图标 */}
+                <div className="w-20 h-20 rounded-full border-2 border-gray-300 flex items-center justify-center mb-6">
+                    <svg className="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                    </svg>
+                </div>
+
+                <h3 className="text-gray-900 text-lg font-medium mb-2">主人设置了权限</h3>
+                <p className="text-gray-500 text-sm">加对方为好友后才可以申请访问。</p>
+
+                {/* 删除记录按钮 */}
+                <button className="mt-8 px-6 py-2.5 rounded-full border border-gray-300 text-gray-600 text-sm hover:bg-gray-50 transition-colors flex items-center gap-1.5">
+                    删除记录
+                    <span className="text-yellow-500 text-base">💎</span>
+                </button>
+            </div>
+
+            {/* 底部操作按钮 */}
+            <div className="bg-white px-4 py-4 flex items-center gap-3 border-t border-gray-200">
+                <button onClick={onBack} className="flex-1 py-3 rounded-lg border border-gray-300 text-gray-700 text-sm font-medium hover:bg-gray-50 transition-colors">
+                    查看资料卡
+                </button>
+                <button className="flex-1 py-3 rounded-lg border border-gray-300 text-gray-700 text-sm font-medium hover:bg-gray-50 transition-colors">
+                    加好友
+                </button>
+            </div>
+        </div>
+    );
+}
+
 // ============ QQ空间页面（占位） ============
 function QZoneView({ result, onBack }) {
     return (
@@ -382,6 +611,7 @@ export default function QQ() {
     const router = useRouter();
     const [activeTab, setActiveTab] = useState('message');
     const [isSearching, setIsSearching] = useState(false);
+    const [viewingProfile, setViewingProfile] = useState(null); // 当前查看的用户详情
     const [viewingQZone, setViewingQZone] = useState(null); // 当前查看的QQ空间结果
     const [contacts, setContacts] = useState([]);
     const [isHydrated, setIsHydrated] = useState(false);
@@ -407,25 +637,58 @@ export default function QQ() {
         setIsSearching(false);
     };
 
-    // 选择QQ号 -> 查看空间
+    // 选择QQ号 -> 查看用户详情
     const handleSelectQQ = (result) => {
-        setViewingQZone(result);
+        setViewingProfile(result);
         setIsSearching(false);
     };
 
-    // 从QQ空间返回
+    // 从用户详情返回
+    const handleBackFromProfile = () => {
+        setViewingProfile(null);
+    };
+
+    // 从用户详情 -> 打开QQ空间
+    const handleOpenQZone = () => {
+        if (viewingProfile) {
+            setViewingQZone(viewingProfile);
+        }
+    };
+
+    // 从QQ空间返回到用户详情
     const handleBackFromQZone = () => {
         setViewingQZone(null);
     };
 
     // 渲染主内容
     const renderContent = () => {
-        // QQ空间视图
+        // QQ空间视图（在用户详情之上）
         if (viewingQZone) {
+            const isZhangwei = viewingQZone.qqNumber === ZHANGWEI_QQ;
+            if (isZhangwei) {
+                return (
+                    <QZoneView
+                        result={viewingQZone}
+                        onBack={handleBackFromQZone}
+                    />
+                );
+            } else {
+                return (
+                    <QZoneNoPermissionView
+                        result={viewingQZone}
+                        onBack={handleBackFromQZone}
+                    />
+                );
+            }
+        }
+
+        // 用户详情视图
+        if (viewingProfile) {
             return (
-                <QZoneView
-                    result={viewingQZone}
-                    onBack={handleBackFromQZone}
+                <QQProfileView
+                    result={viewingProfile}
+                    onBack={handleBackFromProfile}
+                    onOpenQZone={handleOpenQZone}
                 />
             );
         }
@@ -481,8 +744,8 @@ export default function QQ() {
                 {renderContent()}
             </main>
 
-            {/* 底部导航 - 搜索和QQ空间时隐藏 */}
-            {!isSearching && !viewingQZone && (
+            {/* 底部导航 - 搜索、详情和QQ空间时隐藏 */}
+            {!isSearching && !viewingProfile && !viewingQZone && (
                 <QQBottomNav activeTab={activeTab} onTabChange={setActiveTab} />
             )}
         </div>
