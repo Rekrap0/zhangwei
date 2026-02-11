@@ -240,6 +240,7 @@ function MediaMessage({ message, contact, isMe, onAvatarClick }) {
 
     const isSticker = message.type === 'sticker';
     const isImage = message.type === 'image';
+    const [lightboxOpen, setLightboxOpen] = useState(false);
 
     return (
         <div className={`flex gap-2 ${isMe ? 'flex-row-reverse' : ''}`}>
@@ -250,25 +251,28 @@ function MediaMessage({ message, contact, isMe, onAvatarClick }) {
             />
             <div className={`max-w-[70%] ${isMe ? 'items-end' : 'items-start'}`}>
                 {isImage ? (
-                    <div className="bg-white p-2 rounded-lg">
-                        <div className="w-40 h-28 bg-gray-100 rounded flex items-center justify-center">
-                            <BsImage className="w-8 h-8 text-gray-400" />
-                        </div>
-                        {message.meta?.description && (
-                            <p className="text-xs text-gray-400 mt-1 max-w-40">{message.meta.description}</p>
-                        )}
+                    <div className="bg-white p-2 rounded-lg cursor-pointer" onClick={() => setLightboxOpen(true)}>
+                        <img src={message.content} alt="图片" className="w-40 rounded object-cover" />
                     </div>
                 ) : (
                     <div className="bg-white p-2 rounded-lg">
-                        <div className="w-24 h-24 bg-gray-50 rounded flex items-center justify-center">
-                            <MdOutlineInsertEmoticon className="w-12 h-12 text-yellow-400" />
-                        </div>
-                        {message.meta?.description && (
-                            <p className="text-xs text-gray-400 mt-1 text-center">{message.meta.description}</p>
-                        )}
+                        <img src={message.content} alt="表情包" className="w-24 h-24 rounded object-cover" />
                     </div>
                 )}
             </div>
+            {lightboxOpen && (
+                <div
+                    className="fixed inset-0 z-[9999] bg-black/90 flex items-center justify-center cursor-pointer"
+                    onClick={() => setLightboxOpen(false)}
+                >
+                    <img
+                        src={message.content}
+                        alt="图片"
+                        className="max-w-[90vw] max-h-[90vh] object-contain rounded-lg"
+                        onClick={(e) => e.stopPropagation()}
+                    />
+                </div>
+            )}
         </div>
     );
 }

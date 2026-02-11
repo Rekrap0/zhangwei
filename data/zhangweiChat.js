@@ -49,11 +49,10 @@ export function generateZhangweiMessages() {
   messages.push(createMessage({
     id: messageId++,
     sender: 'zhangwei',
-    content: '[图片]',
+    content: '/chatWei1.jpg',
     date: day14Ago,
     time: '10:23',
     type: 'image',
-    meta: { description: '一张杂乱的办公桌，堆满了速溶咖啡，屏幕上全是密密麻麻的代码和表格' },
   }));
   
   messages.push(createMessage({
@@ -140,11 +139,10 @@ export function generateZhangweiMessages() {
   messages.push(createMessage({
     id: messageId++,
     sender: 'zhangwei',
-    content: '[表情包]',
+    content: '/chatWei2.jpg',
     date: day12Ago,
     time: '19:43',
     type: 'sticker',
-    meta: { description: '猫猫震惊.jpg' },
   }));
   
   messages.push(createMessage({
