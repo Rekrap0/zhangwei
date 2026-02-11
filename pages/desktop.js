@@ -168,7 +168,7 @@ export default function Desktop() {
               }}
               onFocus={() => { if (searchQuery.trim()) setShowSearchResults(true); }}
               onKeyDown={handleSearchKeyDown}
-              placeholder="搜索应用或网页..."
+              placeholder="搜索应用名称或网页..."
               className="flex-1 bg-transparent text-white text-sm placeholder-gray-400 focus:outline-none"
             />
             {searchQuery && (
@@ -231,19 +231,28 @@ export default function Desktop() {
       </div>
 
       {/* 桌面图标区域 */}
-      <div className="relative z-10 flex-1 p-6 pt-4">
-        <div className="flex flex-wrap gap-2">
-          {visibleApps.map(app => (
-            <button
-              key={app.id}
-              onClick={() => openApp(app.route)}
-              className="flex flex-col items-center gap-2 p-3 rounded-lg hover:bg-white/10 transition-colors group w-24"
-            >
-              <DesktopAppIcon iconType={app.iconType} />
-              <span className="text-white text-sm font-medium drop-shadow-lg">{app.name}</span>
-            </button>
-          ))}
-        </div>
+      <div className="relative z-10 flex-1 p-6 pt-4 flex flex-col items-center">
+        {visibleApps.length > 0 ? (
+          <>
+            <p className="text-gray-400 text-xs font-medium tracking-wide mb-3">最近打开</p>
+            <div className="flex flex-wrap gap-2 justify-center">
+              {visibleApps.map(app => (
+                <button
+                  key={app.id}
+                  onClick={() => openApp(app.route)}
+                  className="flex flex-col items-center gap-2 p-3 rounded-lg hover:bg-white/10 transition-colors group w-24"
+                >
+                  <DesktopAppIcon iconType={app.iconType} />
+                  <span className="text-white text-sm font-medium drop-shadow-lg">{app.name}</span>
+                </button>
+              ))}
+            </div>
+          </>
+        ) : (
+          <div className="flex-1 flex items-center justify-center">
+            <p className="text-gray-500 text-sm">最近打开的应用将显示在这里</p>
+          </div>
+        )}
       </div>
     </div>
   );
