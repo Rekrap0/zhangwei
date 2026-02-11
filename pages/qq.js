@@ -562,19 +562,21 @@ function getQZonePosts() {
         },
         {
             daysAgo: 1100,
-            content: '我已经记不清快乐是什么感觉了，就像被一层厚厚的灰色玻璃罩住，外面的光进不来，里面的我出不去。每天醒来的第一件事，不是期待今天会发生什么，而是计算着还要熬多久才能再次躺下。我对着镜子练习微笑，想让自己看起来和正常人一样，可笑容到了嘴角，却怎么也到不了眼睛。我知道大家都在关心我，劝我开心一点，可他们不知道，"开心"对我来说，就像让一个瘫痪的人跑起来一样，不是不想，是做不到。我不是故意要消极，我只是真的没有力气了，连呼吸都觉得是一种负担。',
+            content: '收拾行李发现二十多年竟然没什么值得带走的东西 也好 说是去封闭式治疗希望能睡个好觉 哪怕是长眠不醒的那种也好过现在这种半死不活的清醒 祝我好运吧 或者是祝我解脱 晚安这个破烂的世界',
         },
         {
             daysAgo: 1101,
-            content: '在医院门口捡到一张传单 上面写着"精准镇痛"计划 说是能通过神经调控技术阻断痛觉 听起来像是科幻小说里的骗局或者是把灵魂卖给魔鬼的契约 但是无所谓了 反正现在的我也和行尸走肉没区别 如果能让我哪怕一秒钟不感觉到痛 让我把脑子挖出来都行 这种日复一日的凌迟我真的一秒都忍不了了',
+            content: '在医院门口捡到的 搞得像是科幻小说里把灵魂卖给魔鬼的契约 但无所谓了 这种日复一日的凌迟我真的一秒都忍不了了',
+            image: '/momentsEvent.png',
         },
         {
             daysAgo: 1103,
-            content: '收拾行李发现二十多年竟然没什么值得带走的东西 也好 说是去封闭式治疗希望能睡个好觉 哪怕是长眠不醒的那种也好过现在这种半死不活的清醒 祝我好运吧 或者是祝我解脱 晚安这个破烂的世界',
+            content: '我已经记不清快乐是什么感觉了，就像被一层厚厚的灰色玻璃罩住，外面的光进不来，里面的我出不去。每天醒来的第一件事，不是期待今天会发生什么，而是计算着还要熬多久才能再次躺下。我对着镜子练习微笑，想让自己看起来和正常人一样，可笑容到了嘴角，却怎么也到不了眼睛。我知道大家都在关心我，劝我开心一点，可他们不知道，"开心"对我来说，就像让一个瘫痪的人跑起来一样，不是不想，是做不到。我不是故意要消极，我只是真的没有力气了，连呼吸都觉得是一种负担。',
         },
         {
             daysAgo: 1600,
             content: '每次发完疯清醒过来回看那些文字都觉得生理性反胃 删动态的手速比脑子转得快 留下的都是还没来得及嫌弃的电子垃圾 别翻了 没什么好看的 都是些过期作废的情绪',
+            image: '/momentsSmile.gif',
         },
     ];
 
@@ -665,6 +667,8 @@ function QZonePasswordGate({ onUnlock }) {
 
 // ============ 说说项组件 ============
 function QZonePostItem({ post, nickname, avatarSrc }) {
+    const [lightboxOpen, setLightboxOpen] = useState(false);
+
     return (
         <div className="bg-white px-5 py-4">
             <div className="flex gap-3">
@@ -681,6 +685,41 @@ function QZonePostItem({ post, nickname, avatarSrc }) {
                 <div className="flex-1 min-w-0">
                     <p className="text-[#5B7FB5] text-sm font-medium mb-1.5">{nickname}</p>
                     <p className="text-gray-800 text-sm leading-relaxed whitespace-pre-wrap break-words">{post.content}</p>
+                    {/* 图片（带点击放大） */}
+                    {post.image && (
+                        <button
+                            onClick={() => setLightboxOpen(true)}
+                            className="mt-2 block rounded-lg overflow-hidden max-w-[200px]"
+                        >
+                            <img
+                                src={post.image}
+                                alt="图片"
+                                className="w-full h-auto object-cover rounded-lg"
+                            />
+                        </button>
+                    )}
+                    {/* 图片灯箱 */}
+                    {lightboxOpen && post.image && (
+                        <div
+                            className="fixed inset-0 z-[9999] bg-black/90 flex items-center justify-center cursor-zoom-out"
+                            onClick={() => setLightboxOpen(false)}
+                        >
+                            <button
+                                onClick={() => setLightboxOpen(false)}
+                                className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors"
+                            >
+                                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                            <img
+                                src={post.image}
+                                alt="图片"
+                                className="max-w-[90vw] max-h-[90vh] object-contain rounded-lg shadow-2xl"
+                                onClick={(e) => e.stopPropagation()}
+                            />
+                        </div>
+                    )}
                     <div className="mt-3 flex items-center justify-between">
                         <span className="text-gray-400 text-xs">{post.dateStr}</span>
                         <div className="flex items-center gap-5">
