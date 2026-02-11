@@ -234,7 +234,7 @@ export default function Desktop() {
       <div className="relative z-10 flex-1 p-6 pt-4 flex flex-col items-center">
         {visibleApps.length > 0 ? (
           <>
-            <p className="text-gray-400 text-xs font-medium tracking-wide mb-3">最近打开</p>
+            <p className="text-gray-400 text-xs font-medium tracking-wide mb-3">最近使用</p>
             <div className="flex flex-wrap gap-2 justify-center">
               {visibleApps.map(app => (
                 <button
