@@ -75,3 +75,20 @@ export function hasPlayerStarted() {
   const { playerName, startDate } = getPlayerCookies();
   return !!(playerName && startDate);
 }
+
+// ============ QQ空间解锁状态 ============
+const QZONE_UNLOCKED_KEY = 'zhangwei_qzone_unlocked';
+
+/**
+ * 设置QQ空间已解锁
+ */
+export function setQZoneUnlocked() {
+  setCookie(QZONE_UNLOCKED_KEY, 'true');
+}
+
+/**
+ * 检查QQ空间是否已解锁
+ */
+export function isQZoneUnlocked() {
+  return getCookie(QZONE_UNLOCKED_KEY) === 'true';
+}

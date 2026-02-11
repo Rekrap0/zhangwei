@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/router';
-import { getPlayerCookies } from '../utils/cookies';
+import { getPlayerCookies, setCookie, getCookie, setQZoneUnlocked, isQZoneUnlocked } from '../utils/cookies';
+import { getRelativeDate, getZhangweiBirthday, getZhangweiRealAge, formatDateFull } from '../utils/chatDates';
 import { IoChatbubbleEllipsesSharp, IoPersonSharp, IoCompassSharp, IoSettingsSharp } from 'react-icons/io5';
 import { IoMdArrowBack } from 'react-icons/io';
 
@@ -72,7 +73,7 @@ function QQAvatar({ contact, size = 'md', className = '' }) {
         return (
             <div className={`${sizeClasses[size]} rounded-full bg-[#12B7F5] flex items-center justify-center flex-shrink-0 ${className}`}>
                 <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm-1 14.5l-4-4 1.41-1.41L11 13.67l5.59-5.59L18 9.5l-7 7z"/>
+                    <path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm-1 14.5l-4-4 1.41-1.41L11 13.67l5.59-5.59L18 9.5l-7 7z" />
                 </svg>
             </div>
         );
@@ -234,8 +235,8 @@ function SearchView({ onBack, onSelectQQ }) {
                     <div className="flex items-center justify-center py-16">
                         <div className="flex items-center gap-2 text-gray-400">
                             <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
-                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
-                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                             </svg>
                             <span className="text-sm">搜索中...</span>
                         </div>
@@ -331,7 +332,7 @@ function MessageListView({ contacts, onStartSearch }) {
                     <QQChatListItem
                         key={contact.id}
                         contact={contact}
-                        onClick={() => {}}
+                        onClick={() => { }}
                     />
                 ))}
             </div>
@@ -347,6 +348,13 @@ function QQProfileView({ result, onBack, onOpenQZone }) {
     const isZhangwei = result.qqNumber === ZHANGWEI_QQ;
     const [imgError, setImgError] = useState(false);
     const [showToast, setShowToast] = useState(false);
+    const [realAge, setRealAge] = useState(null);
+
+    useEffect(() => {
+        if (isZhangwei) {
+            setRealAge(getZhangweiRealAge());
+        }
+    }, [isZhangwei]);
 
     const handleAddFriend = () => {
         setShowToast(true);
@@ -418,11 +426,11 @@ function QQProfileView({ result, onBack, onOpenQZone }) {
                 </div>
 
                 {/* 张薇特有信息 */}
-                {isZhangwei && (
+                {isZhangwei && realAge !== null && (
                     <div className="mt-4 flex items-center gap-2 text-gray-500 text-sm">
                         <span>女</span>
                         <span className="text-gray-300">|</span>
-                        <span>26岁</span>
+                        <span>{realAge}岁</span>
                     </div>
                 )}
             </div>
@@ -537,23 +545,218 @@ function QZoneNoPermissionView({ result, onBack }) {
     );
 }
 
-// ============ QQ空间页面（占位） ============
+// ============ QQ空间说说数据 ============
+function getQZonePosts() {
+    const posts = [
+        {
+            daysAgo: 1095,
+            content: '就躺着吧，反正今天也不会有什么好事发生。',
+        },
+        {
+            daysAgo: 1097,
+            content: '又是盯着天花板的第四个小时 脑子里的声音比装修队还吵 吃完那把白色药片以后胃里像是吞了一块烧红的炭一直在往下坠 坠到哪里是个头啊 甚至分不清是饿还是恶心 想吐又吐不出来 这种把灵魂困在发烂肉体里的感觉什么时候能结束 连呼吸都觉得是在浪费空气',
+        },
+        {
+            daysAgo: 1098,
+            content: '看着窗外面的人走来走去觉得他们像是在另一个维度的生物 刚刚那个卖保险的给我打电话我竟然盯着手机屏震动看它挂断 连张嘴说个不需要都觉得耗尽了半辈子的力气 我现在的状态就像是一滩烂泥扶不上墙 别来问我怎么了 问就是没死但快了',
+        },
+        {
+            daysAgo: 1100,
+            content: '我已经记不清快乐是什么感觉了，就像被一层厚厚的灰色玻璃罩住，外面的光进不来，里面的我出不去。每天醒来的第一件事，不是期待今天会发生什么，而是计算着还要熬多久才能再次躺下。我对着镜子练习微笑，想让自己看起来和正常人一样，可笑容到了嘴角，却怎么也到不了眼睛。我知道大家都在关心我，劝我开心一点，可他们不知道，"开心"对我来说，就像让一个瘫痪的人跑起来一样，不是不想，是做不到。我不是故意要消极，我只是真的没有力气了，连呼吸都觉得是一种负担。',
+        },
+        {
+            daysAgo: 1101,
+            content: '在医院门口捡到的 说是能通过电流阻断痛觉的新技术 听起来像是科幻小说里的骗局或者是把灵魂卖给魔鬼的契约 但是无所谓了 反正现在的我也和行尸走肉没区别 如果能让我哪怕一秒钟不感觉到痛 让我把脑子挖出来都行 这种日复一日的凌迟我真的一秒都忍不了了',
+        },
+        {
+            daysAgo: 1103,
+            content: '收拾行李发现二十多年竟然没什么值得带走的东西 也好 说是去封闭式治疗希望能睡个好觉 哪怕是长眠不醒的那种也好过现在这种半死不活的清醒 祝我好运吧 或者是祝我解脱 晚安这个破烂的世界',
+        },
+        {
+            daysAgo: 1600,
+            content: '每次发完疯清醒过来回看那些文字都觉得生理性反胃 删动态的手速比脑子转得快 留下的都是还没来得及嫌弃的电子垃圾 别翻了 没什么好看的 都是些过期作废的情绪',
+        },
+    ];
+
+    return posts.map((post) => {
+        const date = getRelativeDate(-post.daysAgo);
+        return {
+            ...post,
+            date,
+            dateStr: formatDateFull(date),
+        };
+    }).sort((a, b) => b.date - a.date); // 按时间倒序
+}
+
+// ============ QQ空间密码验证页（亮色模式） ============
+function QZonePasswordGate({ onUnlock }) {
+    const [answer, setAnswer] = useState('');
+    const [error, setError] = useState(false);
+    const [shaking, setShaking] = useState(false);
+
+    const handleSubmit = () => {
+        const { yyyymmdd } = getZhangweiBirthday();
+        if (answer.trim() === yyyymmdd) {
+            setQZoneUnlocked();
+            onUnlock();
+        } else {
+            setError(true);
+            setShaking(true);
+            setTimeout(() => setShaking(false), 500);
+            setTimeout(() => setError(false), 2000);
+        }
+    };
+
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') handleSubmit();
+    };
+
+    return (
+        <div className="flex-1 flex flex-col items-center justify-center px-6 bg-white">
+            {/* 问题标题 */}
+            <div className="w-full max-w-sm mb-6">
+                <h3 className="text-gray-900 text-lg font-bold mb-1">问题：我的生日(填8位数字)?</h3>
+                <div className={`relative ${shaking ? 'animate-shake' : ''}`}>
+                    <input
+                        type="text"
+                        value={answer}
+                        onChange={(e) => {
+                            setAnswer(e.target.value.replace(/\D/g, '').slice(0, 8));
+                            setError(false);
+                        }}
+                        onKeyDown={handleKeyDown}
+                        placeholder="请输入答案"
+                        maxLength={8}
+                        className={`w-full border-b-2 py-2 text-sm bg-transparent focus:outline-none transition-colors ${error ? 'border-red-400 text-red-500' : 'border-gray-300 text-gray-700 focus:border-[#12B7F5]'
+                            }`}
+                    />
+                </div>
+                {error && (
+                    <p className="text-red-400 text-xs mt-1.5">答案不正确，请重试</p>
+                )}
+            </div>
+
+            {/* 提交按钮 */}
+            <button
+                onClick={handleSubmit}
+                className="w-full max-w-sm py-3 rounded-lg border border-gray-300 text-gray-700 text-sm font-medium hover:bg-gray-50 active:bg-gray-100 transition-colors mb-10"
+            >
+                提交
+            </button>
+
+            {/* 锁图标 */}
+            <div className="w-20 h-20 rounded-full border-2 border-gray-300 flex items-center justify-center mb-6">
+                <svg className="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                </svg>
+            </div>
+
+            <h3 className="text-gray-900 text-lg font-medium mb-2">主人设置了权限</h3>
+            <p className="text-gray-500 text-sm">需要回答问题才能访问TA的空间。</p>
+
+            {/* 删除记录按钮 */}
+            <button className="mt-8 px-6 py-2.5 rounded-full border border-gray-300 text-gray-600 text-sm hover:bg-gray-50 transition-colors flex items-center gap-1.5">
+                删除记录
+                <span className="text-yellow-500 text-base">💎</span>
+            </button>
+        </div>
+    );
+}
+
+// ============ 说说项组件 ============
+function QZonePostItem({ post, nickname, avatarSrc }) {
+    return (
+        <div className="bg-white px-5 py-4">
+            <div className="flex gap-3">
+                {/* 头像（圆形） */}
+                <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 bg-gray-100">
+                    <img
+                        src={avatarSrc}
+                        alt={nickname}
+                        className="w-full h-full object-cover"
+                        onError={(e) => { e.target.src = '/avatarWei2.png'; }}
+                    />
+                </div>
+                {/* 内容 */}
+                <div className="flex-1 min-w-0">
+                    <p className="text-[#5B7FB5] text-sm font-medium mb-1.5">{nickname}</p>
+                    <p className="text-gray-800 text-sm leading-relaxed whitespace-pre-wrap break-words">{post.content}</p>
+                    <div className="mt-3 flex items-center justify-between">
+                        <span className="text-gray-400 text-xs">{post.dateStr}</span>
+                        <div className="flex items-center gap-5">
+                            {/* 点赞 */}
+                            <button className="text-gray-400 hover:text-gray-500">
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M6.633 10.25c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 012.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 00.322-1.672V2.75a.75.75 0 01.75-.75 2.25 2.25 0 012.25 2.25c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282m0 0h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 01-2.649 7.521c-.388.482-.987.729-1.605.729H13.48c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 00-1.423-.23H3.35" />
+                                </svg>
+                            </button>
+                            {/* 评论 */}
+                            <button className="text-gray-400 hover:text-gray-500">
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 01-.923 1.785A5.969 5.969 0 006 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337z" />
+                                </svg>
+                            </button>
+                            {/* 转发（分享箭头） */}
+                            <button className="text-gray-400 hover:text-gray-500">
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+<path d="M14.554 3.9974L19.2301 8.13188C21.0767 9.76455 22 10.5809 22 11.6325C22 12.6842 21.0767 13.5005 19.2301 15.1332L14.554 19.2677C13.7111 20.0129 13.2897 20.3856 12.9422 20.2303C12.5947 20.0751 12.5947 19.5143 12.5947 18.3925V15.6472C8.35683 15.6472 3.76579 17.6545 2 21C2 10.2943 8.27835 7.61792 12.5947 7.61792V4.87257C12.5947 3.75082 12.5947 3.18995 12.9422 3.03474C13.2897 2.87953 13.7111 3.25215 14.554 3.9974Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* 评论输入框 */}
+                    <div className="mt-3 flex items-center">
+                        <div className="flex-1 bg-gray-100 rounded-full px-2 py-1.5 flex items-center gap-2">
+                            <div className="w-5 h-5 rounded-full overflow-hidden flex-shrink-0">
+                                <img src="/avatarPlayer.jpg" alt="我" className="w-full h-full object-cover" />
+                            </div>
+                            <span className="text-xs text-gray-500">说点什么吧…</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+// ============ QQ空间页面（含密码验证 + 说说列表） ============
 function QZoneView({ result, onBack }) {
+    const [unlocked, setUnlocked] = useState(false);
+    const [posts, setPosts] = useState([]);
+
+    // 初始化时检查cookie
+    useEffect(() => {
+        if (isQZoneUnlocked()) {
+            setUnlocked(true);
+        }
+    }, []);
+
+    // 解锁后生成说说
+    useEffect(() => {
+        if (unlocked) {
+            setPosts(getQZonePosts());
+        }
+    }, [unlocked]);
+
+    const handleUnlock = () => {
+        setUnlocked(true);
+    };
+
     return (
         <div className="flex flex-col h-full bg-[#F5F5F5]">
             {/* 头部 */}
-            <header className="bg-[#12B7F5] px-4 py-3 flex items-center gap-3">
-                <button onClick={onBack} className="p-1 -ml-1 text-white">
+            <header className="bg-white px-4 py-3 flex items-center gap-3 border-b border-gray-200">
+                <button onClick={onBack} className="p-1 -ml-1 text-gray-700 hover:text-gray-900">
                     <IoMdArrowBack className="w-6 h-6" />
                 </button>
-                <h2 className="font-medium text-white">QQ空间</h2>
+                <h2 className="font-medium text-gray-900">QQ空间</h2>
             </header>
 
             {/* 封面区域 */}
-            <div className="relative bg-gradient-to-b from-[#12B7F5] to-[#0A95C9] h-40 flex items-end justify-end p-4">
+            <div className="relative bg-gradient-to-b from-[#87CEEB] to-[#E0F2FE] h-40 flex items-end justify-start p-4">
                 <div className="flex items-end gap-3">
-                    <span className="text-white text-lg font-medium drop-shadow-md">{result.nickname}</span>
-                    <div className="w-16 h-16 rounded-lg overflow-hidden border-2 border-white shadow-lg">
+                    <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-white shadow-lg">
                         <img
                             src={result.avatarSrc}
                             alt={result.nickname}
@@ -561,15 +764,45 @@ function QZoneView({ result, onBack }) {
                             onError={(e) => { e.target.src = '/avatarWei2.png'; }}
                         />
                     </div>
+                    <span className="text-gray-800 text-lg font-medium drop-shadow-sm">{result.nickname}</span>
                 </div>
             </div>
 
-            {/* 空间内容（占位） */}
-            <div className="flex-1 overflow-y-auto mt-2">
-                <div className="py-16 text-center">
-                    <p className="text-gray-400 text-sm">暂无动态</p>
+            {/* 空间内容 */}
+            {!unlocked ? (
+                /* 密码验证页 */
+                <QZonePasswordGate onUnlock={handleUnlock} />
+            ) : (
+                /* 说说列表 */
+                <div className="flex-1 overflow-y-auto">
+                    <div className="divide-y divide-gray-100 mt-2">
+                        {posts.map((post, idx) => (
+                            <QZonePostItem
+                                key={idx}
+                                post={post}
+                                nickname={result.nickname}
+                                avatarSrc={result.avatarSrc}
+                            />
+                        ))}
+                    </div>
+                    {/* 底部提示 */}
+                    <div className="py-8 text-center">
+                        <p className="text-gray-400 text-xs">— 没有更多了 —</p>
+                    </div>
                 </div>
-            </div>
+            )}
+
+            {/* 密码页底部按钮 */}
+            {!unlocked && (
+                <div className="bg-white px-4 py-4 flex items-center gap-3 border-t border-gray-200">
+                    <button className="flex-1 py-3 rounded-lg border border-gray-300 text-gray-700 text-sm font-medium hover:bg-gray-50 transition-colors">
+                        申请访问
+                    </button>
+                    <button onClick={onBack} className="flex-1 py-3 rounded-lg border border-gray-300 text-gray-700 text-sm font-medium hover:bg-gray-50 transition-colors">
+                        查看资料卡
+                    </button>
+                </div>
+            )}
         </div>
     );
 }

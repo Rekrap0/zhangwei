@@ -383,6 +383,6 @@ export function getBirthdayHint() {
   const birthday = getZhangweiBirthday();
   return {
     birthday: birthday.formatted,
-    password: birthday.mmdd,
+    password: birthday.yyyymmdd,
   };
 }

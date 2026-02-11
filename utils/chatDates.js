@@ -67,17 +67,44 @@ export function formatDateShort(date, referenceDate = null) {
 
 /**
  * 计算张薇的生日（基于开始日期推算）
- * 规则：开始日期往前推6天是张薇的生日
- * @returns {{ date: Date, formatted: string, mmdd: string }}
+ * 规则：开始日期往前推6天是张薇的月日，出生年份 = 开始日期年份 - 26
+ * @returns {{ date: Date, birthYear: number, formatted: string, mmdd: string, yyyymmdd: string }}
  */
 export function getZhangweiBirthday() {
   const birthday = getRelativeDate(-6);
+  const startDate = getStartDate();
+  const birthYear = startDate.getFullYear() - 26;
+  const mm = String(birthday.getMonth() + 1).padStart(2, '0');
+  const dd = String(birthday.getDate()).padStart(2, '0');
   return {
     date: birthday,
+    birthYear,
     formatted: `${birthday.getMonth() + 1}月${birthday.getDate()}日`,
-    // 密码格式：MMDD
-    mmdd: String(birthday.getMonth() + 1).padStart(2, '0') + String(birthday.getDate()).padStart(2, '0'),
+    mmdd: mm + dd,
+    // 密码格式：yyyyMMdd
+    yyyymmdd: `${birthYear}${mm}${dd}`,
   };
+}
+
+/**
+ * 计算张薇基于当前系统时间的真实年龄
+ * @returns {number} 真实年龄
+ */
+export function getZhangweiRealAge() {
+  const { birthYear } = getZhangweiBirthday();
+  const birthday = getRelativeDate(-6);
+  const birthMonth = birthday.getMonth();
+  const birthDay = birthday.getDate();
+
+  const now = new Date();
+  let age = now.getFullYear() - birthYear;
+  // 如果今年生日还没过，减1
+  const monthNow = now.getMonth();
+  const dayNow = now.getDate();
+  if (monthNow < birthMonth || (monthNow === birthMonth && dayNow < birthDay)) {
+    age--;
+  }
+  return age;
 }
 
 /**
