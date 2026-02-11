@@ -6,5 +6,38 @@
     "description": "恒念药业股份有限公司 — 专注于神经系统疾病治疗的创新型制药企业，致力于为全球患者提供安全、有效的治疗方案。公司总部位于北京。",
     "url": "/hengnian",
     "displayUrl": "www.hengnian-pharma.cn"
+  },
+  {
+    "id": "jingzhun",
+    "keywords": ["精准镇痛", "精准", "镇痛", "神经调控", "封闭式治疗"],
+    "title": "\u201c精准镇痛\u201d神经调控临床研究计划 - 志愿者招募",
+    "description": "基于前沿神经调控技术的精准镇痛临床研究项目，面向慢性疼痛及情绪障碍患者招募志愿者。全封闭管理，费用全免。招募时间：2023年3月-8月。",
+    "url": "/jingzhun",
+    "displayUrl": "www.hengyao-news.cn/clinical/jingzhun"
+  },
+  {
+    "id": "hengyao_news",
+    "keywords": ["恒药新闻", "恒药", "医药新闻"],
+    "title": "恒药新闻 - 中国医药行业资讯门户",
+    "description": "恒药新闻网 — 关注中国医药行业最新动态、政策解读、企业报道、临床研究资讯。",
+    "url": "/hengyao-news",
+    "displayUrl": "www.hengyao-news.cn"
+  },
+  {
+    "id": "zhaorui_baidu",
+    "keywords": ["赵瑞"],
+    "title": "全中国有几个叫赵瑞的_百度知道",
+    "description": "通过身份信息系统查询，全国有31052人叫\u201c赵瑞\u201d，搜寻时建议带上一些相关信息，如所在公司或个人信息等。",
+    "url": "https://zhidao.baidu.com/question/558888538146292331.html",
+    "displayUrl": "zhidao.baidu.com"
+  },
+  {
+    "id": "zhaorui_resume",
+    "keywords": ["赵瑞"],
+    "requireAny": ["恒念", "恒念药业", "13912345678", "手机", "邮箱", "电话", "hengnian", "zhaorui", "博士", "药业"],
+    "title": "赵瑞 - 神经科学博士 · 恒念药业首席研究员 | 医才网",
+    "description": "赵瑞，神经科学博士，现任恒念药业股份有限公司首席研究员。拥有15年以上神经系统疾病研究经验，主导多项精准镇痛相关临床研究。联系方式：zhaorui@hengnian-pharma.cn",
+    "url": "/zhaorui-resume",
+    "displayUrl": "www.medtalent.cn/profile/zhaorui"
   }
 ]

@@ -30,12 +30,21 @@ export default function Chrome() {
   // 根据关键词匹配特殊页面
   const getMatchingSpecialPages = useCallback((query) => {
     const q = query.toLowerCase();
-    return searchablePages.filter(page =>
-      page.keywords.some(keyword =>
+    return searchablePages.filter(page => {
+      // 基础关键词匹配
+      const keywordMatch = page.keywords.some(keyword =>
         q.includes(keyword.toLowerCase()) ||
         keyword.toLowerCase().includes(q)
-      )
-    );
+      );
+      if (!keywordMatch) return false;
+
+      // 若定义了 requireAny，查询中还需包含至少一个额外关键词
+      if (page.requireAny && page.requireAny.length > 0) {
+        return page.requireAny.some(rk => q.includes(rk.toLowerCase()));
+      }
+
+      return true;
+    });
   }, []);
 
   // 执行搜索
@@ -265,13 +274,6 @@ export default function Chrome() {
 
                   {/* URL 显示 */}
                   <div className="flex items-center gap-2 mb-1">
-                    {result.isSpecial && (
-                      <div className="w-6 h-6 bg-gradient-to-br from-blue-600 to-blue-800 rounded flex items-center justify-center flex-shrink-0">
-                        <span className="text-white text-xs font-bold">
-                          {result.title?.charAt(0) || '?'}
-                        </span>
-                      </div>
-                    )}
                     <span className="text-sm text-gray-600 truncate">
                       {result.displayUrl || result.url}
                     </span>
@@ -280,7 +282,7 @@ export default function Chrome() {
                   {/* 标题链接 */}
                   <a
                     href={result.url}
-                    target={result.isSpecial ? '_self' : '_blank'}
+                    target={result.url.startsWith('http') ? '_blank' : '_self'}
                     rel="noopener noreferrer"
                     className="text-xl text-[#1A0DAB] hover:underline block leading-snug"
                   >

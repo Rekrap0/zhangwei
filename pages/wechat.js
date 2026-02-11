@@ -1013,6 +1013,40 @@ export default function Wechat() {
         }
     }, [contacts, isInitialized]);
 
+    // 监听网络修复状态 - 当管理面板修复网络后，张薇发送消息
+    useEffect(() => {
+        if (!isInitialized) return;
+        if (!state.networkRepaired) return;
+
+        // 检查是否已经发送过网络恢复消息（避免重复）
+        const zhangweiMsgs = messagesByContact['zhangwei'] || [];
+        const alreadySent = zhangweiMsgs.some(m => m.id === 'network_restored');
+        if (alreadySent) return;
+
+        const now = new Date();
+        const restoredMessage = {
+            id: 'network_restored',
+            sender: 'zhangwei',
+            content: '你在吗？？我刚才好像断网了……',
+            timestamp: now.toISOString(),
+            time: now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
+            type: 'text',
+        };
+
+        setMessagesByContact((prev) => ({
+            ...prev,
+            zhangwei: [...(prev['zhangwei'] || []), restoredMessage],
+        }));
+
+        setContacts((prev) =>
+            prev.map((c) =>
+                c.id === 'zhangwei'
+                    ? { ...c, lastMessage: restoredMessage.content, time: restoredMessage.time, unread: (c.unread || 0) + 1 }
+                    : c
+            )
+        );
+    }, [state.networkRepaired, isInitialized]);
+
     // 获取当前联系人的消息
     const currentMessages = activeContact ? (messagesByContact[activeContact.id] || []) : [];
 
