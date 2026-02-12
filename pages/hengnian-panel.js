@@ -14,6 +14,7 @@ export default function HengnianPanel() {
   const [isLocked, setIsLocked] = useState(false);
   const [sessionId, setSessionId] = useState('');
   const [glitchActive, setGlitchActive] = useState(false);
+  const [lastLoginDate, setLastLoginDate] = useState('');
 
   useEffect(() => {
     const { playerName, startDate } = getPlayerCookies();
@@ -21,6 +22,10 @@ export default function HengnianPanel() {
       router.replace('/');
       return;
     }
+    // 计算上次登录日期（开始日期 - 2年）
+    const d = new Date(startDate);
+    d.setFullYear(d.getFullYear() - 2);
+    setLastLoginDate(`${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日`);
     // 检查管理员权限
     if (getCookie(ADMIN_AUTH_KEY) !== 'true') {
       router.replace('/hengnian-admin');
@@ -111,24 +116,21 @@ export default function HengnianPanel() {
             </div>
             <div className="p-5 space-y-4">
               <div className="flex items-start gap-3">
-                <span className="text-red-400 mt-0.5">●</span>
+                <span className="text-red-400">●</span>
                 <div>
-                  <p className="text-gray-300 text-sm">系统检测到未授权的管理操作</p>
-                  <p className="text-gray-600 text-xs mt-0.5">触发时间：刚刚</p>
+                  <p className="text-gray-300 text-sm">系统检测到异常的管理操作</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <span className="text-amber-400 mt-0.5">●</span>
+                <span className="text-amber-400">●</span>
                 <div>
                   <p className="text-gray-300 text-sm">管理员面板已锁定，对外网服务已暂停</p>
-                  <p className="text-gray-600 text-xs mt-0.5">受影响范围：全部外网端口</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <span className="text-gray-500 mt-0.5">●</span>
+                <span className="text-amber-400">●</span>
                 <div>
                   <p className="text-gray-300 text-sm">安全团队已收到通知</p>
-                  <p className="text-gray-600 text-xs mt-0.5">预计恢复时间：未知</p>
                 </div>
               </div>
 
@@ -198,7 +200,7 @@ export default function HengnianPanel() {
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2 text-sm text-gray-600">
               <div className="w-7 h-7 bg-blue-100 rounded-full flex items-center justify-center">
-                <span className="text-blue-600 text-xs font-bold">赵</span>
+                <span className="text-blue-600 text-xs font-bold">李</span>
               </div>
               <span>李静</span>
             </div>
@@ -217,7 +219,7 @@ export default function HengnianPanel() {
         {/* 欢迎信息 */}
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-gray-900">欢迎回来，李静</h1>
-          <p className="text-sm text-gray-500 mt-1">恒念药业管理系统 | 上次登录：2024年11月3日</p>
+          <p className="text-sm text-gray-500 mt-1">恒念药业管理系统 | 上次登录：{lastLoginDate}</p>
         </div>
 
         {/* 状态卡片 */}
@@ -276,7 +278,7 @@ export default function HengnianPanel() {
                           修复中...
                         </>
                       ) : (
-                        '修复公司网络'
+                        '一键修复'
                       )}
                     </button>
                   )}
