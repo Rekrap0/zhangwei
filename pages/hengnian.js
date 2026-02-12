@@ -13,9 +13,11 @@ function ChatWidget() {
   const [persona, setPersona] = useState('sy'); // 'sy' | 'lijing'
   const [displayMessages, setDisplayMessages] = useState([]); // [{role, content}]
   const [isFlickering, setIsFlickering] = useState(false);
+  const [lijingDisconnected, setLijingDisconnected] = useState(false);
   const messagesEndRef = useRef(null);
   const lastAiCountRef = useRef(0);
   const isInitializedRef = useRef(false);
+  const broadcastChannelRef = useRef(null);
 
   // 从 localStorage 加载状态
   useEffect(() => {
@@ -27,6 +29,7 @@ function ChatWidget() {
         if (parsed.persona) setPersona(parsed.persona);
         if (parsed.displayMessages) setDisplayMessages(parsed.displayMessages);
         if (typeof parsed.lastAiCount === 'number') lastAiCountRef.current = parsed.lastAiCount;
+        if (parsed.lijingDisconnected) setLijingDisconnected(true);
       }
     } catch (e) {
       console.error('[ChatWidget] Failed to load state:', e);
@@ -34,19 +37,63 @@ function ChatWidget() {
     isInitializedRef.current = true;
   }, []);
 
+  // 监听来自微博的 BroadcastChannel 消息
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
+    broadcastChannelRef.current = new BroadcastChannel('zhangwei_weibo_channel');
+    
+    broadcastChannelRef.current.onmessage = (event) => {
+      if (event.data?.type === 'VERIFICATION_CODE') {
+        const code = event.data.code;
+        // 添加李静发送验证码的消息
+        const newMsg = {
+          role: 'assistant',
+          content: `我截获到了验证码：${code}。快去用它重置密码！记住，时间不多了...`,
+        };
+        setDisplayMessages(prev => {
+          const updated = [...prev, newMsg];
+          // 同时标记连接断开
+          setLijingDisconnected(true);
+          // 保存状态
+          if (typeof window !== 'undefined') {
+            try {
+              localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify({
+                persona: 'lijing',
+                displayMessages: updated,
+                lastAiCount: lastAiCountRef.current,
+                lijingDisconnected: true,
+              }));
+            } catch (e) {
+              // ignore
+            }
+          }
+          return updated;
+        });
+      }
+    };
+    
+    return () => {
+      if (broadcastChannelRef.current) {
+        broadcastChannelRef.current.close();
+      }
+    };
+  }, []);
+
   // 保存状态到 localStorage
-  const saveState = useCallback((msgs, p, aiCount) => {
+  const saveState = useCallback((msgs, p, aiCount, disconnected = false) => {
     if (typeof window === 'undefined') return;
     try {
       localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify({
         persona: p,
         displayMessages: msgs,
         lastAiCount: aiCount,
+        lijingDisconnected: disconnected || lijingDisconnected,
       }));
     } catch (e) {
       console.error('[ChatWidget] Failed to save state:', e);
     }
-  }, []);
+  }, [lijingDisconnected]);
 
   const currentPrompt = persona === 'sy' ? SY_SYSTEM_PROMPT : LIJING_SYSTEM_PROMPT;
   const currentChatId = persona === 'sy' ? 'hengnian_sy' : 'hengnian_lijing';
@@ -131,6 +178,13 @@ function ChatWidget() {
       saveState(updated, persona, lastAiCountRef.current);
       return updated;
     });
+    
+    // 如果李静连接已断开，只显示消息但不发送到AI
+    if (lijingDisconnected && persona === 'lijing') {
+      // 不调用 addUserMessage，消息不会发送到AI
+      return;
+    }
+    
     addUserMessage(text);
   };
 

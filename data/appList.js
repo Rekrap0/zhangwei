@@ -24,4 +24,11 @@ export const appList = [
     route: '/qq',
     iconType: 'qq',
   },
+  {
+    id: 'weibo',
+    name: '微博',
+    keywords: ['微博', 'weibo', '新浪', '新浪微博', 'sina', 'wb'],
+    route: '/weibo',
+    iconType: 'weibo',
+  },
 ];
