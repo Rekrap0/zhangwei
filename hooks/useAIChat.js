@@ -53,6 +53,9 @@ export function useAIChat({
   useEffect(() => {
     if (!enabled || typeof window === 'undefined') return;
 
+    // 标记为未初始化
+    setIsInitialized(false);
+    
     // 先清空状态，防止残留
     setAiMessages([]);
     setSummary('');

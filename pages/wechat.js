@@ -659,7 +659,7 @@ function MomentsView({ contact, onBack, playerName }) {
 }
 
 // 用户详情页
-function ProfileView({ contact, onBack, onOpenSettings, onOpenMoments, isMobile }) {
+function ProfileView({ contact, onBack, onOpenSettings, onOpenMoments, onSendMessage, isMobile }) {
     return (
         <div className="flex flex-col h-full bg-white">
             {/* 头部 */}
@@ -728,7 +728,7 @@ function ProfileView({ contact, onBack, onOpenSettings, onOpenMoments, isMobile 
 
                 {/* 操作按钮 */}
                 <div className="mt-6 space-y-3">
-                    <button className="w-full py-3 bg-[#07C160] text-white rounded-lg font-medium hover:bg-[#06AD56] transition-colors">
+                    <button onClick={onSendMessage} className="w-full py-3 bg-[#07C160] text-white rounded-lg font-medium hover:bg-[#06AD56] transition-colors">
                         发消息
                     </button>
                     <button className="w-full py-3 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition-colors">
@@ -1251,6 +1251,12 @@ export default function Wechat() {
                     onBack={handleBackFromProfile}
                     onOpenSettings={handleOpenFriendSettings}
                     onOpenMoments={handleOpenMoments}
+                    onSendMessage={() => {
+                        setShowProfile(false);
+                        setShowFriendSettings(false);
+                        setShowMoments(false);
+                        if (profileContact) handleSelectContact(profileContact);
+                    }}
                     isMobile={isMobile}
                 />
             );

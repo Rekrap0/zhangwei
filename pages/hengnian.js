@@ -15,7 +15,7 @@ function ChatWidget() {
   const [isFlickering, setIsFlickering] = useState(false);
   const [lijingDisconnected, setLijingDisconnected] = useState(false);
   const messagesEndRef = useRef(null);
-  const lastAiCountRef = useRef(0);
+  const lastAiCountRef = useRef(-1); // -1 表示未初始化
   const isInitializedRef = useRef(false);
   const broadcastChannelRef = useRef(null);
 
@@ -28,7 +28,7 @@ function ChatWidget() {
         const parsed = JSON.parse(stored);
         if (parsed.persona) setPersona(parsed.persona);
         if (parsed.displayMessages) setDisplayMessages(parsed.displayMessages);
-        if (typeof parsed.lastAiCount === 'number') lastAiCountRef.current = parsed.lastAiCount;
+        // lastAiCount 会在同步 useEffect 中根据 aiMessages 自动初始化
         if (parsed.lijingDisconnected) setLijingDisconnected(true);
       }
     } catch (e) {
@@ -103,6 +103,7 @@ function ChatWidget() {
     isAiThinking,
     addUserMessage,
     resetChat,
+    isInitialized: isAiInitialized,
   } = useAIChat({
     chatId: currentChatId,
     systemPrompt: currentPrompt,
@@ -112,14 +113,22 @@ function ChatWidget() {
 
   // 同步 AI 消息到显示列表
   useEffect(() => {
+    // 等待两者都初始化完成
+    if (!isInitializedRef.current || !isAiInitialized) return;
+    
     const assistantMsgs = aiMessages.filter(m => m.role === 'assistant');
     console.log('[ChatWidget] Sync effect - assistantMsgs:', assistantMsgs.length, 'lastAiCount:', lastAiCountRef.current);
+    
+    // 首次同步时，如果 lastAiCount 未设置（-1），初始化为当前 AI 消息数量
+    if (lastAiCountRef.current === -1) {
+      lastAiCountRef.current = assistantMsgs.length;
+      return;
+    }
     
     // 如果 AI 消息数量少于记录的数量，说明 aiMessages 被重置了，需要同步重置计数器
     if (assistantMsgs.length < lastAiCountRef.current) {
       console.log('[ChatWidget] aiMessages was reset, resetting lastAiCount from', lastAiCountRef.current, 'to', assistantMsgs.length);
       lastAiCountRef.current = assistantMsgs.length;
-      // 不 return，继续检查是否有新消息需要显示
     }
     
     if (assistantMsgs.length === lastAiCountRef.current) {
@@ -136,7 +145,7 @@ function ChatWidget() {
       saveState(updated, persona, lastAiCountRef.current);
       return updated;
     });
-  }, [aiMessages, persona, saveState]);
+  }, [aiMessages, persona, saveState, isAiInitialized]);
 
   // 滚动到底部
   useEffect(() => {
@@ -156,7 +165,7 @@ function ChatWidget() {
         setIsFlickering(false);
         // 切换到李静模式，保留之前的UI消息记录，但AI重新开始
         setPersona('lijing');
-        lastAiCountRef.current = 0;
+        lastAiCountRef.current = -1; // 重置为未初始化，让同步逻辑重新计算
         resetChat('hengnian_lijing');
         // 在现有消息后追加系统切换提示和李静的开场白
         setDisplayMessages(prev => {
