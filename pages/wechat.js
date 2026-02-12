@@ -9,6 +9,8 @@ import { IoMdArrowBack, IoMdCall } from 'react-icons/io';
 import { BsThreeDots, BsImage } from 'react-icons/bs';
 import { MdOutlineInsertEmoticon } from 'react-icons/md';
 import { FaCamera } from 'react-icons/fa';
+import { useAIChat } from '../hooks/useAIChat';
+import { ZHANGWEI_SYSTEM_PROMPT } from '../data/aiPrompts';
 
 // 生成初始消息的函数（会在客户端调用以获取动态日期）
 function getInitialMessages() {
@@ -952,6 +954,19 @@ export default function Wechat() {
     const [isInitialized, setIsInitialized] = useState(false);
     const [playerName, setPlayerName] = useState('');
 
+    // 张薇 AI 聊天
+    const {
+        aiMessages: zhangweiAiMessages,
+        isAiThinking: isZhangweiThinking,
+        addUserMessage: addZhangweiMessage,
+    } = useAIChat({
+        chatId: 'zhangwei',
+        systemPrompt: ZHANGWEI_SYSTEM_PROMPT,
+        firstMessage: '你在吗？？我好像做了一个很长的梦……',
+        enabled: !!state.networkRepaired,
+    });
+    const lastAiMsgCountRef = useRef(0);
+
     // 检测屏幕宽度和获取玩家名称 - 仅在客户端执行
     useEffect(() => {
         setIsHydrated(true);
@@ -1049,6 +1064,56 @@ export default function Wechat() {
         );
     }, [state.networkRepaired, isInitialized]);
 
+    // 监听张薇 AI 的回复，注入到微信消息列表（多行拆分并延迟显示）
+    useEffect(() => {
+        if (!isInitialized) return;
+        // 只关注 assistant 消息
+        const assistantMsgs = zhangweiAiMessages.filter(m => m.role === 'assistant');
+        if (assistantMsgs.length <= lastAiMsgCountRef.current) return;
+
+        // 取最新的 assistant 消息
+        const newMsgs = assistantMsgs.slice(lastAiMsgCountRef.current);
+        lastAiMsgCountRef.current = assistantMsgs.length;
+
+        // 将每条 AI 消息按换行拆分，依次延迟注入
+        const allLines = [];
+        for (const msg of newMsgs) {
+            const lines = msg.content.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+            allLines.push(...lines);
+        }
+
+        const timers = [];
+        allLines.forEach((line, index) => {
+            const timer = setTimeout(() => {
+                const now = new Date();
+                const wechatMsg = {
+                    id: 'ai_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+                    sender: 'zhangwei',
+                    content: line,
+                    timestamp: now.toISOString(),
+                    time: now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
+                    type: 'text',
+                };
+
+                setMessagesByContact(prev => ({
+                    ...prev,
+                    zhangwei: [...(prev['zhangwei'] || []), wechatMsg],
+                }));
+
+                setContacts(prev =>
+                    prev.map(c =>
+                        c.id === 'zhangwei'
+                            ? { ...c, lastMessage: line, time: wechatMsg.time, unread: (activeContact?.id === 'zhangwei' ? 0 : (c.unread || 0) + 1) }
+                            : c
+                    )
+                );
+            }, index * 800); // 每条消息间隔 800ms
+            timers.push(timer);
+        });
+
+        return () => timers.forEach(t => clearTimeout(t));
+    }, [zhangweiAiMessages, isInitialized, activeContact]);
+
     // 获取当前联系人的消息
     const currentMessages = activeContact ? (messagesByContact[activeContact.id] || []) : [];
 
@@ -1095,6 +1160,11 @@ export default function Wechat() {
                     : c
             )
         );
+
+        // 张薇 AI 回复（网络修复后）
+        if (activeContact.id === 'zhangwei' && state.networkRepaired) {
+            addZhangweiMessage(content);
+        }
 
         // 微信团队自动回复
         if (activeContact.id === 'wechatteam') {

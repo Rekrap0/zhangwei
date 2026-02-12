@@ -1,6 +1,268 @@
-import { useEffect } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import { getPlayerCookies } from '../utils/cookies';
+import { useAIChat } from '../hooks/useAIChat';
+import { SY_SYSTEM_PROMPT, LIJING_SYSTEM_PROMPT } from '../data/aiPrompts';
+
+// 聊天客服组件
+const CHAT_STORAGE_KEY = 'zhangwei_hengnian_chat';
+
+function ChatWidget() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [inputValue, setInputValue] = useState('');
+  const [persona, setPersona] = useState('sy'); // 'sy' | 'lijing'
+  const [displayMessages, setDisplayMessages] = useState([]); // [{role, content}]
+  const [isFlickering, setIsFlickering] = useState(false);
+  const messagesEndRef = useRef(null);
+  const lastAiCountRef = useRef(0);
+  const isInitializedRef = useRef(false);
+
+  // 从 localStorage 加载状态
+  useEffect(() => {
+    if (typeof window === 'undefined' || isInitializedRef.current) return;
+    try {
+      const stored = localStorage.getItem(CHAT_STORAGE_KEY);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed.persona) setPersona(parsed.persona);
+        if (parsed.displayMessages) setDisplayMessages(parsed.displayMessages);
+        if (typeof parsed.lastAiCount === 'number') lastAiCountRef.current = parsed.lastAiCount;
+      }
+    } catch (e) {
+      console.error('[ChatWidget] Failed to load state:', e);
+    }
+    isInitializedRef.current = true;
+  }, []);
+
+  // 保存状态到 localStorage
+  const saveState = useCallback((msgs, p, aiCount) => {
+    if (typeof window === 'undefined') return;
+    try {
+      localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify({
+        persona: p,
+        displayMessages: msgs,
+        lastAiCount: aiCount,
+      }));
+    } catch (e) {
+      console.error('[ChatWidget] Failed to save state:', e);
+    }
+  }, []);
+
+  const currentPrompt = persona === 'sy' ? SY_SYSTEM_PROMPT : LIJING_SYSTEM_PROMPT;
+  const currentChatId = persona === 'sy' ? 'hengnian_sy' : 'hengnian_lijing';
+
+  const {
+    aiMessages,
+    isAiThinking,
+    addUserMessage,
+    resetChat,
+  } = useAIChat({
+    chatId: currentChatId,
+    systemPrompt: currentPrompt,
+    enabled: true,
+    debounceMs: 5000, // 5秒消息合并
+  });
+
+  // 同步 AI 消息到显示列表
+  useEffect(() => {
+    const assistantMsgs = aiMessages.filter(m => m.role === 'assistant');
+    if (assistantMsgs.length <= lastAiCountRef.current) {
+      return;
+    }
+    const newMsgs = assistantMsgs.slice(lastAiCountRef.current);
+    lastAiCountRef.current = assistantMsgs.length;
+    setDisplayMessages(prev => {
+      const updated = [...prev, ...newMsgs.map(m => ({ role: 'assistant', content: m.content }))];
+      saveState(updated, persona, lastAiCountRef.current);
+      return updated;
+    });
+  }, [aiMessages, persona, saveState]);
+
+  // 滚动到底部
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [displayMessages, isAiThinking]);
+
+  const handleSend = () => {
+    const text = inputValue.trim();
+    if (!text) return;
+
+    // 检查是否是切换暗号
+    if (text === 'KFCVME50' && persona === 'sy') {
+      setInputValue('');
+      // 显示闪烁特效
+      setIsFlickering(true);
+      setTimeout(() => {
+        setIsFlickering(false);
+        // 切换到李静模式，保留之前的UI消息记录，但AI重新开始
+        setPersona('lijing');
+        lastAiCountRef.current = 0;
+        resetChat('hengnian_lijing');
+        // 在现有消息后追加系统切换提示和李静的开场白
+        setDisplayMessages(prev => {
+          const updated = [
+            ...prev,
+            { role: 'system', content: '██ 系统接口已切换 ██' },
+            { role: 'assistant', content: '你终于找到这里了。我是李静。时间不多了，IT那帮人马上发现我们就要拔网线了，我们长话短说！' },
+          ];
+          saveState(updated, 'lijing', 0);
+          return updated;
+        });
+      }, 800);
+      return;
+    }
+
+    setInputValue('');
+    setDisplayMessages(prev => {
+      const updated = [...prev, { role: 'user', content: text }];
+      saveState(updated, persona, lastAiCountRef.current);
+      return updated;
+    });
+    addUserMessage(text);
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
+  };
+
+  const headerColor = persona === 'sy' ? 'bg-[#2E7D32]' : 'bg-[#B71C1C]';
+
+  return (
+    <>
+      {/* 悬浮按钮 */}
+      {!isOpen && (
+        <button
+          onClick={() => setIsOpen(true)}
+          className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-gradient-to-br from-[#2E7D32] to-[#388E3C] rounded-full shadow-lg shadow-green-900/30 flex items-center justify-center hover:scale-105 active:scale-95 transition-transform"
+        >
+          <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+          </svg>
+        </button>
+      )}
+
+      {/* 聊天窗口 */}
+      {isOpen && (
+        <div className="fixed bottom-6 right-6 z-50 w-[360px] max-w-[calc(100vw-2rem)] h-[500px] max-h-[calc(100vh-4rem)] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-gray-200">
+          {/* 闪烁特效层 */}
+          {isFlickering && (
+            <div className="absolute inset-0 z-10 bg-red-500 animate-screen-flicker pointer-events-none" />
+          )}
+
+          {/* 头部 */}
+          <div className={`${headerColor} px-4 py-3 flex items-center justify-between`}>
+            <div className="flex items-center gap-2">
+              <div className={`w-8 h-8 bg-white/20 rounded-full flex items-center justify-center`}>
+                <span className="text-white text-sm font-bold">恒</span>
+              </div>
+              <div>
+                <p className="text-white text-sm font-medium">恒念药业在线客服</p>
+                <p className="text-white/60 text-xs">在线</p>
+              </div>
+            </div>
+            <button
+              onClick={() => setIsOpen(false)}
+              className="text-white/80 hover:text-white transition-colors"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+
+          {/* 消息区域 */}
+          <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-gray-50">
+            {/* 欢迎消息 */}
+            {displayMessages.length === 0 && persona === 'sy' && (
+              <div className="flex gap-2">
+                <div className="w-7 h-7 bg-[#2E7D32] rounded-full flex items-center justify-center flex-shrink-0">
+                  <span className="text-white text-xs font-bold">恒</span>
+                </div>
+                <div className="bg-white rounded-lg rounded-tl-sm px-3 py-2 max-w-[80%] shadow-sm">
+                  <p className="text-sm text-gray-700">您好！我是恒念药业智能客服小恒，有什么可以帮您的吗？ 😊</p>
+                </div>
+              </div>
+            )}
+
+            {displayMessages.map((msg, i) => {
+              if (msg.role === 'system') {
+                return (
+                  <div key={i} className="flex justify-center">
+                    <span className="text-xs text-red-400 bg-red-50 px-3 py-1 rounded-full">{msg.content}</span>
+                  </div>
+                );
+              }
+              if (msg.role === 'user') {
+                return (
+                  <div key={i} className="flex gap-2 flex-row-reverse">
+                    <div className="bg-blue-500 text-white rounded-lg rounded-tr-sm px-3 py-2 max-w-[80%] shadow-sm">
+                      <p className="text-sm">{msg.content}</p>
+                    </div>
+                  </div>
+                );
+              }
+              // assistant
+              const isLijing = persona === 'lijing';
+              return (
+                <div key={i} className="flex gap-2">
+                  <div className="bg-white rounded-lg rounded-tl-sm px-3 py-2 max-w-[80%] shadow-sm">
+                    <p className="text-sm text-gray-700 whitespace-pre-wrap">{msg.content}</p>
+                  </div>
+                </div>
+              );
+            })}
+
+            {/* 正在输入指示器 */}
+            {isAiThinking && (
+              <div className="flex gap-2">
+                <div className={`w-7 h-7 ${persona === 'lijing' ? 'bg-[#B71C1C]' : 'bg-[#2E7D32]'} rounded-full flex items-center justify-center flex-shrink-0`}>
+                  <span className="text-white text-xs font-bold">{persona === 'lijing' ? '李' : '恒'}</span>
+                </div>
+                <div className="bg-white rounded-lg rounded-tl-sm px-3 py-2 shadow-sm">
+                  <div className="flex gap-1">
+                    <div className="w-2 h-2 bg-gray-300 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                    <div className="w-2 h-2 bg-gray-300 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                    <div className="w-2 h-2 bg-gray-300 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div ref={messagesEndRef} />
+          </div>
+
+          {/* 输入区域 */}
+          <div className="px-3 py-2 border-t border-gray-200 bg-white">
+            <div className="flex items-end gap-2">
+              <textarea
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                onKeyPress={handleKeyPress}
+                placeholder={persona === 'sy' ? '输入您的问题...' : '输入消息...'}
+                rows={1}
+                className="flex-1 px-3 py-2 text-sm border border-gray-200 rounded-lg resize-none focus:outline-none focus:border-[#2E7D32] transition-colors"
+                style={{ maxHeight: '80px' }}
+              />
+              <button
+                onClick={handleSend}
+                disabled={!inputValue.trim()}
+                className={`px-3 py-2 rounded-lg text-white text-sm font-medium transition-colors ${inputValue.trim()
+                  ? `${persona === 'lijing' ? 'bg-[#B71C1C] hover:bg-[#8B0000]' : 'bg-[#2E7D32] hover:bg-[#1B5E20]'}`
+                  : 'bg-gray-300 cursor-not-allowed'
+                }`}
+              >
+                发送
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
 
 export default function Hengnian() {
   const router = useRouter();
@@ -254,6 +516,9 @@ export default function Hengnian() {
           </div>
         </div>
       </footer>
+
+      {/* 聊天客服组件 */}
+      <ChatWidget />
     </div>
   );
 }
