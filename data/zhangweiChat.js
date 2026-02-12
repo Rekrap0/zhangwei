@@ -58,7 +58,7 @@ export function generateZhangweiMessages() {
   messages.push(createMessage({
     id: messageId++,
     sender: 'zhangwei',
-    content: '服了，宏图这边的PM（项目经理）是不是脑子有坑？',
+    content: '服了，宏图这边的项目经理是不是脑子有坑？',
     date: day14Ago,
     time: '10:23',
   }));

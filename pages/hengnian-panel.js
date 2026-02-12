@@ -11,6 +11,9 @@ export default function HengnianPanel() {
   const [showNotification, setShowNotification] = useState(false);
   const [isRepairing, setIsRepairing] = useState(false);
   const [repaired, setRepaired] = useState(false);
+  const [isLocked, setIsLocked] = useState(false);
+  const [sessionId, setSessionId] = useState('');
+  const [glitchActive, setGlitchActive] = useState(false);
 
   useEffect(() => {
     const { playerName, startDate } = getPlayerCookies();
@@ -24,12 +27,18 @@ export default function HengnianPanel() {
     }
   }, [router]);
 
-  // 检查是否已经修复过网络
+  // 检查游戏进度状态
   useEffect(() => {
-    if (isHydrated && state.networkRepaired) {
-      setRepaired(true);
+    if (isHydrated) {
+      if (state.continueInvestigation) {
+        // 玩家在微信侧选择了继续调查，管理面板应被锁定
+        setRepaired(true);
+        setIsLocked(true);
+      } else if (state.networkRepaired) {
+        setRepaired(true);
+      }
     }
-  }, [isHydrated, state.networkRepaired]);
+  }, [isHydrated, state.continueInvestigation, state.networkRepaired]);
 
   const handleRepairNetwork = () => {
     setIsRepairing(true);
@@ -48,6 +57,101 @@ export default function HengnianPanel() {
     deleteCookie(ADMIN_AUTH_KEY);
     router.push('/hengnian-admin');
   };
+
+  // 锁定状态下的会话ID动画
+  useEffect(() => {
+    if (!isLocked) return;
+
+    // 生成随机会话ID
+    const chars = '0123456789abcdef';
+    const randomId = Array.from({ length: 32 }, () => chars[Math.floor(Math.random() * chars.length)])
+      .join('')
+      .replace(/(.{8})(.{4})(.{4})(.{4})(.{12})/, '$1-$2-$3-$4-$5');
+    setSessionId(randomId);
+
+    // 1.5秒后切换为Base64编码
+    const timer = setTimeout(() => {
+      setGlitchActive(true);
+      setTimeout(() => {
+        const base64 = typeof window !== 'undefined'
+          ? btoa(window.location.origin + '/hengnian-config')
+          : '';
+        setSessionId(base64);
+        setTimeout(() => {
+          setGlitchActive(false);
+        }, 300);
+      }, 200);
+    }, 1500);
+
+    return () => clearTimeout(timer);
+  }, [isLocked]);
+
+  // ========== 锁定画面 ==========
+  if (isLocked) {
+    return (
+      <div className={`min-h-screen bg-[#0a0a0a] flex flex-col items-center justify-center p-4 font-mono relative overflow-hidden ${glitchActive ? 'animate-screen-flicker' : ''}`}>
+        <div className="max-w-2xl w-full">
+          {/* 警告标题 */}
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse" />
+            <span className="text-red-500/80 text-xs uppercase tracking-[0.3em]">SECURITY ALERT — EMERGENCY PROTOCOL ACTIVE</span>
+          </div>
+
+          <h1 className="text-red-400 text-2xl font-bold mb-2">
+            ⚠ 检测到异常网络活动
+          </h1>
+          <p className="text-gray-500 text-sm mb-8">
+            管理员面板已被安全系统自动锁定
+          </p>
+
+          {/* 状态面板 */}
+          <div className="bg-[#111] border border-red-900/30 rounded-lg overflow-hidden mb-6">
+            <div className="bg-red-900/20 px-5 py-3 border-b border-red-900/30">
+              <span className="text-red-400 text-sm font-medium">紧急安全协议 — 状态报告</span>
+            </div>
+            <div className="p-5 space-y-4">
+              <div className="flex items-start gap-3">
+                <span className="text-red-400 mt-0.5">●</span>
+                <div>
+                  <p className="text-gray-300 text-sm">系统检测到未授权的管理操作</p>
+                  <p className="text-gray-600 text-xs mt-0.5">触发时间：刚刚</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <span className="text-amber-400 mt-0.5">●</span>
+                <div>
+                  <p className="text-gray-300 text-sm">管理员面板已锁定，对外网服务已暂停</p>
+                  <p className="text-gray-600 text-xs mt-0.5">受影响范围：全部外网端口</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <span className="text-gray-500 mt-0.5">●</span>
+                <div>
+                  <p className="text-gray-300 text-sm">安全团队已收到通知</p>
+                  <p className="text-gray-600 text-xs mt-0.5">预计恢复时间：未知</p>
+                </div>
+              </div>
+
+              <div className="border-t border-gray-800 pt-4 mt-4">
+                <div className="flex items-start gap-2 text-sm">
+                  <span className="text-gray-500 flex-shrink-0">会话ID:</span>
+                  <span className={`font-mono text-xs break-all transition-colors duration-300 ${glitchActive ? 'text-red-400' : 'text-green-400/80'}`}>
+                    {sessionId}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* 底部信息 */}
+          <div className="text-gray-600 text-xs space-y-1">
+            <p>如有疑问，请联系系统安全管理员。</p>
+            <p className="text-gray-700">&copy; 2015-2026 恒念药业 内部安全系统</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#F0F2F5] flex flex-col">
