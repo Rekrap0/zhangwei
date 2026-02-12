@@ -605,7 +605,7 @@ function MomentsView({ contact, onBack, playerName }) {
         },
         {
             id: 4,
-            content: '妈的谁发明的这玩意儿？？？我以为是新口味可乐结果喝一口直接喷了🤮🤮🤮\n饺子味可乐，可乐味饺子，这世界疯了吧',
+            content: '明天就请项目经理喝一瓶😇',
             images: [
                 { src: '/momentsFun.jpg', alt: '饺子味可乐' }
             ],
@@ -1335,7 +1335,7 @@ export default function Wechat() {
                                         onClick={handleContinueInvestigation}
                                         className="w-full py-3 bg-white/10 text-white font-medium rounded-xl hover:bg-white/20 transition-colors text-sm border border-white/20"
                                     >
-                                        继续调查
+                                        不...我要继续调查
                                     </button>
                                 </div>
                             </div>
