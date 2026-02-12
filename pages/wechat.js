@@ -740,54 +740,19 @@ function ProfileView({ contact, onBack, onOpenSettings, onOpenMoments, isMobile 
     );
 }
 
-// 随机提示语
-const LAZY_HINTS = [
-    '还是之后再弄吧',
-    '现在不是做这件事的时候',
-    '这样应该也不会有线索吧',
-];
-
 // 好友设置页面
 function FriendSettingsView({ contact, onBack, onDeleteFriend }) {
     const [isBlocked, setIsBlocked] = useState(false);
-    const [showHint, setShowHint] = useState(false); // 全屏提示遮罩
-    const [hintText, setHintText] = useState('');
-
-    const handleAction = () => {
-        // 如果已经在显示，点击关闭
-        if (showHint) {
-            setShowHint(false);
-            return;
-        }
-        // 随机选择一条提示
-        const randomHint = LAZY_HINTS[Math.floor(Math.random() * LAZY_HINTS.length)];
-        setHintText(randomHint);
-        setShowHint(true);
-    };
 
     const handleDeleteFriend = () => {
         // 只有张薇的好友设置才会触发删除结局
         if (contact.id === 'zhangwei') {
             onDeleteFriend();
-        } else {
-            handleAction();
         }
     };
 
     return (
         <div className="flex flex-col h-full bg-[#F5F5F5] relative">
-            {/* 全屏提示遮罩 */}
-            {showHint && (
-                <div
-                    className="absolute inset-0 bg-black/60 z-50 flex items-center justify-center"
-                    onClick={() => setShowHint(false)}
-                >
-                    <p className="text-white text-lg font-medium px-6 text-center">
-                        {hintText}
-                    </p>
-                </div>
-            )}
-
             {/* 头部 */}
             <header className="bg-[#EDEDED] px-4 py-3 flex items-center gap-3 border-b border-gray-300">
                 <button onClick={onBack} className="p-1 -ml-1 text-gray-600">
@@ -811,7 +776,6 @@ function FriendSettingsView({ contact, onBack, onDeleteFriend }) {
                 <div className="bg-white divide-y divide-gray-100">
                     {/* 修改好友备注 */}
                     <button
-                        onClick={handleAction}
                         className="w-full px-4 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
                     >
                         <span className="text-gray-900">修改好友备注</span>
@@ -820,7 +784,6 @@ function FriendSettingsView({ contact, onBack, onDeleteFriend }) {
 
                     {/* 隐私 */}
                     <button
-                        onClick={handleAction}
                         className="w-full px-4 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
                     >
                         <span className="text-gray-900">隐私</span>
@@ -829,7 +792,6 @@ function FriendSettingsView({ contact, onBack, onDeleteFriend }) {
 
                     {/* 分享用户 */}
                     <button
-                        onClick={handleAction}
                         className="w-full px-4 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
                     >
                         <span className="text-gray-900">分享用户</span>
@@ -838,7 +800,6 @@ function FriendSettingsView({ contact, onBack, onDeleteFriend }) {
 
                     {/* 屏蔽 */}
                     <button
-                        onClick={handleAction}
                         className="w-full px-4 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
                     >
                         <span className="text-gray-900">屏蔽</span>
