@@ -7,7 +7,7 @@ import { SY_SYSTEM_PROMPT, LIJING_SYSTEM_PROMPT } from '../data/aiPrompts';
 // 聊天客服组件
 const CHAT_STORAGE_KEY = 'zhangwei_hengnian_chat';
 
-function ChatWidget() {
+function ChatWidget({ forceOpen }) {
   const [isOpen, setIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [persona, setPersona] = useState('sy'); // 'sy' | 'lijing'
@@ -18,6 +18,11 @@ function ChatWidget() {
   const lastAiCountRef = useRef(-1); // -1 表示未初始化
   const isInitializedRef = useRef(false);
   const broadcastChannelRef = useRef(null);
+
+  // 响应外部 forceOpen 变化
+  useEffect(() => {
+    if (forceOpen) setIsOpen(true);
+  }, [forceOpen]);
 
   // 从 localStorage 加载状态
   useEffect(() => {
@@ -342,6 +347,7 @@ function ChatWidget() {
 
 export default function Hengnian() {
   const router = useRouter();
+  const [chatOpen, setChatOpen] = useState(false);
 
   useEffect(() => {
     const { playerName, startDate } = getPlayerCookies();
@@ -353,7 +359,7 @@ export default function Hengnian() {
   return (
     <div className="min-h-screen bg-white">
       {/* 顶部导航 */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
+      <header className="bg-white border-b border-gray-200 sticky top-0 z-30">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center gap-3">
@@ -393,7 +399,7 @@ export default function Hengnian() {
             <circle cx="100" cy="350" r="150" fill="#81C784" />
           </svg>
         </div>
-        <div className="max-w-6xl mx-auto px-6 relative z-10">
+        <div className="max-w-6xl mx-auto px-6 relative z-[1]">
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 leading-tight">
             创新药物<br />
             <span className="text-[#2E7D32]">恒念为民</span>
@@ -401,7 +407,10 @@ export default function Hengnian() {
           <p className="text-lg text-gray-600 max-w-2xl mb-8 leading-relaxed">
             恒念药业专注于神经系统疾病治疗的创新研发，致力于为全球患者提供安全、有效的治疗方案。
           </p>
-          <button className="px-8 py-3 bg-[#2E7D32] text-white font-medium rounded-lg hover:bg-[#1B5E20] transition-colors text-sm shadow-lg shadow-green-200">
+          <button
+            onClick={() => setChatOpen(true)}
+            className="px-8 py-3 bg-[#2E7D32] text-white font-medium rounded-lg hover:bg-[#1B5E20] transition-colors text-sm shadow-lg shadow-green-200"
+          >
             了解更多
           </button>
         </div>
@@ -593,7 +602,7 @@ export default function Hengnian() {
       </footer>
 
       {/* 聊天客服组件 */}
-      <ChatWidget />
+      <ChatWidget forceOpen={chatOpen} />
     </div>
   );
 }
