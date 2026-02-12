@@ -39,10 +39,11 @@ export default function Ending1() {
       <div className={`max-w-md text-center transition-opacity duration-1000 ${fadeIn ? 'opacity-100' : 'opacity-0'}`}>
         {/* 结局标题 */}
         <div className="mb-12">
-          <p className="text-gray-500 text-sm mb-2">结局 1/4</p>
+          <p className="text-gray-500 text-sm mb-2">结局 1/3</p>
           <h1 className="text-3xl font-bold text-white mb-4">
             眼不见为净
           </h1>
+          <p className="text-gray-500 text-sm mb-2">HTTP 410: GONE</p>
           <div className="w-16 h-0.5 bg-gray-700 mx-auto" />
         </div>
 
@@ -69,9 +70,6 @@ export default function Ending1() {
         <div className="mt-16 pt-8 border-t border-gray-800">
           <p className="text-gray-600 text-xs">
             已解锁结局：眼不见为净
-          </p>
-          <p className="text-gray-700 text-xs mt-1">
-            还有 3 个结局等待发现
           </p>
         </div>
 

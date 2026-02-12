@@ -1154,8 +1154,21 @@ export default function Wechat() {
 
     // 删除好友（结局1）
     const handleDeleteFriend = () => {
-        router.push('/end1_5zhUd_x7Kp');
+        router.push('/end1_5zhUdx7Kp');
     };
+
+    // 结束调查（结局2）- 新标签页打开
+    const handleEndInvestigation = () => {
+        window.open('/end2_k1sZyNMYd6', '_blank');
+    };
+
+    // 继续调查 - 关闭覆盖层，同步到所有标签页
+    const handleContinueInvestigation = () => {
+        updateState({ continueInvestigation: true });
+    };
+
+    // 是否显示调查选择覆盖层
+    const showInvestigationOverlay = !!(state.networkRepaired && !state.continueInvestigation && activeContact?.id === 'zhangwei' && !showProfile && !showFriendSettings && !showMoments);
 
     // 返回聊天
     const handleBackFromProfile = () => {
@@ -1280,7 +1293,7 @@ export default function Wechat() {
     return (
         <div className="flex flex-col bg-[#EDEDED]" style={{ height: '100dvh' }}>
             {/* 主内容区域 */}
-            <main className="flex-1 overflow-hidden">
+            <main className="flex-1 overflow-hidden relative">
                 {activeTab === 'chat' ? (
                     renderContent()
                 ) : (
@@ -1290,6 +1303,43 @@ export default function Wechat() {
                             {activeTab === 'discover' && '发现功能开发中...'}
                             {activeTab === 'me' && '我的页面开发中...'}
                         </p>
+                    </div>
+                )}
+
+                {/* 调查选择覆盖层 - 张薇聊天界面上的半透明覆盖 */}
+                {showInvestigationOverlay && (
+                    <div className="absolute inset-0 bg-black/70 z-40 flex items-center justify-center p-4">
+                        <div className="max-w-sm w-full text-center">
+                            <div className="mb-6">
+                                <div className="w-16 h-16 bg-[#07C160] rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg shadow-green-500/30">
+                                    <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 01.213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.326.326 0 00.167-.054l1.903-1.114a.864.864 0 01.717-.098 10.16 10.16 0 002.837.403c.276 0 .543-.027.811-.05-.857-2.578.157-4.972 1.932-6.446 1.703-1.415 3.882-1.98 5.853-1.838-.576-3.583-4.196-6.348-8.596-6.348zM5.785 5.991c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 01-1.162 1.178A1.17 1.17 0 014.623 7.17c0-.651.52-1.18 1.162-1.18zm5.813 0c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 01-1.162 1.178 1.17 1.17 0 01-1.162-1.178c0-.651.52-1.18 1.162-1.18zm3.905 4.238c-1.548 0-3.028.428-4.236 1.238-1.399.937-2.27 2.324-2.37 3.876-.105 1.63.64 3.156 2.041 4.17a.418.418 0 01.152.472l-.238.906c-.014.05-.035.1-.035.152 0 .115.093.209.206.209a.23.23 0 00.118-.039l1.348-.789a.612.612 0 01.508-.069 7.18 7.18 0 002.01.285c3.426 0 6.217-2.33 6.217-5.193s-2.791-5.218-6.217-5.218h-.504zm-2.39 2.768c.456 0 .824.375.824.838a.831.831 0 01-.824.836.831.831 0 01-.823-.836c0-.463.368-.838.823-.838zm4.781 0c.456 0 .824.375.824.838a.831.831 0 01-.824.836.831.831 0 01-.823-.836c0-.463.368-.838.823-.838z" />
+                                    </svg>
+                                </div>
+                                <h2 className="text-xl font-bold text-white mb-2">张薇发来了消息！</h2>
+                                <p className="text-gray-300 text-sm leading-relaxed">
+                                    嗯？张薇突然回来了？
+                                </p>
+                            </div>
+
+                            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-5">
+                                <p className="text-white text-lg font-medium mb-5">是否结束调查？</p>
+                                <div className="space-y-3">
+                                    <button
+                                        onClick={handleEndInvestigation}
+                                        className="w-full py-3 bg-[#07C160] text-white font-medium rounded-xl hover:bg-[#06AD56] transition-colors text-sm"
+                                    >
+                                        太好了，结束调查！
+                                    </button>
+                                    <button
+                                        onClick={handleContinueInvestigation}
+                                        className="w-full py-3 bg-white/10 text-white font-medium rounded-xl hover:bg-white/20 transition-colors text-sm border border-white/20"
+                                    >
+                                        继续调查
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 )}
             </main>

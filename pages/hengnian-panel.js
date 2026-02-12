@@ -8,7 +8,7 @@ const ADMIN_AUTH_KEY = 'zhangwei_admin_auth';
 export default function HengnianPanel() {
   const router = useRouter();
   const { state, updateState, isHydrated } = useGameState();
-  const [showDialog, setShowDialog] = useState(false);
+  const [showNotification, setShowNotification] = useState(false);
   const [isRepairing, setIsRepairing] = useState(false);
   const [repaired, setRepaired] = useState(false);
 
@@ -39,20 +39,9 @@ export default function HengnianPanel() {
       setRepaired(true);
       // 更新游戏状态 - 通知其他标签页
       updateState({ networkRepaired: true });
-      // 显示全屏对话框
-      setShowDialog(true);
+      // 显示手机通知弹窗
+      setShowNotification(true);
     }, 2000);
-  };
-
-  const handleEndInvestigation = () => {
-    // 结局1：结束调查
-    router.push('/end1_5zhUd_x7Kp');
-  };
-
-  const handleContinue = () => {
-    // 继续调查
-    updateState({ continueInvestigation: true });
-    setShowDialog(false);
   };
 
   const handleLogout = () => {
@@ -62,42 +51,31 @@ export default function HengnianPanel() {
 
   return (
     <div className="min-h-screen bg-[#F0F2F5] flex flex-col">
-      {/* 全屏对话框 */}
-      {showDialog && (
-        <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
-          <div className="max-w-md w-full text-center">
-            {/* 动画效果 */}
-            <div className="mb-8">
-              <div className="w-20 h-20 bg-[#07C160] rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg shadow-green-500/30">
-                <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                </svg>
-              </div>
-              <h2 className="text-2xl font-bold text-white mb-2">张薇发来了消息！</h2>
-              <p className="text-gray-300 text-sm leading-relaxed">
-                公司网络已恢复，张薇重新上线并向你发送了消息。<br />
-                你可以回到微信查看她的消息。
-              </p>
+      {/* 手机消息通知弹窗 */}
+      {showNotification && (
+        <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 animate-slide-down w-[360px] max-w-[90vw]">
+          <button
+            onClick={() => {
+              setShowNotification(false);
+              window.open('/wechat', '_blank');
+            }}
+            className="w-full bg-white rounded-2xl shadow-2xl shadow-black/20 p-4 flex items-start gap-3 text-left hover:bg-gray-50 active:scale-[0.98] transition-all"
+          >
+            {/* 微信图标 */}
+            <div className="w-10 h-10 bg-[#07C160] rounded-xl flex items-center justify-center flex-shrink-0">
+              <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 01.213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.326.326 0 00.167-.054l1.903-1.114a.864.864 0 01.717-.098 10.16 10.16 0 002.837.403c.276 0 .543-.027.811-.05-.857-2.578.157-4.972 1.932-6.446 1.703-1.415 3.882-1.98 5.853-1.838-.576-3.583-4.196-6.348-8.596-6.348zM5.785 5.991c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 01-1.162 1.178A1.17 1.17 0 014.623 7.17c0-.651.52-1.18 1.162-1.18zm5.813 0c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 01-1.162 1.178 1.17 1.17 0 01-1.162-1.178c0-.651.52-1.18 1.162-1.18zm3.905 4.238c-1.548 0-3.028.428-4.236 1.238-1.399.937-2.27 2.324-2.37 3.876-.105 1.63.64 3.156 2.041 4.17a.418.418 0 01.152.472l-.238.906c-.014.05-.035.1-.035.152 0 .115.093.209.206.209a.23.23 0 00.118-.039l1.348-.789a.612.612 0 01.508-.069 7.18 7.18 0 002.01.285c3.426 0 6.217-2.33 6.217-5.193s-2.791-5.218-6.217-5.218h-.504zm-2.39 2.768c.456 0 .824.375.824.838a.831.831 0 01-.824.836.831.831 0 01-.823-.836c0-.463.368-.838.823-.838zm4.781 0c.456 0 .824.375.824.838a.831.831 0 01-.824.836.831.831 0 01-.823-.836c0-.463.368-.838.823-.838z" />
+              </svg>
             </div>
-
-            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
-              <p className="text-white text-lg font-medium mb-6">是否结束调查？</p>
-              <div className="space-y-3">
-                <button
-                  onClick={handleEndInvestigation}
-                  className="w-full py-3.5 bg-[#07C160] text-white font-medium rounded-xl hover:bg-[#06AD56] transition-colors text-sm"
-                >
-                  太好了，结束调查！
-                </button>
-                <button
-                  onClick={handleContinue}
-                  className="w-full py-3.5 bg-white/10 text-white font-medium rounded-xl hover:bg-white/20 transition-colors text-sm border border-white/20"
-                >
-                  继续调查
-                </button>
+            {/* 通知内容 */}
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center justify-between mb-0.5">
+                <span className="text-sm font-semibold text-gray-900">微信</span>
+                <span className="text-xs text-gray-400">现在</span>
               </div>
+              <p className="text-sm text-gray-700 truncate">您收到了一条微信消息</p>
             </div>
-          </div>
+          </button>
         </div>
       )}
 
