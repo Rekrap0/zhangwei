@@ -316,9 +316,11 @@ function ChatView({ contact, messages, onBack, onSendMessage, onAvatarClick, isM
     const messagesEndRef = useRef(null);
     const [inputValue, setInputValue] = useState('');
 
-    // 滚动到底部
+    // 滚动到底部（使用 requestAnimationFrame 确保 DOM 布局完成后再滚动）
     const scrollToBottom = useCallback(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+        requestAnimationFrame(() => {
+            messagesEndRef.current?.scrollIntoView({ behavior: 'instant' });
+        });
     }, []);
 
     useEffect(() => {
@@ -1159,7 +1161,8 @@ export default function Wechat() {
 
     // 结束调查（结局2）- 新标签页打开
     const handleEndInvestigation = () => {
-        window.open('/end2_k1sZyNMYd6', '_blank');
+        location.href = '/end2_k1sZyNMYd6';
+        //window.locate('/end2_k1sZyNMYd6', '_blank');
     };
 
     // 继续调查 - 关闭覆盖层，同步到所有标签页
