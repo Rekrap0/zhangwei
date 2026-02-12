@@ -45,9 +45,9 @@ function ChatWidget({ forceOpen }) {
   // 监听来自微博的 BroadcastChannel 消息
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    
+
     broadcastChannelRef.current = new BroadcastChannel('zhangwei_weibo_channel');
-    
+
     broadcastChannelRef.current.onmessage = (event) => {
       if (event.data?.type === 'VERIFICATION_CODE') {
         const code = event.data.code;
@@ -77,7 +77,7 @@ function ChatWidget({ forceOpen }) {
         });
       }
     };
-    
+
     return () => {
       if (broadcastChannelRef.current) {
         broadcastChannelRef.current.close();
@@ -120,22 +120,22 @@ function ChatWidget({ forceOpen }) {
   useEffect(() => {
     // 等待两者都初始化完成
     if (!isInitializedRef.current || !isAiInitialized) return;
-    
+
     const assistantMsgs = aiMessages.filter(m => m.role === 'assistant');
     console.log('[ChatWidget] Sync effect - assistantMsgs:', assistantMsgs.length, 'lastAiCount:', lastAiCountRef.current);
-    
+
     // 首次同步时，如果 lastAiCount 未设置（-1），初始化为当前 AI 消息数量
     if (lastAiCountRef.current === -1) {
       lastAiCountRef.current = assistantMsgs.length;
       return;
     }
-    
+
     // 如果 AI 消息数量少于记录的数量，说明 aiMessages 被重置了，需要同步重置计数器
     if (assistantMsgs.length < lastAiCountRef.current) {
       console.log('[ChatWidget] aiMessages was reset, resetting lastAiCount from', lastAiCountRef.current, 'to', assistantMsgs.length);
       lastAiCountRef.current = assistantMsgs.length;
     }
-    
+
     if (assistantMsgs.length === lastAiCountRef.current) {
       // 没有新消息
       return;
@@ -177,7 +177,7 @@ function ChatWidget({ forceOpen }) {
           const updated = [
             ...prev,
             { role: 'system', content: '██ 系统接口已切换 ██' },
-            { role: 'assistant', content: '你终于找到这里了。我是李静。时间不多了，IT那帮人马上发现我们就要拔网线了，我们长话短说！' },
+            { role: 'assistant', content: '你终于找到这里了。我是李静。时间不多了，公司的安全系统马上就会发现我们，我们长话短说！' },
           ];
           saveState(updated, 'lijing', 0);
           return updated;
@@ -192,13 +192,13 @@ function ChatWidget({ forceOpen }) {
       saveState(updated, persona, lastAiCountRef.current);
       return updated;
     });
-    
+
     // 如果李静连接已断开，只显示消息但不发送到AI
     if (lijingDisconnected && persona === 'lijing') {
       // 不调用 addUserMessage，消息不会发送到AI
       return;
     }
-    
+
     addUserMessage(text);
   };
 
@@ -333,7 +333,7 @@ function ChatWidget({ forceOpen }) {
                 className={`px-3 py-2 rounded-lg text-white text-sm font-medium transition-colors ${inputValue.trim()
                   ? `${persona === 'lijing' ? 'bg-[#B71C1C] hover:bg-[#8B0000]' : 'bg-[#2E7D32] hover:bg-[#1B5E20]'}`
                   : 'bg-gray-300 cursor-not-allowed'
-                }`}
+                  }`}
               >
                 发送
               </button>
@@ -494,12 +494,12 @@ export default function Hengnian() {
                 desc: '连续创业者，致力于神经科学研究转化。曾获"中关村高端领军人才"等荣誉。',
               },
               {
-                name: '李静',
+                name: '林晓琳',
                 title: '首席研究员（CRO）',
-                desc: '神经科学博士，哈佛医学院博士后。拥有15年以上神经系统疾病研究经验。',
+                desc: '神经科学博士，海外归国学者。拥有15年以上神经系统疾病研究经验。',
               },
               {
-                name: '林晓琳',
+                name: '陈志远',
                 title: '首席运营官（COO）',
                 desc: '拥有超过12年医药行业运营管理经验，曾任某跨国药企中国区运营总监。',
               },

@@ -34,10 +34,18 @@
   {
     "id": "lijing_resume",
     "keywords": ["李静"],
-    "requireAny": ["恒念", "恒念药业", "13912345678", "手机", "邮箱", "电话", "hengnian", "lijing", "博士", "药业"],
-    "title": "李静 - 神经科学博士 · 恒念药业首席研究员 | 医才网",
-    "description": "李静，神经科学博士，现任恒念药业股份有限公司首席研究员。拥有15年以上神经系统疾病研究经验，主导多项精准镇痛相关临床研究。联系方式： lijing@hengnian-pharma.cn",
+    "requireAny": ["恒念", "恒念药业", "13912345678", "hengnian",  "架构师", "IT", "系统"],
+    "title": "李静 - 高级系统架构师 · 恒念药业IT负责人 | 码上招",
+    "description": "李静，计算机科学硕士，现任恒念药业股份有限公司高级系统架构师兼IT基础设施负责人。12年IT从业经验，主导公司核心系统架构及智能客服系统开发。联系方式：lijing@hengnian-pharma.cn",
     "url": "/lijing-resume",
-    "displayUrl": "www.medtalent.cn/profile/lijing"
+    "displayUrl": "www.codehire.cn/u/lijing"
+  },
+  {
+    "id": "lingxiaolin_resume",
+    "keywords": ["林晓琳"],
+    "title": "林晓琳 - 首席运营官 · 恒念药业 | 医才网",
+    "description": "林晓琳，资深医药行业运营管理专家，现任恒念药业股份有限公司首席运营官（COO）。拥有超过12年医药行业运营管理经验。联系方式：lingxiaolin@hengnian-pharma.cn",
+    "url": "/lingxiaolin-resume",
+    "displayUrl": "www.medtalent.cn/profile/lingxiaolin"
   }
 ]

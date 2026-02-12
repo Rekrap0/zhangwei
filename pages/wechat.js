@@ -829,8 +829,52 @@ function FriendSettingsView({ contact, onBack, onDeleteFriend }) {
     );
 }
 
+// 封禁账号页面
+function BannedAccountView({ onBack }) {
+    return (
+        <div className="flex flex-col h-full bg-white">
+            <header className="bg-[#EDEDED] px-4 py-3 flex items-center gap-3 border-b border-gray-300">
+                <button onClick={onBack} className="p-1 -ml-1 text-gray-600">
+                    <IoMdArrowBack className="w-6 h-6" />
+                </button>
+                <h2 className="font-medium text-gray-900">公众号</h2>
+            </header>
+            <div className="flex-1 flex flex-col items-center justify-center px-6">
+                <div className="w-20 h-20 bg-red-500 rounded-full flex items-center justify-center mb-6 shadow-lg">
+                    <span className="text-white text-4xl font-bold">!</span>
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">帐号被永久封禁</h3>
+                <p className="text-gray-500 text-sm text-center leading-relaxed mb-8">
+                    根据相关法律法规和政策的要求，此帐号已被永久屏蔽。
+                </p>
+                <button
+                    onClick={onBack}
+                    className="px-8 py-2.5 border border-gray-300 rounded-lg text-gray-700 text-sm hover:bg-gray-50 transition-colors"
+                >
+                    回到首页
+                </button>
+            </div>
+        </div>
+    );
+}
+
+// Toast 提示组件
+function Toast({ message, visible }) {
+    if (!visible) return null;
+    return (
+        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[200] bg-black/70 text-white text-sm px-6 py-3 rounded-lg pointer-events-none animate-fade-in">
+            {message}
+        </div>
+    );
+}
+
 // 消息列表视图
-function ChatListView({ contacts, activeContactId, onSelectContact }) {
+function ChatListView({ contacts, activeContactId, onSelectContact, onSearchSelect, onBannedAccount }) {
+    const [searchText, setSearchText] = useState('');
+    const [isFocused, setIsFocused] = useState(false);
+    const showDropdown = searchText.trim().length > 0;
+    const isXiaoNian = searchText.trim() === '小念医生';
+
     return (
         <div className="flex flex-col h-full bg-white">
             {/* 搜索栏 */}
@@ -841,10 +885,58 @@ function ChatListView({ contacts, activeContactId, onSelectContact }) {
                     </svg>
                     <input
                         type="text"
+                        value={searchText}
+                        onChange={(e) => setSearchText(e.target.value)}
+                        onFocus={() => setIsFocused(true)}
                         placeholder="搜索"
                         className="flex-1 text-sm bg-transparent focus:outline-none"
                     />
+                    {searchText && (
+                        <button onClick={() => { setSearchText(''); }} className="text-gray-400 hover:text-gray-600">
+                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 001.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                            </svg>
+                        </button>
+                    )}
                 </div>
+
+                {/* 搜索下拉结果 */}
+                {showDropdown && (
+                    <div className="mt-1 bg-white rounded-lg shadow-lg border border-gray-200 overflow-hidden">
+                        <button
+                            onClick={() => {
+                                onSearchSelect(searchText.trim());
+                                setSearchText('');
+                            }}
+                            className="w-full px-4 py-3 flex items-center gap-3 hover:bg-gray-50 transition-colors text-left"
+                        >
+                            <div className="w-8 h-8 bg-[#07C160] rounded-lg flex items-center justify-center flex-shrink-0">
+                                <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                            </div>
+                            <span className="text-sm text-[#576B95]">
+                                搜索QQ号/手机/微信ID：<span className="text-[#07C160] font-medium">{searchText.trim()}</span>
+                            </span>
+                        </button>
+                        {isXiaoNian && (
+                            <button
+                                onClick={() => {
+                                    onBannedAccount();
+                                    setSearchText('');
+                                }}
+                                className="w-full px-4 py-3 flex items-center gap-3 hover:bg-gray-50 transition-colors text-left border-t border-gray-100"
+                            >
+                                <div className="w-8 h-8 bg-[#FA5151] rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <span className="text-white text-xs font-bold">公</span>
+                                </div>
+                                <span className="text-sm text-gray-900">
+                                    公众号：<span className="font-medium">小念医生</span>
+                                </span>
+                            </button>
+                        )}
+                    </div>
+                )}
             </div>
 
             {/* 聊天列表 */}
@@ -914,6 +1006,33 @@ export default function Wechat() {
     const [isHydrated, setIsHydrated] = useState(false);
     const [isInitialized, setIsInitialized] = useState(false);
     const [playerName, setPlayerName] = useState('');
+    const [showBannedAccount, setShowBannedAccount] = useState(false);
+    const [toastMessage, setToastMessage] = useState('');
+    const [showToast, setShowToast] = useState(false);
+
+    // Toast 辅助函数
+    const triggerToast = useCallback((msg) => {
+        setToastMessage(msg);
+        setShowToast(true);
+        setTimeout(() => setShowToast(false), 2000);
+    }, []);
+
+    // 搜索选择处理
+    const handleSearchSelect = useCallback((query) => {
+        if (query === '2847593160') {
+            // 跳转到张薇的个人资料页
+            const zhangwei = contacts.find(c => c.id === 'zhangwei');
+            if (zhangwei) {
+                setProfileContact(zhangwei);
+                setShowProfile(true);
+                setShowFriendSettings(false);
+                setShowMoments(false);
+                setShowBannedAccount(false);
+            }
+        } else {
+            triggerToast('未能搜索到该用户');
+        }
+    }, [contacts, triggerToast]);
 
     // 张薇 AI 聊天
     const {
@@ -1221,6 +1340,15 @@ export default function Wechat() {
 
     // 渲染主内容区域
     const renderContent = () => {
+        // 显示封禁账号页面
+        if (showBannedAccount) {
+            return (
+                <BannedAccountView
+                    onBack={() => setShowBannedAccount(false)}
+                />
+            );
+        }
+
         // 显示朋友圈页面
         if (showMoments && profileContact) {
             return (
@@ -1281,6 +1409,8 @@ export default function Wechat() {
                     contacts={contacts}
                     activeContactId={null}
                     onSelectContact={handleSelectContact}
+                    onSearchSelect={handleSearchSelect}
+                    onBannedAccount={() => setShowBannedAccount(true)}
                 />
             );
         }
@@ -1294,6 +1424,8 @@ export default function Wechat() {
                         contacts={contacts}
                         activeContactId={activeContact?.id}
                         onSelectContact={handleSelectContact}
+                        onSearchSelect={handleSearchSelect}
+                        onBannedAccount={() => setShowBannedAccount(true)}
                     />
                 </div>
 
@@ -1388,6 +1520,9 @@ export default function Wechat() {
             {(!isMobile || (!activeContact && !showProfile)) && (
                 <BottomNav activeTab={activeTab} onTabChange={setActiveTab} />
             )}
+
+            {/* Toast 提示 */}
+            <Toast message={toastMessage} visible={showToast} />
         </div>
     );
 }

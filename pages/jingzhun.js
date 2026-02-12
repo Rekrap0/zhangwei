@@ -152,15 +152,15 @@ export default function Jingzhun() {
             <h2 className="text-xl font-bold text-gray-900 mb-4">项目咨询</h2>
             <div className="space-y-3">
               <div className="flex items-center gap-3">
-                <span className="text-gray-500 w-16 flex-shrink-0">咨询人</span>
-                <span className="text-gray-900 font-medium">李静 博士</span>
+                <span className="text-gray-500 w-20 flex-shrink-0">咨询人</span>
+                <span className="text-gray-900 font-medium">林晓琳</span>
               </div>
               <div className="flex items-center gap-3">
-                <span className="text-gray-500 w-16 flex-shrink-0">电话</span>
-                <span className="text-[#4A9CC7] font-medium">13912345678</span>
+                <span className="text-gray-500 w-20 flex-shrink-0">电话</span>
+                <span className="text-[#4A9CC7] font-medium">16910237856</span>
               </div>
               <div className="flex items-center gap-3">
-                <span className="text-gray-500 w-16 flex-shrink-0">地点</span>
+                <span className="text-gray-500 w-20 flex-shrink-0">地点</span>
                 <span className="text-gray-900">北京市海淀区西北旺东路恒念科技园B座</span>
               </div>
             </div>

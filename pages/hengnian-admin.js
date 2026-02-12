@@ -8,6 +8,10 @@ const ADMIN_AUTH_KEY = 'zhangwei_admin_auth';
 const CORRECT_EMAIL = 'lijing@hengnian-pharma.cn';
 const CORRECT_PASSWORD = 'lj20150608';
 
+// 林晓琳的凭证（账户已锁定）
+const LOCKED_EMAIL = 'lingxiaolin@hengnian-pharma.cn';
+const LOCKED_PASSWORD = '19850217';
+
 export default function HengnianAdmin() {
   const router = useRouter();
   const [email, setEmail] = useState('');
@@ -35,10 +39,19 @@ export default function HengnianAdmin() {
 
     // 模拟加载延迟
     setTimeout(() => {
-      if (email.trim().toLowerCase() === CORRECT_EMAIL && password === CORRECT_PASSWORD) {
+      const emailLower = email.trim().toLowerCase();
+      
+      // 检查林晓琳的锁定账户
+      if (emailLower === LOCKED_EMAIL && password === LOCKED_PASSWORD) {
+        setError('该账户因长期未修改初始密码已被锁定。请联系IT支持解锁：it-support@hengnian-pharma.cn 或 李静 13912345678');
+        setIsLoading(false);
+        return;
+      }
+      
+      if (emailLower === CORRECT_EMAIL && password === CORRECT_PASSWORD) {
         setCookie(ADMIN_AUTH_KEY, 'true');
         router.push('/hengnian-panel');
-      } else if (email.trim().toLowerCase() === CORRECT_EMAIL) {
+      } else if (emailLower === CORRECT_EMAIL || emailLower === LOCKED_EMAIL) {
         setError('密码错误，请重试');
       } else {
         setError('账户不存在或凭证无效');
@@ -174,8 +187,8 @@ export default function HengnianAdmin() {
                     <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z" />
                   </svg>
                   <p className="text-amber-800 text-sm">
-                    <strong>安全提示：</strong>若管理员在30天内未修改初始密码，
-                    账户将被<strong>自动锁定</strong>。
+                    <strong>安全提示：</strong>若管理员在规定时间内未修改初始密码，
+                    账户可能被<strong>自动锁定</strong>。
                   </p>
                 </div>
               </div>
@@ -199,11 +212,6 @@ export default function HengnianAdmin() {
                 </ul>
               </div>
 
-              <div className="border-t border-gray-200 pt-3">
-                <p className="text-xs text-gray-400">
-                  如需重置密码或解除账户锁定，请联系IT部门：it-support@hengnian-pharma.cn
-                </p>
-              </div>
             </div>
 
             <div className="px-6 py-4 bg-[#F5F5F5] border-t border-gray-200">
