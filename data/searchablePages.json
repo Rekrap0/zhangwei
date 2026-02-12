@@ -26,10 +26,11 @@
   {
     "id": "lijing_baidu",
     "keywords": ["李静"],
+    "exactMatch": true,
     "title": "全中国有几个叫李静的_百度知道",
     "description": "通过身份信息系统查询，全国有超过243644人叫\u201c李静\u201d，搜寻时建议带上一些相关信息，如所在公司或个人信息等。",
     "url": "https://zhidao.baidu.com/question/558888538146292331.html",
-    "displayUrl": "zhidao.baidu.com"
+    "displayUrl": "https://zhidao.baidu.com/question"
   },
   {
     "id": "lijing_resume",

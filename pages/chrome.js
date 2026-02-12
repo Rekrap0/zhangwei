@@ -29,8 +29,13 @@ export default function Chrome() {
 
   // 根据关键词匹配特殊页面
   const getMatchingSpecialPages = useCallback((query) => {
-    const q = query.toLowerCase();
+    const q = query.toLowerCase().trim();
     return searchablePages.filter(page => {
+      // 精准匹配模式：查询必须完全等于某个关键词
+      if (page.exactMatch) {
+        return page.keywords.some(keyword => q === keyword.toLowerCase());
+      }
+
       // 基础关键词匹配
       const keywordMatch = page.keywords.some(keyword =>
         q.includes(keyword.toLowerCase()) ||
