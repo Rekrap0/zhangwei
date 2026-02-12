@@ -72,15 +72,45 @@ export default function StartScreen() {
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
 
             {/* 主内容区域 */}
-            <div className="relative z-10 flex flex-col items-center gap-8">
+            <div className="relative z-10 flex flex-col items-center gap-8 my-10">
                 {/* 游戏标题 */}
                 <div className="text-center mb-8">
-                    <h1 className="text-5xl font-bold text-white mb-4 tracking-wider">
-                        张薇失联事件
-                    </h1>
-                    <p className="text-gray-400 text-lg">
-                        一个关于寻找真相的故事
-                    </p>
+                    <section className='p-5'>
+                        <h1 className="text-5xl font-bold text-white mb-4 tracking-wider">
+                            张薇失联事件
+                        </h1>
+                        <p className="text-gray-400 text-lg">
+                            一个关于寻找真相的故事
+                        </p>
+                    </section>
+                    <section className='p-5'>
+                        <h2 className="text-xl font-bold text-white mb-4 tracking-wider">前情提要</h2>
+                        <p className="text-white max-w-[500px] px-5 text-left">
+                            你的网友“张薇”是你的好闺蜜，但是已经失联超过 168 小时了。 她最后一次给你发微信是在一周前。作为她在网络上最好的朋友，你察觉到了某种不寻常的违和感。
+                        </p>
+                    </section>
+                    <section className='p-5'>
+                        <h2 className="text-xl font-bold text-white mb-4 tracking-wider">游戏介绍</h2>
+                        <p className="text-white max-w-[500px] px-5 text-left">
+                            这是一款“没有进度条”的ARG游戏，你可以使用主角的手机里的搜索框去打开主角的手机应用、搜索网页结果，一步步推进找到线索。<br/>
+                            你的目标：
+                        </p>
+                        <ul className="text-white text-left max-w-[500px] px-5 list-disc">
+                            <li>找回张薇。</li>
+                            <li>找到事件的真相。</li>
+                        </ul>
+                    </section>
+                    <section className='p-5'>
+                        <h2 className="text-xl font-bold text-white mb-4 tracking-wider">游戏须知</h2>
+                        <ul className="text-white text-left max-w-[500px] px-5 list-disc">
+                            <li>本游戏剧情纯属虚构，请勿将游戏内的任何内容带入现实，或对现实中同名的真实公司、真实人物进行联系或骚扰。</li>
+                            <li>和同类网页解密游戏有所不同的是，此游戏没有页面编号，你已经访问过的页面<b>可能会随游戏的进度推动继续变化</b>。</li>
+                            <li>游戏可能会调用真实世界的网页或搜索结果以提升沉浸感和游戏难度，您可以通过查看网站地址栏域名是否为{window.location.href}的方式来判断自己是在游戏内还是在外部网站。</li>
+                            <li>本游戏不要求任何编程、it知识。请你只从肉眼可见的信息中进行推理，无需查看源代码或修改/解析文件等。</li>
+                            <li>游戏进度是在你的浏览器本地储存的，部分文本输入框/搜索框会使用外部的API来提供更好的游戏体验，请勿在文本框/搜索框搜索真实世界的个人信息。</li>
+                            <li>游戏中没有跳脸或血腥画面（因为作者本人很讨厌这些）。游戏不包含任何音效。</li>
+                        </ul>
+                    </section>
                     {/* 版权信息 */}
                     <div className="text-gray-500 text-xs">
                         © 2026 Jiangye

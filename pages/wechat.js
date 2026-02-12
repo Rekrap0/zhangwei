@@ -1027,7 +1027,7 @@ export default function Wechat() {
         const restoredMessage = {
             id: 'network_restored',
             sender: 'zhangwei',
-            content: '你在吗？？我刚才好像断网了……',
+            content: '你在吗？？我好像做了一个很长的梦……',
             timestamp: now.toISOString(),
             time: now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
             type: 'text',
