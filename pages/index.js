@@ -8,6 +8,7 @@ export default function StartScreen() {
     const [showNameModal, setShowNameModal] = useState(false);
     const [playerName, setPlayerName] = useState('');
     const [isLoading, setIsLoading] = useState(true);
+    const [showClearConfirm, setShowClearConfirm] = useState(false);
 
     // 检查是否为已有存档的玩家
     useEffect(() => {
@@ -39,16 +40,19 @@ export default function StartScreen() {
 
     // 清空游戏进度
     const handleClearProgress = () => {
-        if (confirm('确定要清空所有游戏进度吗？此操作不可撤销。')) {
-            clearPlayerCookies();
-            // 同时清空 localStorage 中的聊天记录、联系人状态和桌面图标
-            if (typeof window !== 'undefined') {
-                localStorage.removeItem('zhangwei_wechat_messages');
-                localStorage.removeItem('zhangwei_wechat_contacts');
-                localStorage.removeItem('zhangwei_desktop_icons');
-            }
-            setIsReturningPlayer(false);
+        setShowClearConfirm(true);
+    };
+
+    const confirmClearProgress = () => {
+        clearPlayerCookies();
+        // 同时清空 localStorage 中的聊天记录、联系人状态和桌面图标
+        if (typeof window !== 'undefined') {
+            localStorage.removeItem('zhangwei_wechat_messages');
+            localStorage.removeItem('zhangwei_wechat_contacts');
+            localStorage.removeItem('zhangwei_desktop_icons');
         }
+        setIsReturningPlayer(false);
+        setShowClearConfirm(false);
     };
 
     // 关闭弹窗
@@ -85,20 +89,26 @@ export default function StartScreen() {
                     </section>
                     <section className='p-5'>
                         <h2 className="text-xl font-bold text-white mb-4 tracking-wider">前情提要</h2>
-                        <p className="text-white max-w-[500px] px-5 text-left">
+                        <p className="text-white max-w-[500px] px-5 text-left my-2">
                             你的网友“张薇”是你的好闺蜜，但是已经失联超过 168 小时了。 她最后一次给你发微信是在一周前。作为她在网络上最好的朋友，你察觉到了某种不寻常的违和感。
                         </p>
                     </section>
                     <section className='p-5'>
                         <h2 className="text-xl font-bold text-white mb-4 tracking-wider">游戏介绍</h2>
-                        <p className="text-white max-w-[500px] px-5 text-left">
-                            这是一款“没有进度条”的ARG游戏，你可以使用主角的手机里的搜索框去打开主角的手机应用、搜索网页结果，一步步推进找到线索。<br/>
-                            你的目标：
+                        <p className="text-white max-w-[500px] px-5 text-left my-2">
+                            这是一款“没有进度条”的ARG游戏，你可以使用主角的手机里的搜索框去打开主角的手机应用、搜索网页结果，一步步推进找到线索。<br />
+                            你只能通过搜索框搜索正确、完整的应用名来打开应用，不过在搜索一次并打开应用之后，应用图标会添加至桌面的“最近使用”界面。
                         </p>
-                        <ul className="text-white text-left max-w-[500px] px-5 list-disc">
-                            <li>找回张薇。</li>
-                            <li>找到事件的真相。</li>
-                        </ul>
+                        <p className="text-white max-w-[500px] px-5 text-left my-2">
+                            你的目标：
+                            <ul className="px-5 list-disc">
+                                <li>找回张薇。</li>
+                                <li>找到事件的真相。</li>
+                            </ul>
+                        </p>
+                        <p className="text-white max-w-[500px] px-5 text-left my-2">
+                            如果不知道怎么开始的话，请想起你们最后的聊天记录在“<b>微信</b>”里，试着用搜索框打开这个应用吧。
+                        </p>
                     </section>
                     <section className='p-5'>
                         <h2 className="text-xl font-bold text-white mb-4 tracking-wider">游戏须知</h2>
@@ -168,6 +178,31 @@ export default function StartScreen() {
                                 className="flex-1 px-4 py-3 bg-blue-600 hover:bg-blue-500 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors"
                             >
                                 确认
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* 清空进度确认弹窗 */}
+            {showClearConfirm && (
+                <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50">
+                    <div className="bg-gray-800 border border-gray-700 rounded-xl p-8 max-w-md w-full mx-4 shadow-2xl">
+                        <h2 className="text-2xl font-bold text-white mb-2">确认清空进度</h2>
+                        <p className="text-gray-400 mb-6">确定要清空所有游戏进度吗？此操作不可撤销。</p>
+
+                        <div className="flex gap-3">
+                            <button
+                                onClick={() => setShowClearConfirm(false)}
+                                className="flex-1 px-4 py-3 bg-gray-700 hover:bg-gray-600 text-gray-300 rounded-lg transition-colors"
+                            >
+                                取消
+                            </button>
+                            <button
+                                onClick={confirmClearProgress}
+                                className="flex-1 px-4 py-3 bg-red-600 hover:bg-red-500 text-white font-semibold rounded-lg transition-colors"
+                            >
+                                确认清空
                             </button>
                         </div>
                     </div>
