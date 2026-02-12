@@ -204,14 +204,14 @@ export default function StartScreen() {
 
                 {/* 按钮区域 */}
                 <div className="flex flex-col items-center gap-4">
-                    {/* 开始/继续游戏按钮 */}
-                    <button
-                        onClick={handleStartGame}
-                        className="px-12 py-4 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white text-xl font-semibold rounded-lg shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all duration-300 transform hover:scale-105"
-                    >
-                        {isReturningPlayer ? isGameCompleted ? '回到桌面' : '继续游戏' : '开始游戏'}
-                    </button>
-
+                    {!isGameCompleted &&
+                        <button
+                            onClick={handleStartGame}
+                            className="px-12 py-4 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white text-xl font-semibold rounded-lg shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all duration-300 transform hover:scale-105"
+                        >
+                            {isReturningPlayer ? '继续游戏' : '开始游戏'}
+                        </button>
+                    }
                     <div className='flex gap-4'>
                         <button
                             onClick={() => window.location.href = 'mailto:songjiangye2021@gmail.com?subject=' + encodeURIComponent('张薇失联事件 - 问题反馈')}
