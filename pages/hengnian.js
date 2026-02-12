@@ -375,9 +375,8 @@ export default function Hengnian() {
           {/* 导航 */}
           <nav className="hidden md:flex items-center gap-8 text-sm">
             <span className="text-[#2E7D32] font-medium cursor-pointer">首页</span>
-            <span className="text-gray-600 hover:text-[#2E7D32] cursor-pointer transition-colors">关于我们</span>
             <span className="text-gray-600 hover:text-[#2E7D32] cursor-pointer transition-colors">产品与研发</span>
-            <span className="text-gray-600 hover:text-[#2E7D32] cursor-pointer transition-colors">新闻中心</span>
+            <span className="text-gray-600 hover:text-[#2E7D32] cursor-pointer transition-colors"><a href="/hengyao-news">新闻中心</a></span>
             <span className="text-gray-600 hover:text-[#2E7D32] cursor-pointer transition-colors">社会责任</span>
             <span className="text-gray-600 hover:text-[#2E7D32] cursor-pointer transition-colors">加入我们</span>
           </nav>
