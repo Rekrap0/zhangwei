@@ -77,6 +77,12 @@ export default function Ending1() {
 
         {/* 返回按钮 */}
         <button
+          onClick={() => history.back()}
+          className="mt-8 px-6 py-2 text-gray-500 hover:text-gray-300 transition-colors text-sm"
+        >
+          返回上一页
+        </button>
+        <button
           onClick={() => router.push('/')}
           className="mt-8 px-6 py-2 text-gray-500 hover:text-gray-300 transition-colors text-sm"
         >
