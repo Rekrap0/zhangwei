@@ -47,7 +47,7 @@ export default function ZhaoruiResume() {
           </div>
 
           <div className="pt-16 pb-6 px-6">
-            <h1 className="text-2xl font-bold text-gray-900">赵瑞</h1>
+            <h1 className="text-2xl font-bold text-gray-900">李静</h1>
             <p className="text-lg text-gray-600 mt-1">神经科学博士 | 恒念药业 首席研究员</p>
             <p className="text-sm text-gray-500 mt-1">北京 · 中国</p>
 
@@ -72,7 +72,7 @@ export default function ZhaoruiResume() {
               </svg>
               <div>
                 <p className="text-xs text-gray-500">邮箱</p>
-                <p className="text-sm text-gray-900 font-medium">zhaorui@hengnian-pharma.cn</p>
+                <p className="text-sm text-gray-900 font-medium">lijing@hengnian-pharma.cn</p>
               </div>
             </div>
             <div className="flex items-center gap-3">

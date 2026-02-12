@@ -96,7 +96,7 @@ export default function HengnianPanel() {
               <div className="w-7 h-7 bg-blue-100 rounded-full flex items-center justify-center">
                 <span className="text-blue-600 text-xs font-bold">赵</span>
               </div>
-              <span>赵瑞</span>
+              <span>李静</span>
             </div>
             <button
               onClick={handleLogout}
@@ -112,7 +112,7 @@ export default function HengnianPanel() {
       <main className="flex-1 max-w-6xl mx-auto px-6 py-6 w-full">
         {/* 欢迎信息 */}
         <div className="mb-6">
-          <h1 className="text-2xl font-bold text-gray-900">欢迎回来，赵瑞</h1>
+          <h1 className="text-2xl font-bold text-gray-900">欢迎回来，李静</h1>
           <p className="text-sm text-gray-500 mt-1">恒念药业管理系统 | 上次登录：2024年11月3日</p>
         </div>
 

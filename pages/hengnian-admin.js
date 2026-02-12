@@ -5,8 +5,8 @@ import { getPlayerCookies, setCookie, getCookie } from '../utils/cookies';
 const ADMIN_AUTH_KEY = 'zhangwei_admin_auth';
 
 // 正确的登录凭证
-const CORRECT_EMAIL = 'zhaorui@hengnian-pharma.cn';
-const CORRECT_PASSWORD = 'zr20150608';
+const CORRECT_EMAIL = 'lijing@hengnian-pharma.cn';
+const CORRECT_PASSWORD = 'lj20150608';
 
 export default function HengnianAdmin() {
   const router = useRouter();

@@ -153,15 +153,11 @@ export default function Jingzhun() {
             <div className="space-y-3">
               <div className="flex items-center gap-3">
                 <span className="text-gray-500 w-16 flex-shrink-0">咨询人</span>
-                <span className="text-gray-900 font-medium">赵瑞 博士</span>
+                <span className="text-gray-900 font-medium">李静 博士</span>
               </div>
               <div className="flex items-center gap-3">
                 <span className="text-gray-500 w-16 flex-shrink-0">电话</span>
                 <span className="text-[#4A9CC7] font-medium">139-1234-5678</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <span className="text-gray-500 w-16 flex-shrink-0">邮箱</span>
-                <span className="text-[#4A9CC7] font-medium">zhaorui@hengnian-pharma.cn</span>
               </div>
               <div className="flex items-center gap-3">
                 <span className="text-gray-500 w-16 flex-shrink-0">地点</span>
