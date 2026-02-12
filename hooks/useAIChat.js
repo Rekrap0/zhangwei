@@ -49,9 +49,13 @@ export function useAIChat({
     currentSystemPrompt.current = systemPrompt;
   }, [systemPrompt]);
 
-  // 从 localStorage 加载状态
+  // 从 localStorage 加载状态（当 chatId 变化时重新加载）
   useEffect(() => {
     if (!enabled || typeof window === 'undefined') return;
+
+    // 先清空状态，防止残留
+    setAiMessages([]);
+    setSummary('');
 
     try {
       const stored = localStorage.getItem(STORAGE_PREFIX + chatId);
@@ -150,63 +154,86 @@ export function useAIChat({
 
   // 发送消息到 Groq API
   const sendToApi = useCallback(async (userContent) => {
+    console.log('[useAIChat] sendToApi called with:', userContent);
     setIsAiThinking(true);
 
     // 将用户消息加入记录
     const userMsg = { role: 'user', content: userContent };
 
+    // 先同步更新用户消息
+    let updatedMessages;
     setAiMessages(prev => {
-      const updated = [...prev, userMsg];
+      updatedMessages = [...prev, userMsg];
+      console.log('[useAIChat] updatedMessages:', updatedMessages);
+      return updatedMessages;
+    });
 
-      // 构建 API 消息
-      const apiMessages = buildApiMessages(updated, summary);
+    // 等待状态更新完成
+    await new Promise(resolve => setTimeout(resolve, 0));
 
-      // 异步发送请求
-      (async () => {
-        try {
-          const response = await fetch('/api/chat', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ messages: apiMessages }),
+    try {
+      // 使用 ref 获取最新的 systemPrompt
+      const apiMessages = buildApiMessages(updatedMessages, summary);
+      console.log('[useAIChat] Sending API request, messages count:', apiMessages.length);
+
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: apiMessages }),
+      });
+
+      console.log('[useAIChat] API response status:', response.status);
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('[useAIChat] API response data:', data);
+        const assistantContent = data.content || '...';
+        const assistantMsg = { role: 'assistant', content: assistantContent };
+
+        setAiMessages(prev => {
+          let newMessages = [...prev, assistantMsg];
+          console.log('[useAIChat] newMessages after assistant reply:', newMessages);
+
+          // 限制消息数量
+          if (newMessages.length > maxMessages) {
+            newMessages = newMessages.slice(-maxMessages);
+          }
+
+          // 检查是否需要触发总结
+          if (newMessages.length >= summarizeThreshold && !isSummarizing.current) {
+            setSummary(currentSummary => {
+              triggerSummarize(newMessages, currentSummary);
+              return currentSummary;
+            });
+          }
+
+          // 使用函数式更新获取最新 summary
+          setSummary(currentSummary => {
+            saveState(newMessages, currentSummary);
+            return currentSummary;
           });
 
-          if (response.ok) {
-            const data = await response.json();
-            const assistantContent = data.content || '...';
-            const assistantMsg = { role: 'assistant', content: assistantContent };
-
-            setAiMessages(prev2 => {
-              let newMessages = [...prev2, assistantMsg];
-
-              // 限制消息数量
-              if (newMessages.length > maxMessages) {
-                newMessages = newMessages.slice(-maxMessages);
-              }
-
-              // 检查是否需要触发总结
-              if (newMessages.length >= summarizeThreshold && !isSummarizing.current) {
-                // 使用最新的 summary
-                setSummary(currentSummary => {
-                  triggerSummarize(newMessages, currentSummary);
-                  return currentSummary;
-                });
-              }
-
-              saveState(newMessages, summary);
-              return newMessages;
-            });
-          } else {
-            console.error('[useAIChat] API request failed');
-          }
-        } catch (e) {
-          console.error('[useAIChat] API request error:', e);
-        } finally {
-          setIsAiThinking(false);
-        }
-      })();
-
-      return updated;
-    });
+          return newMessages;
+        });
+      } else {
+        const errorText = await response.text();
+        console.error('[useAIChat] API request failed:', response.status, errorText);
+        // 添加错误提示消息
+        setAiMessages(prev => {
+          const errorMsg = { role: 'assistant', content: '（连接出现问题，请稍后再试）' };
+          return [...prev, errorMsg];
+        });
+      }
+    } catch (e) {
+      console.error('[useAIChat] API request error:', e);
+      // 添加错误提示消息
+      setAiMessages(prev => {
+        const errorMsg = { role: 'assistant', content: '（网络连接失败，请检查网络后重试）' };
+        return [...prev, errorMsg];
+      });
+    } finally {
+      setIsAiThinking(false);
+    }
   }, [buildApiMessages, summary, maxMessages, summarizeThreshold, saveState, triggerSummarize]);
 
   /**

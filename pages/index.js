@@ -45,11 +45,29 @@ export default function StartScreen() {
 
     const confirmClearProgress = () => {
         clearPlayerCookies();
-        // 同时清空 localStorage 中的聊天记录、联系人状态和桌面图标
+        // 清空所有 localStorage 游戏数据
         if (typeof window !== 'undefined') {
+            // 微信相关
             localStorage.removeItem('zhangwei_wechat_messages');
             localStorage.removeItem('zhangwei_wechat_contacts');
+            // 桌面图标
             localStorage.removeItem('zhangwei_desktop_icons');
+            // 游戏状态
+            localStorage.removeItem('zhangwei_game_state');
+            // 恒念客服聊天
+            localStorage.removeItem('zhangwei_hengnian_chat');
+            // 管理员登录状态已在 clearPlayerCookies 中清除（是 Cookie 不是 localStorage）
+            // QQ空间解锁状态
+            localStorage.removeItem('zhangwei_qzone_unlocked');
+            // 清除所有 AI 聊天记录 (zhangwei_ai_chat_*)
+            const keysToRemove = [];
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key && key.startsWith('zhangwei_ai_chat_')) {
+                    keysToRemove.push(key);
+                }
+            }
+            keysToRemove.forEach(key => localStorage.removeItem(key));
         }
         setIsReturningPlayer(false);
         setShowClearConfirm(false);

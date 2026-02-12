@@ -66,10 +66,23 @@ function ChatWidget() {
   // 同步 AI 消息到显示列表
   useEffect(() => {
     const assistantMsgs = aiMessages.filter(m => m.role === 'assistant');
-    if (assistantMsgs.length <= lastAiCountRef.current) {
+    console.log('[ChatWidget] Sync effect - assistantMsgs:', assistantMsgs.length, 'lastAiCount:', lastAiCountRef.current);
+    
+    // 如果 AI 消息数量少于记录的数量，说明 aiMessages 被重置了，需要同步重置计数器
+    if (assistantMsgs.length < lastAiCountRef.current) {
+      console.log('[ChatWidget] aiMessages was reset, resetting lastAiCount from', lastAiCountRef.current, 'to', assistantMsgs.length);
+      lastAiCountRef.current = assistantMsgs.length;
+      // 不 return，继续检查是否有新消息需要显示
+    }
+    
+    if (assistantMsgs.length === lastAiCountRef.current) {
+      // 没有新消息
       return;
     }
+
+    // 有新消息需要显示
     const newMsgs = assistantMsgs.slice(lastAiCountRef.current);
+    console.log('[ChatWidget] Adding new messages:', newMsgs);
     lastAiCountRef.current = assistantMsgs.length;
     setDisplayMessages(prev => {
       const updated = [...prev, ...newMsgs.map(m => ({ role: 'assistant', content: m.content }))];
@@ -358,8 +371,8 @@ export default function Hengnian() {
           <div className="grid md:grid-cols-2 gap-8">
             <div>
               <p className="text-gray-700 leading-relaxed mb-4">
-                恒念药业股份有限公司成立于<strong>2015年6月8日</strong>，由创始人田宇博士以
-                &ldquo;恒心守念，医者仁心&rdquo;的理念创立。公司总部位于北京市海淀区，
+                公司总部位于北京市海淀区，由创始人田宇博士以
+                &ldquo;恒心守念，医者仁心&rdquo;的理念创立。
                 是一家专注于神经系统疾病治疗的创新型制药企业。
               </p>
               <p className="text-gray-700 leading-relaxed mb-4">
@@ -442,7 +455,6 @@ export default function Hengnian() {
             {[
               { date: '2025-12-01', title: '恒念药业荣获"2025中国医药创新企业50强"', desc: '在近日举办的中国医药创新发展大会上，恒念药业凭借在神经调控技术领域的突出贡献……' },
               { date: '2025-09-15', title: '公司与北京大学签署战略合作协议', desc: '恒念药业与北京大学生命科学学院签署为期五年的产学研合作框架协议……' },
-              { date: '2025-06-08', title: '恒念药业十周年庆典圆满举行', desc: '2025年6月8日，公司迎来创立十周年庆典，全体员工共同回顾十年发展历程……' },
             ].map((news, i) => (
               <div key={i} className="bg-white rounded-xl p-5 hover:shadow-md transition-shadow cursor-pointer">
                 <span className="text-xs text-gray-400">{news.date}</span>

@@ -5,6 +5,8 @@
 
 const PLAYER_NAME_KEY = 'zhangwei_player_name';
 const START_DATE_KEY = 'zhangwei_start_date';
+const QZONE_UNLOCKED_KEY = 'zhangwei_qzone_unlocked';
+const ADMIN_AUTH_KEY = 'zhangwei_admin_auth';
 
 // Cookie 过期日期设置为 2099 年
 const EXPIRE_DATE = new Date('2099-12-31T23:59:59').toUTCString();
@@ -66,6 +68,8 @@ export function getPlayerCookies() {
 export function clearPlayerCookies() {
   deleteCookie(PLAYER_NAME_KEY);
   deleteCookie(START_DATE_KEY);
+  deleteCookie(QZONE_UNLOCKED_KEY);
+  deleteCookie(ADMIN_AUTH_KEY);
 }
 
 /**
@@ -77,7 +81,6 @@ export function hasPlayerStarted() {
 }
 
 // ============ QQ空间解锁状态 ============
-const QZONE_UNLOCKED_KEY = 'zhangwei_qzone_unlocked';
 
 /**
  * 设置QQ空间已解锁
