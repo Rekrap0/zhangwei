@@ -186,22 +186,14 @@ export default function HengnianAdmin() {
                   <li className="flex items-start gap-2">
                     <span className="text-[#2E7D32] mt-1">•</span>
                     <span>
-                      建议使用<strong>姓名拼音首字母缩写</strong>来增加密码复杂度
+                      建议混合英语字母来增加密码复杂度（可使用如姓名拼音首字母缩写）
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-[#2E7D32] mt-1">•</span>
                     <span>
-                      建议使用有意义的<strong>纪念日期</strong>（如公司创立日期等），
-                      而非个人生日，以提高安全性
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-[#2E7D32] mt-1">•</span>
-                    <span>
-                      推荐格式：<code className="bg-gray-100 px-1.5 py-0.5 rounded text-xs">拼音首字母 + 日期（YYYYMMDD）</code>
-                      <br />
-                      <span className="text-gray-400">例如：xm20200101</span>
+                      建议使用纪念日期（如结婚纪念日、创立日期等），
+                      避免使用非个人生日，以提高安全性
                     </span>
                   </li>
                 </ul>
@@ -209,7 +201,7 @@ export default function HengnianAdmin() {
 
               <div className="border-t border-gray-200 pt-3">
                 <p className="text-xs text-gray-400">
-                  如需重置密码，请联系IT部门：it-support@hengnian-pharma.cn
+                  如需重置密码或解除账户锁定，请联系IT部门：it-support@hengnian-pharma.cn
                 </p>
               </div>
             </div>

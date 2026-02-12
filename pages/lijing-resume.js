@@ -40,7 +40,7 @@ export default function ZhaoruiResume() {
             <div className="absolute -bottom-12 left-6">
               <div className="w-24 h-24 rounded-full border-4 border-white bg-gray-200 overflow-hidden shadow-lg">
                 <div className="w-full h-full bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center">
-                  <span className="text-4xl font-bold text-[#0A66C2]">赵</span>
+                  <span className="text-4xl font-bold text-[#0A66C2]">李</span>
                 </div>
               </div>
             </div>
@@ -81,7 +81,7 @@ export default function ZhaoruiResume() {
               </svg>
               <div>
                 <p className="text-xs text-gray-500">电话</p>
-                <p className="text-sm text-gray-900 font-medium">139-1234-5678</p>
+                <p className="text-sm text-gray-900 font-medium">13912345678</p>
               </div>
             </div>
           </div>
