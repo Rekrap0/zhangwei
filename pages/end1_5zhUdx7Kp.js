@@ -20,7 +20,7 @@ export default function Ending1() {
       return;
     }
     setPlayerName(name);
-    
+
     // 延迟显示内容
     setTimeout(() => setShowContent(true), 500);
     setTimeout(() => setFadeIn(true), 1000);
@@ -43,7 +43,9 @@ export default function Ending1() {
           <h1 className="text-3xl font-bold text-white mb-4">
             眼不见为净
           </h1>
-          <p className="text-gray-500 text-sm mb-2">HTTP 410: GONE</p>
+          <a href='https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Reference/Status#410_gone'>
+            <p className="text-gray-500 text-sm mb-2">HTTP 410: GONE</p>
+          </a>
           <div className="w-16 h-0.5 bg-gray-700 mx-auto" />
         </div>
 
