@@ -5,7 +5,7 @@
     "title": "恒念药业 - 创新药物，恒念为民",
     "description": "恒念药业股份有限公司 — 专注于神经系统疾病治疗的创新型制药企业，致力于为全球患者提供安全、有效的治疗方案。公司总部位于北京。",
     "url": "/hengnian",
-    "displayUrl": "www.hengnian-pharma.cn"
+    "displayUrl": "https://www.hengnian-pharma.cn"
   },
   {
     "id": "jingzhun",
@@ -13,7 +13,7 @@
     "title": "\u201c精准镇痛\u201d神经调控临床研究计划 - 志愿者招募",
     "description": "基于前沿神经调控技术的精准镇痛临床研究项目，面向慢性疼痛及情绪障碍患者招募志愿者。全封闭管理，费用全免。招募时间：2023年3月-8月。",
     "url": "/jingzhun",
-    "displayUrl": "www.hengyao-news.cn/clinical/jingzhun"
+    "displayUrl": "https://www.hengyao-news.cn/clinical/jingzhun"
   },
   {
     "id": "hengyao_news",
@@ -21,7 +21,7 @@
     "title": "恒药新闻 - 中国医药行业资讯门户",
     "description": "恒药新闻网 — 关注中国医药行业最新动态、政策解读、企业报道、临床研究资讯。",
     "url": "/hengyao-news",
-    "displayUrl": "www.hengyao-news.cn"
+    "displayUrl": "https://www.hengyao-news.cn"
   },
   {
     "id": "lijing_baidu",
@@ -39,7 +39,7 @@
     "title": "李静 - 高级系统架构师 · 恒念药业IT负责人 | 码上招",
     "description": "李静，计算机科学硕士，现任恒念药业股份有限公司高级系统架构师兼IT基础设施负责人。12年IT从业经验，主导公司核心系统架构及智能客服系统开发。联系方式：lijing@hengnian-pharma.cn",
     "url": "/lijing-resume",
-    "displayUrl": "www.codehire.cn/u/lijing"
+    "displayUrl": "https://www.codehire.cn/u/lijing"
   },
   {
     "id": "lingxiaolin_resume",
@@ -47,6 +47,6 @@
     "title": "林晓琳 - 首席运营官 · 恒念药业 | 医才网",
     "description": "林晓琳，资深医药行业运营管理专家，现任恒念药业股份有限公司首席运营官（COO）。拥有超过12年医药行业运营管理经验。联系方式：lingxiaolin@hengnian-pharma.cn",
     "url": "/lingxiaolin-resume",
-    "displayUrl": "www.medtalent.cn/profile/lingxiaolin"
+    "displayUrl": "https://www.medtalent.cn/profile/lingxiaolin"
   }
 ]
