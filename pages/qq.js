@@ -609,7 +609,10 @@ function QQServiceView({ contact, onBack }) {
                                 <p className="text-xs text-gray-500 leading-relaxed">恒念药业创始人田宇（45岁），多年来不仅带领企业深耕神经系统疾病药物研发，更因其女儿罹患渐冻症而走上一条充满艰辛与希望的抗争之路……</p>
                             </div>
                             <div className="border-t border-gray-100">
-                                <button className="w-full px-4 py-3 text-sm text-[#12B7F5] flex items-center justify-between hover:bg-gray-50 transition-colors">
+                                <button
+                                    onClick={() => window.open('/txnews-tianyu', '_blank')}
+                                    className="w-full px-4 py-3 text-sm text-[#12B7F5] flex items-center justify-between hover:bg-gray-50 transition-colors"
+                                >
                                     <span>阅读全文</span>
                                     <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
