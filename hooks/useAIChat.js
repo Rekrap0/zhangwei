@@ -36,6 +36,7 @@ export function useAIChat({
   const [aiMessages, setAiMessages] = useState([]); // [{role: 'user'|'assistant', content}]
   const [summary, setSummary] = useState('');
   const [isAiThinking, setIsAiThinking] = useState(false);
+  const [isDebouncing, setIsDebouncing] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
 
   // 消息批处理相关
@@ -247,6 +248,7 @@ export function useAIChat({
     if (!enabled) return;
 
     pendingUserMessages.current.push(content);
+    setIsDebouncing(true);
 
     // 重置 debounce 计时器
     if (debounceTimer.current) {
@@ -256,6 +258,7 @@ export function useAIChat({
     debounceTimer.current = setTimeout(() => {
       const merged = pendingUserMessages.current.join('\n');
       pendingUserMessages.current = [];
+      setIsDebouncing(false);
       sendToApi(merged);
     }, debounceMs);
   }, [enabled, debounceMs, sendToApi]);
@@ -272,6 +275,7 @@ export function useAIChat({
       debounceTimer.current = null;
     }
     setIsAiThinking(false);
+    setIsDebouncing(false);
     // 清除旧的 localStorage
     if (typeof window !== 'undefined' && newChatId) {
       try {
@@ -299,6 +303,7 @@ export function useAIChat({
   return {
     aiMessages,
     isAiThinking,
+    isDebouncing,
     isInitialized,
     addUserMessage,
     resetChat,

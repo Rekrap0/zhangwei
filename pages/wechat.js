@@ -317,7 +317,7 @@ function ChatBubble({ message, contact, isMe, onAvatarClick }) {
 }
 
 // 聊天界面
-function ChatView({ contact, messages, onBack, onSendMessage, onAvatarClick, isMobile }) {
+function ChatView({ contact, messages, onBack, onSendMessage, onAvatarClick, isMobile, isTyping }) {
     const messagesEndRef = useRef(null);
     const [inputValue, setInputValue] = useState('');
 
@@ -415,7 +415,7 @@ function ChatView({ contact, messages, onBack, onSendMessage, onAvatarClick, isM
                             <IoMdArrowBack className="w-6 h-6" />
                         </button>
                     )}
-                    <h2 className="font-medium text-gray-900">{contact.name}</h2>
+                    <h2 className="font-medium text-gray-900">{isTyping ? '对方正在输入…' : contact.name}</h2>
                 </div>
                 <button onClick={() => onAvatarClick(contact)} className="p-1 text-gray-600">
                     <BsThreeDots className="w-5 h-5" />
@@ -1041,6 +1041,7 @@ export default function Wechat() {
     const {
         aiMessages: zhangweiAiMessages,
         isAiThinking: isZhangweiThinking,
+        isDebouncing: isZhangweiDebouncing,
         addUserMessage: addZhangweiMessage,
     } = useAIChat({
         chatId: 'zhangwei',
@@ -1404,6 +1405,7 @@ export default function Wechat() {
                         onSendMessage={handleSendMessage}
                         onAvatarClick={handleViewProfile}
                         isMobile={true}
+                        isTyping={activeContact?.id === 'zhangwei' && (isZhangweiThinking || isZhangweiDebouncing)}
                     />
                 );
             }
@@ -1442,6 +1444,7 @@ export default function Wechat() {
                             onSendMessage={handleSendMessage}
                             onAvatarClick={handleViewProfile}
                             isMobile={false}
+                            isTyping={activeContact?.id === 'zhangwei' && (isZhangweiThinking || isZhangweiDebouncing)}
                         />
                     ) : (
                         <div className="flex-1 flex items-center justify-center bg-[#F5F5F5]">

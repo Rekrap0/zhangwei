@@ -107,6 +107,7 @@ function ChatWidget({ forceOpen }) {
   const {
     aiMessages,
     isAiThinking,
+    isDebouncing,
     addUserMessage,
     resetChat,
     isInitialized: isAiInitialized,
@@ -293,7 +294,7 @@ function ChatWidget({ forceOpen }) {
             })}
 
             {/* 正在输入指示器 */}
-            {isAiThinking && (
+            {(isAiThinking || isDebouncing) && (
               <div className="flex gap-2">
                 <div className="bg-white rounded-lg rounded-tl-sm px-3 py-2 shadow-sm">
                   <div className="flex gap-1">
