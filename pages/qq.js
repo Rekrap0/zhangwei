@@ -126,7 +126,7 @@ function getInitialQQMessages() {
                 content: '有人打工吗',
                 type: 'text',
                 timestamp: oneWeekAgo.toISOString(),
-            },
+            }
         ],
         other_qq: [],
         qqteam: [],
@@ -134,6 +134,16 @@ function getInitialQQMessages() {
         txnews: [],
     };
 }
+
+// ============ Base64 解码辅助 ============
+const _d = (s) => {
+    try { return typeof window !== 'undefined' ? decodeURIComponent(escape(atob(s))) : Buffer.from(s, 'base64').toString('utf-8'); } catch { return ''; }
+};
+
+// ============ 鱿谊第一 对话数据 (encoded) ============
+const _SPLAT_R1 = ['5Zev77yf5L2g5piv6LCB77yf', '5L2g55+l6YGT6L+Z5Liq5piv5LuA5LmI5ri45oiP55qE576k5ZCX77yf'];
+const _SPLAT_T = ['U3BsYXRvb24gMw==', '5pav5pmu5ouJ6YGBMw=='];
+const _SPLAT_R2 = ['T0tPSw==', '6YKj5omT5bel5ZCX', '6KaB5LiN5L2g5YWIPGEgaHJlZj0iaHR0cHM6Ly9nYW1lLmp5LXMuY29tIj7liqDkuIvmiJHlpb3lj4s8L2E+77yf'];
 
 // ============ 底部导航配置 ============
 const NAV_ITEMS = [
@@ -494,7 +504,11 @@ function QQChatView({ contact, messages, onBack, onSendMessage, isMobile, disabl
                                     </span>
                                 )}
                                 <div className={`px-3 py-2 rounded-lg ${isMe ? 'bg-[#95CAFF] text-gray-900' : 'bg-white text-gray-900'}`}>
-                                    <p className="text-sm leading-relaxed break-words">{msg.content}</p>
+                                    {msg.html ? (
+                                        <p className="text-sm leading-relaxed break-words [&_a]:text-[#12B7F5] [&_a]:underline" dangerouslySetInnerHTML={{ __html: msg.content }} />
+                                    ) : (
+                                        <p className="text-sm leading-relaxed break-words">{msg.content}</p>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -1297,6 +1311,8 @@ export default function QQ() {
     const [isHydrated, setIsHydrated] = useState(false);
     const [isInitialized, setIsInitialized] = useState(false);
     const [class5Dissolved, setClass5Dissolved] = useState(false);
+    const [splatStage, setSplatStage] = useState(0); // 0=idle, 1=asked question, 2=correct answer given, 3=done
+    const splatReplyingRef = useRef(false);
     const [toastMsg, setToastMsg] = useState('');
     const [showToast, setShowToast] = useState(false);
 
@@ -1344,6 +1360,8 @@ export default function QQ() {
         if (typeof window !== 'undefined') {
             const dissolved = localStorage.getItem('zhangwei_qq_class5_dissolved') === 'true';
             setClass5Dissolved(dissolved);
+            const storedSplatStage = localStorage.getItem('zhangwei_qq_splat_stage');
+            if (storedSplatStage !== null) setSplatStage(parseInt(storedSplatStage, 10));
         }
 
         setIsInitialized(true);
@@ -1363,6 +1381,13 @@ export default function QQ() {
         }
     }, [contacts, isInitialized]);
 
+    // Save splat stage
+    useEffect(() => {
+        if (isInitialized && typeof window !== 'undefined') {
+            localStorage.setItem('zhangwei_qq_splat_stage', String(splatStage));
+        }
+    }, [splatStage, isInitialized]);
+
     // 根据游戏状态过滤联系人（疼讯新闻仅在继续调查时显示）
     const filteredContacts = contacts.filter(c => {
         if (c.id === 'txnews' && !gameState.continueInvestigation) return false;
@@ -1377,6 +1402,9 @@ export default function QQ() {
         setActiveContact(contact);
         // 清除未读
         setContacts(prev => prev.map(c => c.id === contact.id ? { ...c, unread: 0 } : c));
+        if (contact.id === 'splat' || contact.id === 'class5') {
+            triggerToast('这个群聊和我要找到的真相应该没有关联');
+        }
     };
 
     // 发送消息
@@ -1395,6 +1423,68 @@ export default function QQ() {
                 ...prev,
                 [contactId]: [...(prev[contactId] || []), newMsg],
             };
+
+            // 鱿谊第一群：朔月互动
+            if (contactId === 'splat' && !splatReplyingRef.current) {
+                const playerMsgs = updated[contactId].filter(m => m.sender === 'player');
+                const currentStage = splatStage;
+
+                if (currentStage === 0 && playerMsgs.length === 1) {
+                    // 第一次发言：朔月回复两条
+                    splatReplyingRef.current = true;
+                    const replies = _SPLAT_R1;
+                    replies.forEach((encoded, i) => {
+                        setTimeout(() => {
+                            setMessagesByContact(prev => ({
+                                ...prev,
+                                splat: [...(prev.splat || []), {
+                                    id: 'sp_r1_' + i + '_' + Date.now(),
+                                    sender: 'sakugetsu',
+                                    senderName: '朔月',
+                                    avatarImg: '/avatarSakugetsu.png',
+                                    content: _d(encoded),
+                                    type: 'text',
+                                    timestamp: new Date().toISOString(),
+                                }],
+                            }));
+                            if (i === replies.length - 1) {
+                                setSplatStage(1);
+                                splatReplyingRef.current = false;
+                            }
+                        }, (i + 1) * 1200);
+                    });
+                } else if (currentStage === 1) {
+                    // 等待正确答案
+                    const lastPlayerMsg = content.trim();
+                    const triggers = _SPLAT_T.map(e => _d(e));
+                    if (triggers.includes(lastPlayerMsg)) {
+                        splatReplyingRef.current = true;
+                        const replies = _SPLAT_R2;
+                        replies.forEach((encoded, i) => {
+                            setTimeout(() => {
+                                setMessagesByContact(prev => ({
+                                    ...prev,
+                                    splat: [...(prev.splat || []), {
+                                        id: 'sp_r2_' + i + '_' + Date.now(),
+                                        sender: 'sakugetsu',
+                                        senderName: '朔月',
+                                        avatarImg: '/avatarSakugetsu.png',
+                                        content: _d(encoded),
+                                        type: 'text',
+                                        html: i === replies.length - 1,
+                                        timestamp: new Date().toISOString(),
+                                    }],
+                                }));
+                                if (i === replies.length - 1) {
+                                    setSplatStage(3);
+                                    splatReplyingRef.current = false;
+                                }
+                            }, (i + 1) * 1200);
+                        });
+                        setSplatStage(2);
+                    }
+                }
+            }
 
             // 5班班级群：第5条玩家消息后解散
             if (contactId === 'class5') {
@@ -1472,8 +1562,10 @@ export default function QQ() {
             // 群聊
             const msgs = messagesByContact[activeContact.id] || [];
             const isClass5 = activeContact.id === 'class5';
+            const isSplat = activeContact.id === 'splat';
             const playerMsgCount = isClass5 ? msgs.filter(m => m.sender === 'player').length : 0;
-            const isDisabled = isClass5 && (class5Dissolved || playerMsgCount >= 5);
+            const isDisabled = (isClass5 && (class5Dissolved || playerMsgCount >= 5))
+                || (isSplat && (splatStage >= 2 || splatReplyingRef.current));
 
             return (
                 <QQChatView
