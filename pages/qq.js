@@ -1,23 +1,51 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import { getPlayerCookies, setCookie, getCookie, setQZoneUnlocked, isQZoneUnlocked } from '../utils/cookies';
-import { getRelativeDate, getZhangweiBirthday, getZhangweiRealAge, formatDateFull } from '../utils/chatDates';
+import { getRelativeDate, getZhangweiBirthday, getZhangweiRealAge, formatDateFull, formatDateShort, getStartDate } from '../utils/chatDates';
 import { IoChatbubbleEllipsesSharp, IoPersonSharp, IoCompassSharp, IoSettingsSharp } from 'react-icons/io5';
 import { IoMdArrowBack } from 'react-icons/io';
 
+// ============ localStorage 存储 ============
+const QQ_MESSAGES_KEY = 'zhangwei_qq_messages';
+const QQ_CONTACTS_KEY = 'zhangwei_qq_contacts';
+
+function loadQQMessages() {
+    if (typeof window === 'undefined') return null;
+    try {
+        const stored = localStorage.getItem(QQ_MESSAGES_KEY);
+        return stored ? JSON.parse(stored) : null;
+    } catch { return null; }
+}
+function saveQQMessages(msgs) {
+    if (typeof window === 'undefined') return;
+    try { localStorage.setItem(QQ_MESSAGES_KEY, JSON.stringify(msgs)); } catch { }
+}
+function loadQQContacts() {
+    if (typeof window === 'undefined') return null;
+    try {
+        const stored = localStorage.getItem(QQ_CONTACTS_KEY);
+        return stored ? JSON.parse(stored) : null;
+    } catch { return null; }
+}
+function saveQQContacts(contacts) {
+    if (typeof window === 'undefined') return;
+    try { localStorage.setItem(QQ_CONTACTS_KEY, JSON.stringify(contacts)); } catch { }
+}
+
 // ============ QQ 联系人/消息数据 ============
 
-// 玩家自己QQ的"杂音"消息列表（和游戏无关的日常聊天）
 function getQQContacts() {
+    const oneWeekAgo = getRelativeDate(-7);
     return [
         {
             id: 'other_qq',
-            name: '我的其他QQ帐号',
+            name: '我的关联QQ账号',
             avatarImg: null,
             avatarIcon: 'penguin',
             lastMessage: '暂无新消息',
             time: '17:59',
             unread: 0,
+            chatType: 'linked',
         },
         {
             id: 'qqteam',
@@ -27,6 +55,7 @@ function getQQContacts() {
             lastMessage: '登录保护通知',
             time: '17:58',
             unread: 1,
+            chatType: 'service',
         },
         {
             id: 'qqsecurity',
@@ -36,17 +65,88 @@ function getQQContacts() {
             lastMessage: '【密码安全提醒】您已成功修改密码，请…',
             time: '17:58',
             unread: 1,
+            chatType: 'service',
         },
+        {
+            id: 'txnews',
+            name: '疼讯新闻',
+            avatarImg: null,
+            avatarIcon: 'news',
+            lastMessage: '父爱如磐，静待花开——恒念药业董事长田宇…',
+            time: '2天前',
+            unread: 1,
+            chatType: 'service',
+        },
+        {
+            id: 'splatoon',
+            name: '鱿谊第一',
+            avatarImg: null,
+            avatarIcon: 'group',
+            lastMessage: '朔月：有人打工吗',
+            time: formatDateShort(oneWeekAgo),
+            unread: 0,
+            chatType: 'group',
+        },
+        {
+            id: 'class5',
+            name: '5班班级群',
+            avatarImg: null,
+            avatarIcon: 'group',
+            lastMessage: '[群主] 辅导员-王老师：@全体成员 各位同学…',
+            time: '5年前',
+            unread: 0,
+            chatType: 'group',
+        }
     ];
+}
+
+function getInitialQQMessages() {
+    const fiveYearsAgo = getRelativeDate(-1825);
+    const oneWeekAgo = getRelativeDate(-7);
+    return {
+        class5: [
+            {
+                id: 'c5_2',
+                sender: 'wanglaoshi',
+                senderName: '[群主] 辅导员-王老师',
+                content: '@全体成员 各位同学，毕业三年问卷调查麻烦填一下，收到请回复。',
+                type: 'text',
+                timestamp: fiveYearsAgo.toISOString(),
+            },
+        ],
+        splatoon: [
+            {
+                id: 'sp_1',
+                sender: 'sakugetsu',
+                senderName: '[管理员]朔月',
+                content: '有人打工吗',
+                type: 'text',
+                timestamp: oneWeekAgo.toISOString(),
+            },
+        ],
+        other_qq: [],
+        qqteam: [],
+        qqsecurity: [],
+        txnews: [],
+    };
 }
 
 // ============ 底部导航配置 ============
 const NAV_ITEMS = [
     { id: 'message', label: '消息', icon: IoChatbubbleEllipsesSharp },
     { id: 'contacts', label: '联系人', icon: IoPersonSharp },
-    { id: 'watch', label: '看点', icon: IoCompassSharp },
-    { id: 'dynamic', label: '动态', icon: IoSettingsSharp },
+    { id: 'dynamic', label: '动态', icon: IoCompassSharp },
 ];
+
+// ============ Toast 组件 ============
+function QQToast({ message, visible }) {
+    if (!visible) return null;
+    return (
+        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[200] bg-black/70 text-white text-sm px-6 py-3 rounded-lg pointer-events-none animate-fade-in">
+            {message}
+        </div>
+    );
+}
 
 // ============ 头像组件 ============
 function QQAvatar({ contact, size = 'md', className = '' }) {
@@ -54,6 +154,11 @@ function QQAvatar({ contact, size = 'md', className = '' }) {
         sm: 'w-8 h-8',
         md: 'w-12 h-12',
         lg: 'w-16 h-16',
+    };
+    const iconSizes = {
+        sm: 'w-4 h-4',
+        md: 'w-6 h-6',
+        lg: 'w-8 h-8',
     };
 
     if (contact.avatarImg) {
@@ -68,12 +173,31 @@ function QQAvatar({ contact, size = 'md', className = '' }) {
         );
     }
 
-    // 默认图标头像
     if (contact.avatarIcon === 'shield') {
         return (
             <div className={`${sizeClasses[size]} rounded-full bg-[#12B7F5] flex items-center justify-center flex-shrink-0 ${className}`}>
-                <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="currentColor">
+                <svg className={`${iconSizes[size]} text-white`} viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm-1 14.5l-4-4 1.41-1.41L11 13.67l5.59-5.59L18 9.5l-7 7z" />
+                </svg>
+            </div>
+        );
+    }
+
+    if (contact.avatarIcon === 'group') {
+        return (
+            <div className={`${sizeClasses[size]} rounded-full bg-[#12B7F5] flex items-center justify-center flex-shrink-0 ${className}`}>
+                <svg className={`${iconSizes[size]} text-white`} fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z" />
+                </svg>
+            </div>
+        );
+    }
+
+    if (contact.avatarIcon === 'news') {
+        return (
+            <div className={`${sizeClasses[size]} rounded-full bg-[#FF6B35] flex items-center justify-center flex-shrink-0 ${className}`}>
+                <svg className={`${iconSizes[size]} text-white`} fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zM4 12h4v6H4v-6zm6 6V6h10v12H10z" />
                 </svg>
             </div>
         );
@@ -280,22 +404,292 @@ function QQChatListItem({ contact, onClick }) {
     );
 }
 
+// ============ 群聊/普通聊天界面 ============
+function QQChatView({ contact, messages, onBack, onSendMessage, isMobile, disabled, disabledText }) {
+    const messagesEndRef = useRef(null);
+    const [inputValue, setInputValue] = useState('');
+
+    const scrollToBottom = useCallback(() => {
+        requestAnimationFrame(() => {
+            messagesEndRef.current?.scrollIntoView({ behavior: 'instant' });
+        });
+    }, []);
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages, scrollToBottom]);
+
+    const handleSend = () => {
+        if (disabled) return;
+        if (inputValue.trim()) {
+            onSendMessage(inputValue.trim());
+            setInputValue('');
+        }
+    };
+
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            handleSend();
+        }
+    };
+
+    return (
+        <div className="flex flex-col h-full bg-[#EDEDED]">
+            {/* 聊天头部 */}
+            <header className="bg-[#EDEDED] px-4 py-3 flex items-center justify-between border-b border-gray-300">
+                <div className="flex items-center gap-3">
+                    <button onClick={onBack} className="p-1 -ml-1 text-gray-600">
+                        <IoMdArrowBack className="w-6 h-6" />
+                    </button>
+                    <h2 className="font-medium text-gray-900">{contact.name}</h2>
+                </div>
+            </header>
+
+            {/* 消息区域 */}
+            <div className="flex-1 overflow-y-auto p-4 space-y-3">
+                {messages.map((msg) => {
+                    if (msg.type === 'system') {
+                        return (
+                            <div key={msg.id} className="flex justify-center my-2">
+                                <div className="bg-gray-200 text-gray-500 text-xs px-3 py-1 rounded max-w-[80%] text-center">
+                                    {msg.content}
+                                </div>
+                            </div>
+                        );
+                    }
+                    const isMe = msg.sender === 'player';
+                    return (
+                        <div key={msg.id} className={`flex gap-2 ${isMe ? 'flex-row-reverse' : ''}`}>
+                            {isMe ? (
+                                <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
+                                    <img src="/avatarPlayer.jpg" alt="我" className="w-full h-full object-cover" />
+                                </div>
+                            ) : (
+                                <div className="w-8 h-8 rounded-full bg-[#12B7F5] flex items-center justify-center flex-shrink-0">
+                                    <IoPersonSharp className="w-4 h-4 text-white" />
+                                </div>
+                            )}
+                            <div className={`max-w-[70%] flex flex-col ${isMe ? 'items-end' : 'items-start'}`}>
+                                {!isMe && msg.senderName && (
+                                    <span className="text-xs text-gray-400 mb-0.5 ml-1">
+                                        {(() => {
+                                            const match = msg.senderName.match(/^\[(群主|管理员)\]\s*(.*)$/);
+                                            if (match) {
+                                                const role = match[1];
+                                                const name = match[2];
+                                                const bgColor = role === '群主' ? 'bg-[#E8A317]' : 'bg-[#2BA7A7]';
+                                                return (<><span className={`${bgColor} text-white text-[10px] px-1 py-[1px] rounded mr-1`}>{role}</span>{name}</>);
+                                            }
+                                            return msg.senderName;
+                                        })()}
+                                    </span>
+                                )}
+                                <div className={`px-3 py-2 rounded-lg ${isMe ? 'bg-[#95CAFF] text-gray-900' : 'bg-white text-gray-900'}`}>
+                                    <p className="text-sm leading-relaxed break-words">{msg.content}</p>
+                                </div>
+                            </div>
+                        </div>
+                    );
+                })}
+                <div ref={messagesEndRef} />
+            </div>
+
+            {/* 输入区域 */}
+            <div className="bg-[#F7F7F7] px-4 py-3 border-t border-gray-300">
+                <div className="flex items-end gap-2">
+                    <div className="flex-1 bg-white rounded-lg border border-gray-300">
+                        <textarea
+                            value={inputValue}
+                            onChange={(e) => !disabled && setInputValue(e.target.value)}
+                            onKeyPress={handleKeyPress}
+                            placeholder={disabled ? disabledText : '输入消息...'}
+                            rows={1}
+                            disabled={disabled}
+                            className={`w-full px-3 py-2 text-sm resize-none focus:outline-none rounded-lg ${disabled ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : ''}`}
+                            style={{ maxHeight: '100px' }}
+                        />
+                    </div>
+                    <button
+                        onClick={handleSend}
+                        disabled={disabled || !inputValue.trim()}
+                        className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors ${!disabled && inputValue.trim()
+                            ? 'bg-[#12B7F5] text-white hover:bg-[#0FA3DB]'
+                            : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                            }`}
+                    >
+                        发送
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+// ============ 服务号消息界面（QQ团队、QQ安全中心、疼讯新闻） ============
+function QQServiceView({ contact, onBack }) {
+    return (
+        <div className="flex flex-col h-full bg-[#EDEDED]">
+            {/* 头部 */}
+            <header className="bg-[#EDEDED] px-4 py-3 flex items-center justify-between border-b border-gray-300">
+                <div className="flex items-center gap-3">
+                    <button onClick={onBack} className="p-1 -ml-1 text-gray-600">
+                        <IoMdArrowBack className="w-6 h-6" />
+                    </button>
+                    <h2 className="font-medium text-gray-900">{contact.name}</h2>
+                </div>
+            </header>
+
+            {/* 消息区域 */}
+            <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                {contact.id === 'qqteam' && (
+                    <div className="flex justify-center">
+                        <div className="bg-white rounded-xl shadow-sm w-lg m-5 w-full overflow-hidden">
+                            <div className="px-4 py-3 border-b border-gray-100">
+                                <h3 className="font-bold text-gray-900 text-sm">安全通知</h3>
+                            </div>
+
+                            <div className="px-4 py-3 space-y-2 text-sm">
+                                <div className="flex"><span className="text-gray-500 w-24 flex-shrink-0">账号：</span><span className="text-gray-400">{(() => { const { playerName: name } = getPlayerCookies(); return name; })()}</span></div>
+                                <div className="flex"><span className="text-gray-500 w-24 flex-shrink-0">通知类型：</span><span className="text-gray-900">非常用环境登录</span></div>
+                                <div className="flex"><span className="text-gray-500 w-24 flex-shrink-0">日期：</span><span className="text-gray-900">{(() => { const d = getStartDate(); const pad = n => String(n).padStart(2, '0'); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`; })()}</span></div>
+                                <div className="flex"><span className="text-gray-500 w-24 flex-shrink-0">详情：</span><span className="text-gray-900">如非本人操作请改密。</span></div>
+                            </div>
+                            <div className="border-t border-gray-100">
+                                <button className="w-full px-4 py-3 text-sm text-[#12B7F5] flex items-center justify-between hover:bg-gray-50 transition-colors">
+                                    <span>查看详情</span>
+                                    <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {contact.id === 'qqsecurity' && (
+                    <div className="flex justify-center">
+                        <div className="bg-white rounded-xl shadow-sm w-lg m-5 w-full overflow-hidden">
+                            <div className="px-4 py-3 border-b border-gray-100 flex items-center gap-2">
+                                <svg className="w-5 h-5 text-[#12B7F5]" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm-1 14.5l-4-4 1.41-1.41L11 13.67l5.59-5.59L18 9.5l-7 7z" />
+                                </svg>
+                                <h3 className="font-bold text-gray-900 text-sm">密码安全提醒</h3>
+                            </div>
+                            <div className="px-4 py-4 text-sm text-gray-700 leading-relaxed">
+                                <p>您已成功修改QQ密码，请妥善保管新密码。</p>
+                                <p className="mt-2 text-gray-500 text-xs">如非本人操作，请立即通过QQ安全中心冻结账号。</p>
+                            </div>
+                            <div className="border-t border-gray-100 px-4 py-3">
+                                <p className="text-xs text-gray-400 mb-2">建议您启用二次验证以增强账号安全</p>
+                                <button className="w-full py-2.5 rounded-lg bg-[#12B7F5] text-white text-sm font-medium hover:bg-[#0FA3DB] transition-colors">
+                                    前往开启
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {contact.id === 'txnews' && (
+                    <div className="flex justify-center">
+                        <div className="bg-white rounded-xl shadow-sm w-lg m-5 w-full overflow-hidden">
+                            <div className="px-4 py-3">
+                                <h4 className="text-sm font-bold text-gray-900 leading-relaxed mb-2">父爱如磐，静待花开——恒念药业董事长田宇与女儿的渐冻症抗争之路</h4>
+                                <div className="w-full h-40 bg-gray-100 rounded-lg overflow-hidden mb-2 flex items-center justify-center">
+                                    <img
+                                        src="/newsTianyu.png"
+                                        alt="新闻配图"
+                                        className="w-full h-full object-cover"
+                                        onError={(e) => {
+                                            e.target.style.display = 'none';
+                                            e.target.parentElement.innerHTML = '<span class="text-gray-300 text-sm">图片加载中...</span>';
+                                        }}
+                                    />
+                                </div>
+                                <p className="text-xs text-gray-500 leading-relaxed">恒念药业创始人田宇（45岁），多年来不仅带领企业深耕神经系统疾病药物研发，更因其女儿罹患渐冻症而走上一条充满艰辛与希望的抗争之路……</p>
+                            </div>
+                            <div className="border-t border-gray-100">
+                                <button className="w-full px-4 py-3 text-sm text-[#12B7F5] flex items-center justify-between hover:bg-gray-50 transition-colors">
+                                    <span>阅读全文</span>
+                                    <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+}
+
+// ============ 我的关联QQ账号页面（亮色） ============
+function LinkedQQView({ onBack }) {
+    return (
+        <div className="flex flex-col h-full bg-[#F5F5F5]">
+            {/* 头部 */}
+            <header className="bg-white px-4 py-3 flex items-center justify-between border-b border-gray-200">
+                <button onClick={onBack} className="p-1 -ml-1 text-gray-600">
+                    <IoMdArrowBack className="w-6 h-6" />
+                </button>
+                <h2 className="font-medium text-gray-900">我的关联QQ账号</h2>
+                <button className="text-[#12B7F5] text-sm font-medium">管理</button>
+            </header>
+
+            {/* 关联QQ号消息提醒 */}
+            <div className="bg-white mx-4 mt-4 rounded-xl px-4 py-3 flex items-center justify-between">
+                <span className="text-gray-900 text-sm">关联QQ号消息提醒</span>
+                <div className="w-11 h-6 bg-[#12B7F5] rounded-full relative">
+                    <div className="absolute top-0.5 right-0.5 w-5 h-5 bg-white rounded-full shadow" />
+                </div>
+            </div>
+
+            {/* 账号列表 */}
+            <div className="px-4 mt-5 flex items-start gap-6">
+                {/* 添加账号按钮 */}
+                <div className="flex flex-col items-center gap-1.5">
+                    <button className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center hover:bg-gray-300 transition-colors">
+                        <svg className="w-7 h-7 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+                        </svg>
+                    </button>
+                    <span className="text-sm text-[#12B7F5]">添加账号</span>
+                </div>
+            </div>
+
+            {/* 分隔线 */}
+            <div className="mx-4 mt-5 border-t border-gray-200" />
+
+            {/* 暂无新消息 */}
+            <div className="px-4 mt-4">
+                <p className="text-sm text-gray-400">暂无新消息</p>
+            </div>
+
+            <div className="flex-1" />
+        </div>
+    );
+}
+
 // ============ 消息列表视图 ============
-function MessageListView({ contacts, onStartSearch }) {
+function MessageListView({ contacts, onStartSearch, onSelectContact }) {
     return (
         <div className="flex flex-col h-full bg-white">
             {/* 顶部状态栏 */}
             <div className="bg-[#EDEDED] px-4 pt-2 pb-1 flex items-center justify-between">
                 <div className="flex items-center gap-1.5">
-                    <div className="w-8 h-8 rounded-full overflow-hidden">
+                    <div className="w-10 h-10 rounded-full overflow-hidden">
                         <img src="/avatarPlayer.jpg" alt="我" className="w-full h-full object-cover" />
                     </div>
-                    <div className="flex items-center gap-1">
-                        <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                        <span className="text-xs text-gray-500">在线</span>
-                        <svg className="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
+                    <div>
+                        <span className="text-lg">{(() => { const { playerName: name } = getPlayerCookies(); return name; })()}</span>
+                        <div className="flex items-center gap-1">
+                            <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                            <span className="text-xs text-gray-500">在线</span>
+                            <svg className="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                            </svg>
+                        </div>
                     </div>
                 </div>
                 <div className="flex items-center gap-4">
@@ -313,7 +707,7 @@ function MessageListView({ contacts, onStartSearch }) {
                 </div>
             </div>
 
-            {/* 搜索栏（点击后跳转到搜索视图） */}
+            {/* 搜索栏 */}
             <div className="px-3 py-2 bg-[#EDEDED]">
                 <button
                     onClick={onStartSearch}
@@ -332,7 +726,7 @@ function MessageListView({ contacts, onStartSearch }) {
                     <QQChatListItem
                         key={contact.id}
                         contact={contact}
-                        onClick={() => { }}
+                        onClick={() => onSelectContact(contact)}
                     />
                 ))}
             </div>
@@ -738,8 +1132,8 @@ function QZonePostItem({ post, nickname, avatarSrc }) {
                             {/* 转发（分享箭头） */}
                             <button className="text-gray-400 hover:text-gray-500">
                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-<path d="M14.554 3.9974L19.2301 8.13188C21.0767 9.76455 22 10.5809 22 11.6325C22 12.6842 21.0767 13.5005 19.2301 15.1332L14.554 19.2677C13.7111 20.0129 13.2897 20.3856 12.9422 20.2303C12.5947 20.0751 12.5947 19.5143 12.5947 18.3925V15.6472C8.35683 15.6472 3.76579 17.6545 2 21C2 10.2943 8.27835 7.61792 12.5947 7.61792V4.87257C12.5947 3.75082 12.5947 3.18995 12.9422 3.03474C13.2897 2.87953 13.7111 3.25215 14.554 3.9974Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
+                                    <path d="M14.554 3.9974L19.2301 8.13188C21.0767 9.76455 22 10.5809 22 11.6325C22 12.6842 21.0767 13.5005 19.2301 15.1332L14.554 19.2677C13.7111 20.0129 13.2897 20.3856 12.9422 20.2303C12.5947 20.0751 12.5947 19.5143 12.5947 18.3925V15.6472C8.35683 15.6472 3.76579 17.6545 2 21C2 10.2943 8.27835 7.61792 12.5947 7.61792V4.87257C12.5947 3.75082 12.5947 3.18995 12.9422 3.03474C13.2897 2.87953 13.7111 3.25215 14.554 3.9974Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
                             </button>
                         </div>
                     </div>
@@ -847,7 +1241,7 @@ function QZoneView({ result, onBack }) {
 }
 
 // ============ 底部导航栏 ============
-function QQBottomNav({ activeTab, onTabChange }) {
+function QQBottomNav({ activeTab, onTabChange, totalUnread = 0 }) {
     return (
         <nav className="bg-[#F7F7F7] border-t border-gray-300 px-2 py-1">
             <div className="flex justify-around">
@@ -863,9 +1257,9 @@ function QQBottomNav({ activeTab, onTabChange }) {
                         >
                             <div className="relative">
                                 <Icon className="w-6 h-6" />
-                                {item.id === 'message' && (
+                                {item.id === 'message' && totalUnread > 0 && (
                                     <span className="absolute -top-1 -right-2 min-w-4 h-4 bg-red-500 rounded-full flex items-center justify-center text-white text-[10px] font-bold px-0.5">
-                                        2
+                                        {totalUnread > 99 ? '99+' : totalUnread}
                                     </span>
                                 )}
                             </div>
@@ -883,10 +1277,22 @@ export default function QQ() {
     const router = useRouter();
     const [activeTab, setActiveTab] = useState('message');
     const [isSearching, setIsSearching] = useState(false);
-    const [viewingProfile, setViewingProfile] = useState(null); // 当前查看的用户详情
-    const [viewingQZone, setViewingQZone] = useState(null); // 当前查看的QQ空间结果
+    const [viewingProfile, setViewingProfile] = useState(null);
+    const [viewingQZone, setViewingQZone] = useState(null);
+    const [activeContact, setActiveContact] = useState(null); // 当前打开的聊天联系人
     const [contacts, setContacts] = useState([]);
+    const [messagesByContact, setMessagesByContact] = useState({});
     const [isHydrated, setIsHydrated] = useState(false);
+    const [isInitialized, setIsInitialized] = useState(false);
+    const [class5Dissolved, setClass5Dissolved] = useState(false);
+    const [toastMsg, setToastMsg] = useState('');
+    const [showToast, setShowToast] = useState(false);
+
+    const triggerToast = useCallback((msg) => {
+        setToastMsg(msg);
+        setShowToast(true);
+        setTimeout(() => setShowToast(false), 2500);
+    }, []);
 
     // 检查cookies并初始化
     useEffect(() => {
@@ -895,66 +1301,129 @@ export default function QQ() {
             router.replace('/');
             return;
         }
-        setContacts(getQQContacts());
         setIsHydrated(true);
     }, [router]);
 
-    // 开始搜索
-    const handleStartSearch = () => {
-        setIsSearching(true);
+    // 初始化消息和联系人
+    useEffect(() => {
+        if (!isHydrated) return;
+
+        const storedMessages = loadQQMessages();
+        const storedContacts = loadQQContacts();
+        const dynamicContacts = getQQContacts();
+        const dynamicMessages = getInitialQQMessages();
+
+        if (storedMessages && Object.keys(storedMessages).length > 0) {
+            setMessagesByContact(storedMessages);
+        } else {
+            setMessagesByContact(dynamicMessages);
+        }
+
+        if (storedContacts && storedContacts.length > 0) {
+            setContacts(dynamicContacts.map(c => {
+                const stored = storedContacts.find(sc => sc.id === c.id);
+                return stored ? { ...c, ...stored } : c;
+            }));
+        } else {
+            setContacts(dynamicContacts);
+        }
+
+        // Load dissolved state
+        if (typeof window !== 'undefined') {
+            const dissolved = localStorage.getItem('zhangwei_qq_class5_dissolved') === 'true';
+            setClass5Dissolved(dissolved);
+        }
+
+        setIsInitialized(true);
+    }, [isHydrated]);
+
+    // Save messages
+    useEffect(() => {
+        if (isInitialized && Object.keys(messagesByContact).length > 0) {
+            saveQQMessages(messagesByContact);
+        }
+    }, [messagesByContact, isInitialized]);
+
+    // Save contacts
+    useEffect(() => {
+        if (isInitialized && contacts.length > 0) {
+            saveQQContacts(contacts);
+        }
+    }, [contacts, isInitialized]);
+
+    // 计算未读总数用于badge
+    const totalUnread = contacts.reduce((sum, c) => sum + (c.unread || 0), 0);
+
+    // 选择联系人打开聊天
+    const handleSelectContact = (contact) => {
+        setActiveContact(contact);
+        // 清除未读
+        setContacts(prev => prev.map(c => c.id === contact.id ? { ...c, unread: 0 } : c));
     };
 
-    // 取消搜索
-    const handleCancelSearch = () => {
-        setIsSearching(false);
+    // 发送消息
+    const handleSendMessage = (contactId, content) => {
+        const now = new Date();
+        const newMsg = {
+            id: 'player_' + Date.now(),
+            sender: 'player',
+            content,
+            type: 'text',
+            timestamp: now.toISOString(),
+        };
+
+        setMessagesByContact(prev => {
+            const updated = {
+                ...prev,
+                [contactId]: [...(prev[contactId] || []), newMsg],
+            };
+
+            // 5班班级群：第5条玩家消息后解散
+            if (contactId === 'class5') {
+                const playerMsgs = updated[contactId].filter(m => m.sender === 'player');
+                if (playerMsgs.length >= 5 && !class5Dissolved) {
+                    setClass5Dissolved(true);
+                    if (typeof window !== 'undefined') {
+                        localStorage.setItem('zhangwei_qq_class5_dissolved', 'true');
+                    }
+                    triggerToast('该群已被管理员解散');
+                }
+            }
+
+            return updated;
+        });
+
+        // 更新联系人最后消息
+        setContacts(prev => prev.map(c =>
+            c.id === contactId ? { ...c, lastMessage: content, time: now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }) } : c
+        ));
     };
 
-    // 选择QQ号 -> 查看用户详情
+    // 搜索相关
+    const handleStartSearch = () => setIsSearching(true);
+    const handleCancelSearch = () => setIsSearching(false);
     const handleSelectQQ = (result) => {
         setViewingProfile(result);
         setIsSearching(false);
     };
-
-    // 从用户详情返回
-    const handleBackFromProfile = () => {
-        setViewingProfile(null);
-    };
-
-    // 从用户详情 -> 打开QQ空间
-    const handleOpenQZone = () => {
-        if (viewingProfile) {
-            setViewingQZone(viewingProfile);
-        }
-    };
-
-    // 从QQ空间返回到用户详情
-    const handleBackFromQZone = () => {
-        setViewingQZone(null);
-    };
+    const handleBackFromProfile = () => setViewingProfile(null);
+    const handleOpenQZone = () => { if (viewingProfile) setViewingQZone(viewingProfile); };
+    const handleBackFromQZone = () => setViewingQZone(null);
+    const handleBackFromChat = () => setActiveContact(null);
 
     // 渲染主内容
     const renderContent = () => {
-        // QQ空间视图（在用户详情之上）
+        // QQ空间
         if (viewingQZone) {
             const isZhangwei = viewingQZone.qqNumber === ZHANGWEI_QQ;
-            if (isZhangwei) {
-                return (
-                    <QZoneView
-                        result={viewingQZone}
-                        onBack={handleBackFromQZone}
-                    />
-                );
-            } else {
-                return (
-                    <QZoneNoPermissionView
-                        result={viewingQZone}
-                        onBack={handleBackFromQZone}
-                    />
-                );
-            }
+            return isZhangwei ? (
+                <QZoneView result={viewingQZone} onBack={handleBackFromQZone} />
+            ) : (
+                <QZoneNoPermissionView result={viewingQZone} onBack={handleBackFromQZone} />
+            );
         }
 
-        // 用户详情视图
+        // 用户详情
         if (viewingProfile) {
             return (
                 <QQProfileView
@@ -965,61 +1434,86 @@ export default function QQ() {
             );
         }
 
-        // 搜索视图
+        // 搜索
         if (isSearching) {
+            return <SearchView onBack={handleCancelSearch} onSelectQQ={handleSelectQQ} />;
+        }
+
+        // 聊天界面
+        if (activeContact) {
+            // 服务号（QQ团队、QQ安全中心、疼讯新闻）—— 无输入框
+            if (activeContact.chatType === 'service') {
+                return <QQServiceView contact={activeContact} onBack={handleBackFromChat} />;
+            }
+
+            // 关联QQ账号
+            if (activeContact.chatType === 'linked') {
+                return <LinkedQQView onBack={handleBackFromChat} />;
+            }
+
+            // 群聊（5班、斯普拉遁）
+            const msgs = messagesByContact[activeContact.id] || [];
+            const isClass5 = activeContact.id === 'class5';
+            const playerMsgCount = isClass5 ? msgs.filter(m => m.sender === 'player').length : 0;
+            const isDisabled = isClass5 && (class5Dissolved || playerMsgCount >= 5);
+
             return (
-                <SearchView
-                    onBack={handleCancelSearch}
-                    onSelectQQ={handleSelectQQ}
+                <QQChatView
+                    contact={activeContact}
+                    messages={msgs}
+                    onBack={handleBackFromChat}
+                    onSendMessage={(content) => handleSendMessage(activeContact.id, content)}
+                    disabled={isDisabled}
+                    disabledText={isClass5 ? '无法在已解散的群聊中发送消息' : ''}
                 />
             );
         }
 
-        // 默认消息列表
+        // 消息列表
         if (activeTab === 'message') {
             return (
                 <MessageListView
                     contacts={contacts}
                     onStartSearch={handleStartSearch}
+                    onSelectContact={handleSelectContact}
                 />
             );
         }
 
-        // 其他标签页占位
+        // 其他标签页
         return (
             <div className="h-full flex items-center justify-center bg-white">
                 <p className="text-gray-400">
-                    {activeTab === 'contacts' && '联系人功能开发中...'}
-                    {activeTab === 'watch' && '看点功能开发中...'}
-                    {activeTab === 'dynamic' && '动态功能开发中...'}
+                    {activeTab === 'contacts' && '暂时无法显示此页面。'}
+                    {activeTab === 'dynamic' && '暂时无法显示此页面。'}
                 </p>
             </div>
         );
     };
 
-    // 加载中
-    if (!isHydrated) {
+    if (!isHydrated || !isInitialized) {
         return (
             <div className="flex flex-col bg-[#EDEDED]" style={{ height: '100dvh' }}>
                 <main className="flex-1 overflow-hidden flex items-center justify-center">
                     <p className="text-gray-400">加载中...</p>
                 </main>
-                <QQBottomNav activeTab={activeTab} onTabChange={setActiveTab} />
+                <QQBottomNav activeTab={activeTab} onTabChange={setActiveTab} totalUnread={0} />
             </div>
         );
     }
 
     return (
         <div className="flex flex-col bg-[#EDEDED]" style={{ height: '100dvh' }}>
-            {/* 主内容区域 */}
             <main className="flex-1 overflow-hidden">
                 {renderContent()}
             </main>
 
-            {/* 底部导航 - 搜索、详情和QQ空间时隐藏 */}
-            {!isSearching && !viewingProfile && !viewingQZone && (
-                <QQBottomNav activeTab={activeTab} onTabChange={setActiveTab} />
+            {/* 底部导航 - 搜索、详情、QQ空间、聊天时隐藏 */}
+            {!isSearching && !viewingProfile && !viewingQZone && !activeContact && (
+                <QQBottomNav activeTab={activeTab} onTabChange={setActiveTab} totalUnread={totalUnread} />
             )}
+
+            <QQToast message={toastMsg} visible={showToast} />
         </div>
     );
 }

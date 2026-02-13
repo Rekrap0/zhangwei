@@ -85,6 +85,10 @@ export default function StartScreen() {
             // 管理员登录状态已在 clearPlayerCookies 中清除（是 Cookie 不是 localStorage）
             // QQ空间解锁状态
             localStorage.removeItem('zhangwei_qzone_unlocked');
+            // QQ聊天记录和联系人
+            localStorage.removeItem('zhangwei_qq_messages');
+            localStorage.removeItem('zhangwei_qq_contacts');
+            localStorage.removeItem('zhangwei_qq_class5_dissolved');
             // 清除所有 AI 聊天记录 (zhangwei_ai_chat_*)
             const keysToRemove = [];
             for (let i = 0; i < localStorage.length; i++) {
