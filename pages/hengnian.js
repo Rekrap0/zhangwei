@@ -341,6 +341,7 @@ function ChatWidget({ forceOpen }) {
 export default function Hengnian() {
   const router = useRouter();
   const [chatOpen, setChatOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const { playerName, startDate } = getPlayerCookies();
@@ -379,6 +380,35 @@ export default function Hengnian() {
             <span>/</span>
             <span className="cursor-pointer hover:text-[#2E7D32]">EN</span>
           </div>
+
+          {/* 移动端省略号按钮 */}
+          <button
+            className="md:hidden flex items-center justify-center w-9 h-9 rounded-lg hover:bg-gray-100 transition-colors"
+            onClick={() => setMobileMenuOpen(prev => !prev)}
+            aria-label="菜单"
+          >
+            <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeWidth={2} d="M4 7h16M4 12h16M4 17h16" />
+            </svg>
+          </button>
+        </div>
+
+        {/* 移动端折叠菜单 */}
+        <div className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
+          mobileMenuOpen ? 'max-h-64 opacity-100' : 'max-h-0 opacity-0'
+        }`}>
+          <nav className="flex flex-col px-6 pb-4 space-y-1 border-t border-gray-100">
+            <span className="text-[#2E7D32] font-medium text-sm py-2 cursor-pointer">首页</span>
+            <span className="text-gray-600 hover:text-[#2E7D32] text-sm py-2 cursor-pointer transition-colors">产品与研发</span>
+            <span className="text-gray-600 hover:text-[#2E7D32] text-sm py-2 cursor-pointer transition-colors"><a href="/hengyao-news">新闻中心</a></span>
+            <span className="text-gray-600 hover:text-[#2E7D32] text-sm py-2 cursor-pointer transition-colors">社会责任</span>
+            <span className="text-gray-600 hover:text-[#2E7D32] text-sm py-2 cursor-pointer transition-colors">加入我们</span>
+            <div className="flex items-center gap-2 text-xs text-gray-500 pt-2 border-t border-gray-100">
+              <span className="text-[#2E7D32] font-medium">中文</span>
+              <span>/</span>
+              <span className="cursor-pointer hover:text-[#2E7D32]">EN</span>
+            </div>
+          </nav>
         </div>
       </header>
 
