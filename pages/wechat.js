@@ -1571,15 +1571,15 @@ export default function Wechat() {
                 ) : (
                     <div className="h-full flex items-center justify-center bg-white">
                         <p className="text-gray-400">
-                            {activeTab === 'contacts' && '通讯录功能开发中...'}
-                            {activeTab === 'discover' && '发现功能开发中...'}
+                            {activeTab === 'contacts' && '暂时无法显示此页面。'}
+                            {activeTab === 'discover' && '暂时无法显示此页面。'}
                         </p>
                     </div>
                 )}
 
                 {/* 调查选择覆盖层 - 张薇聊天界面上的半透明覆盖 */}
                 {showInvestigationOverlay && (
-                    <div className="absolute inset-0 bg-black/70 z-40 flex items-center justify-center p-4">
+                    <div className="absolute inset-0 bg-black/70 z-40 flex items-center justify-center p-4 transition-opacity duration-500 opacity-0 hover:opacity-100">
                         <div className="max-w-sm w-full text-center">
                             <div className="mb-6">
                                 <div className="w-16 h-16 bg-[#07C160] rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg shadow-green-500/30">
