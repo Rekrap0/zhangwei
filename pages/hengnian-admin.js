@@ -43,7 +43,7 @@ export default function HengnianAdmin() {
       
       // 检查林晓琳的锁定账户
       if (emailLower === LOCKED_EMAIL && password === LOCKED_PASSWORD) {
-        setError('该账户因长期未修改初始密码已被锁定。请联系IT支持解锁：it-support@hengnian-pharma.cn 或 李静 13912345678');
+        setError('locked');
         setIsLoading(false);
         return;
       }
@@ -115,12 +115,36 @@ export default function HengnianAdmin() {
                 />
               </div>
 
-              {error && (
+              {error && error !== 'locked' && (
                 <div className="flex items-center gap-2 text-red-600 text-sm bg-red-50 px-3 py-2 rounded-lg">
                   <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
                   </svg>
                   {error}
+                </div>
+              )}
+
+              {error === 'locked' && (
+                <div className="text-sm bg-red-50 border border-red-200 rounded-lg p-4 space-y-3">
+                  <div className="flex items-center gap-2 text-red-600">
+                    <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
+                    </svg>
+                    <span>该账户因长期未修改初始密码已被锁定。一封密码重置邮件已发送至您的邮箱，如有疑问，请联系IT支持：it-support@hengnian-pharma.cn 或 <b>李静 13912345678 </b></span>
+                  </div>
+                  <div className="border-t border-red-200 pt-3">
+                    <h4 className="font-medium text-gray-900 mb-1 text-xs">密码修改建议</h4>
+                    <ul className="space-y-1 text-gray-600 text-xs">
+                      <li className="flex items-start gap-1.5">
+                        <span className="text-red-400 mt-0.5">•</span>
+                        <span>建议混合英语字母来增加密码复杂度（可使用如<b>姓名拼音首字母缩写</b>）</span>
+                      </li>
+                      <li className="flex items-start gap-1.5">
+                        <span className="text-red-400 mt-0.5">•</span>
+                        <span>建议使用纪念日期（如纪念日、<b>创立日期</b>等），避免使用非个人生日，以提高安全性</span>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               )}
 
@@ -193,24 +217,6 @@ export default function HengnianAdmin() {
                 </div>
               </div>
 
-              <div>
-                <h4 className="font-medium text-gray-900 mb-1">密码修改建议</h4>
-                <ul className="space-y-2 text-gray-600">
-                  <li className="flex items-start gap-2">
-                    <span className="text-[#2E7D32] mt-1">•</span>
-                    <span>
-                      建议混合英语字母来增加密码复杂度（可使用如姓名拼音首字母缩写）
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-[#2E7D32] mt-1">•</span>
-                    <span>
-                      建议使用纪念日期（如结婚纪念日、创立日期等），
-                      避免使用非个人生日，以提高安全性
-                    </span>
-                  </li>
-                </ul>
-              </div>
 
             </div>
 
