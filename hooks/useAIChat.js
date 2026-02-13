@@ -28,7 +28,7 @@ export function useAIChat({
   systemPrompt,
   firstMessage = null,
   enabled = false,
-  debounceMs = 10000,
+  debounceMs = 5000,
   maxMessages = 10,
   summarizeThreshold = 6,
 }) {

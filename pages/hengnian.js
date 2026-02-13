@@ -114,7 +114,7 @@ function ChatWidget({ forceOpen }) {
     chatId: currentChatId,
     systemPrompt: currentPrompt,
     enabled: true,
-    debounceMs: 5000, // 5秒消息合并
+    debounceMs: 3000, // 3秒消息合并
   });
 
   // 同步 AI 消息到显示列表
