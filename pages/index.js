@@ -10,6 +10,8 @@ export default function StartScreen() {
     const [isLoading, setIsLoading] = useState(true);
     const [showClearConfirm, setShowClearConfirm] = useState(false);
     const [isGameCompleted, setIsGameCompleted] = useState(false);
+    const [activeTab, setActiveTab] = useState(0);
+    const [hasViewedNotice, setHasViewedNotice] = useState(false);
 
     // 结局数据（路径经过编码，避免直接暴露）
     // 使用简单的字符替换混淆
@@ -120,6 +122,8 @@ export default function StartScreen() {
         );
     }
 
+    const tabLabels = ['前情提要', '游戏介绍', '游戏须知'];
+
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-800 to-gray-900 flex flex-col items-center justify-center relative overflow-hidden">
             {/* 背景效果 */}
@@ -163,42 +167,68 @@ export default function StartScreen() {
                         </>
                     ) : (
                         <>
-                            <section className='p-5'>
-                                <h2 className="text-xl font-bold text-white mb-4 tracking-wider">前情提要</h2>
-                                <p className="text-white max-w-[500px] px-5 text-left my-2">
-                                    你的网友“张薇”是你的好闺蜜，但是已经失联超过 168 小时了。 她最后一次给你发微信是在一周前。作为她在网络上最好的朋友，你察觉到了某种不寻常的违和感。
-                                </p>
-                            </section>
-                            <section className='p-5'>
-                                <h2 className="text-xl font-bold text-white mb-4 tracking-wider">游戏介绍</h2>
-                                <p className="text-white max-w-[500px] px-5 text-left my-2">
-                                    这是一款“没有进度条”的ARG游戏，你可以使用主角的手机里的搜索框去打开主角的手机应用、搜索网页结果，一步步推进找到线索。<br />
-                                    你只能通过搜索框搜索正确、完整的应用名来打开应用，不过在搜索一次并打开应用之后，应用图标会添加至桌面的“最近使用”界面。
-                                </p>
-                                <p className="text-white max-w-[500px] px-5 text-left my-2">
-                                    你的目标：
-                                    <ul className="px-5 list-disc">
-                                        <li>找回张薇。</li>
-                                        <li>找到事件的真相。</li>
-                                    </ul>
-                                </p>
-                                <p className="text-white max-w-[500px] px-5 text-left my-2">
-                                    如果不知道怎么开始的话，请想起你们最后的聊天记录在“<b>微信</b>”里，试着用搜索框打开这个应用吧。
-                                </p>
-                            </section>
-                            <section className='p-5'>
-                                <h2 className="text-xl font-bold text-white mb-4 tracking-wider">游戏须知</h2>
-                                <ul className="text-white text-left max-w-[500px] px-5 list-disc">
-                                    <li>本游戏剧情纯属虚构，与现实的人、地点、组织没有任何关系。请勿将游戏内的任何内容带入现实，或对现实中同名的真实公司、真实人物进行联系或骚扰。</li>
-                                    <li>和同类网页解密游戏有所不同的是，此游戏没有页面编号，你已经访问过的页面<b>可能会随游戏的进度推动继续变化</b>。</li>
-                                    <li>游戏内的时间由您开始游戏的时间而定，<b>部分线索的时间将会随游戏开始时间而变化</b>（也就是说，直接复制其他人解除来的密码不一定有用的）</li>
-                                    <li>游戏可能会调用真实世界的网页或搜索结果以提升沉浸感和游戏难度，您可以通过查看网站地址栏域名是否为{window.location.href}的方式来判断自己是在游戏内还是在外部网站。</li>
-                                    <li>本游戏不要求任何编程、it知识。请你只从肉眼可见的信息中进行推理，无需查看页面元素改/解析文件等。</li>
-                                    <li>本网站使用Cookies等技术在你的浏览器本地储存游戏进度（Cookies内容被不会发送，也不包含任何分析型Cookies），本项目未连接或使用任何数据库。</li>
-                                    <li>部分文本输入框/搜索框会使用外部的API来提供更好的游戏体验，请勿在文本框/搜索框搜索真实世界的个人信息。</li>
-                                    <li>游戏中没有跳脸或血腥画面（因为作者本人很讨厌这些）。游戏不包含任何音效。</li>
-                                </ul>
-                            </section>
+                            {/* Tab switcher */}
+                            <div className="flex gap-1 mb-0 max-w-[540px] mx-auto px-5">
+                                {tabLabels.map((label, i) => (
+                                    <button
+                                        key={label}
+                                        onClick={() => {
+                                            setActiveTab(i);
+                                            if (i === 2) setHasViewedNotice(true);
+                                        }}
+                                        className={`flex-1 px-4 py-2 text-sm font-medium rounded-t-lg transition-colors ${
+                                            activeTab === i
+                                                ? 'text-white'
+                                                : 'text-gray-400 hover:text-gray-300 hover:bg-gray-700/30'
+                                        }`}
+                                    >
+                                        {label}
+                                    </button>
+                                ))}
+                            </div>
+
+                            {/* Tab content */}
+                            <div className="rounded-b-lg max-w-[540px] mx-auto px-5 h-[300px] overflow-y-scroll mt-5">
+                                {activeTab === 0 && (
+                                    <section>
+                                        <p className="text-white max-w-[500px] px-5 text-left my-2">
+                                            你的网友"张薇"是你的好闺蜜，但是已经失联超过 168 小时了。 她最后一次给你发微信是在一周前。作为她在网络上最好的朋友，你察觉到了某种不寻常的违和感。
+                                        </p>
+                                    </section>
+                                )}
+                                {activeTab === 1 && (
+                                    <section>
+                                        <p className="text-white max-w-[500px] px-5 text-left my-2">
+                                            这是一款"没有进度条"的ARG游戏，你可以使用主角的手机里的搜索框去打开主角的手机应用、搜索网页结果，一步步推进找到线索。<br />
+                                            你只能通过搜索框搜索正确、完整的应用名来打开应用，不过在搜索一次并打开应用之后，应用图标会添加至桌面的"最近使用"界面。
+                                        </p>
+                                        <p className="text-white max-w-[500px] px-5 text-left my-2">
+                                            你的目标：
+                                            <ul className="px-5 list-disc">
+                                                <li>找回张薇。</li>
+                                                <li>找到事件的真相。</li>
+                                            </ul>
+                                        </p>
+                                        <p className="text-white max-w-[500px] px-5 text-left my-2">
+                                            如果不知道怎么开始的话，请想起你们最后的聊天记录在"<b>微信</b>"里，试着用搜索框打开这个应用吧。
+                                        </p>
+                                    </section>
+                                )}
+                                {activeTab === 2 && (
+                                    <section>
+                                        <ul className="text-white text-left max-w-[500px] px-5 list-disc">
+                                            <li>本游戏剧情纯属虚构，与现实的人、地点、组织没有任何关系。请勿将游戏内的任何内容带入现实，或对现实中同名的真实公司、真实人物进行联系或骚扰。</li>
+                                            <li>和同类网页解密游戏有所不同的是，此游戏没有页面编号，你已经访问过的页面<b>可能会随游戏的进度推动继续变化</b>。</li>
+                                            <li>游戏内的时间由您开始游戏的时间而定，<b>部分线索的时间将会随游戏开始时间而变化</b>（也就是说，直接复制其他人解除来的密码不一定有用的）</li>
+                                            <li>游戏可能会调用真实世界的网页或搜索结果以提升沉浸感和游戏难度，您可以通过查看网站地址栏域名是否为{window.location.href}的方式来判断自己是在游戏内还是在外部网站。</li>
+                                            <li>本游戏不要求任何编程、it知识。请你只从肉眼可见的信息中进行推理，无需查看页面元素改/解析文件等。</li>
+                                            <li>本网站使用Cookies等技术在你的浏览器本地储存游戏进度（Cookies内容被不会发送，也不包含任何分析型Cookies），本项目未连接或使用任何数据库。</li>
+                                            <li>部分文本输入框/搜索框会使用外部的API来提供更好的游戏体验，请勿在文本框/搜索框搜索真实世界的个人信息。</li>
+                                            <li>游戏中没有跳脸或血腥画面（因为作者本人很讨厌这些）。游戏不包含任何音效。</li>
+                                        </ul>
+                                    </section>
+                                )}
+                            </div>
                         </>
                     )}
                     {/* 版权信息 */}
@@ -211,10 +241,18 @@ export default function StartScreen() {
                 <div className="flex flex-col items-center gap-4">
                     {!isGameCompleted &&
                         <button
-                            onClick={handleStartGame}
+                            onClick={() => {
+                                if (!isReturningPlayer && !hasViewedNotice) {
+                                    const next = activeTab + 1;
+                                    setActiveTab(next);
+                                    if (next === 2) setHasViewedNotice(true);
+                                } else {
+                                    handleStartGame();
+                                }
+                            }}
                             className="px-12 py-4 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white text-xl font-semibold rounded-lg shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all duration-300 transform hover:scale-105"
                         >
-                            {isReturningPlayer ? '继续游戏' : '开始游戏'}
+                            {isReturningPlayer ? '继续游戏' : (hasViewedNotice ? '开始游戏' : '下一步')}
                         </button>
                     }
                     <div className='flex gap-4'>
