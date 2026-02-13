@@ -236,9 +236,7 @@ function ChatWidget({ forceOpen }) {
           {/* 头部 */}
           <div className={`${headerColor} px-4 py-3 flex items-center justify-between`}>
             <div className="flex items-center gap-2">
-              <div className={`w-8 h-8 bg-white/20 rounded-full flex items-center justify-center`}>
-                <span className="text-white text-sm font-bold">恒</span>
-              </div>
+              <img src="/iconHengnian.png" alt="恒念药业" className="w-8 h-8 rounded-full object-cover" />
               <div>
                 <p className="text-white text-sm font-medium">恒念药业在线客服</p>
                 <p className="text-white/60 text-xs">在线</p>
@@ -357,9 +355,7 @@ export default function Hengnian() {
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-[#1B5E20] to-[#388E3C] rounded-lg flex items-center justify-center">
-              <span className="text-white text-lg font-bold">恒</span>
-            </div>
+            <img src="/iconHengnian.png" alt="恒念药业" className="w-10 h-10 rounded-lg object-cover" />
             <div>
               <h1 className="text-lg font-bold text-gray-900 leading-tight">恒念药业</h1>
               <p className="text-[10px] text-gray-400 leading-none tracking-wider">HENGNIAN PHARMA</p>
@@ -575,9 +571,7 @@ export default function Hengnian() {
         <div className="max-w-6xl mx-auto px-6 py-8">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
-                <span className="text-white text-sm font-bold">恒</span>
-              </div>
+              <img src="/iconHengnian.png" alt="恒念药业" className="w-8 h-8 rounded-lg object-cover" />
               <div>
                 <p className="font-medium">恒念药业股份有限公司</p>
                 <p className="text-xs text-white/60">Hengnian Pharmaceutical Co., Ltd.</p>

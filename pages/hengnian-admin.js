@@ -66,9 +66,7 @@ export default function HengnianAdmin() {
       <header className="bg-white border-b border-gray-200">
         <div className="max-w-lg mx-auto px-6 h-14 flex items-center">
           <a href="/hengnian" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-            <div className="w-8 h-8 bg-gradient-to-br from-[#1B5E20] to-[#388E3C] rounded-lg flex items-center justify-center">
-              <span className="text-white text-sm font-bold">恒</span>
-            </div>
+            <img src="/iconHengnian.png" alt="恒念药业" className="w-8 h-8 rounded-lg object-cover" />
             <span className="font-bold text-gray-900">恒念药业</span>
             <span className="text-xs text-gray-400">管理系统</span>
           </a>

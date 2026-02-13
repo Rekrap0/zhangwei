@@ -189,9 +189,7 @@ export default function HengnianPanel() {
       <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
         <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-gradient-to-br from-[#1B5E20] to-[#388E3C] rounded-lg flex items-center justify-center">
-              <span className="text-white text-sm font-bold">恒</span>
-            </div>
+            <img src="/iconHengnian.png" alt="恒念药业" className="w-8 h-8 rounded-lg object-cover" />
             <div>
               <span className="font-bold text-gray-900">管理面板</span>
               <span className="text-xs text-gray-400 ml-2">恒念药业内部系统</span>

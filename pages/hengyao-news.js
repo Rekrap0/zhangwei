@@ -91,9 +91,7 @@ export default function HengyaoNews() {
           <div className="flex items-center justify-between h-14">
             {/* Logo */}
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-[#1E88E5] to-[#0D47A1] rounded-lg flex items-center justify-center">
-                <span className="text-white text-sm font-bold">恒</span>
-              </div>
+              <img src="/iconHengyao.png" alt="恒药新闻" className="w-8 h-8 rounded-lg object-cover" />
               <h1 className="text-xl font-bold text-gray-900">
                 恒药新闻
               </h1>
@@ -199,9 +197,7 @@ export default function HengyaoNews() {
         <div className="max-w-5xl mx-auto px-4 py-6">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-400">
             <div className="flex items-center gap-2">
-              <div className="w-6 h-6 bg-gradient-to-br from-[#1E88E5] to-[#0D47A1] rounded flex items-center justify-center">
-                <span className="text-white text-xs font-bold">恒</span>
-              </div>
+              <img src="/iconHengyao.png" alt="恒药新闻" className="w-6 h-6 rounded object-cover" />
               <span>恒药新闻网</span>
             </div>
             <div className="flex gap-4">
