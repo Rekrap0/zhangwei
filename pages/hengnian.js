@@ -259,9 +259,6 @@ function ChatWidget({ forceOpen }) {
             {/* 欢迎消息 */}
             {displayMessages.length === 0 && persona === 'sy' && (
               <div className="flex gap-2">
-                <div className="w-7 h-7 bg-[#2E7D32] rounded-full flex items-center justify-center flex-shrink-0">
-                  <span className="text-white text-xs font-bold">恒</span>
-                </div>
                 <div className="bg-white rounded-lg rounded-tl-sm px-3 py-2 max-w-[80%] shadow-sm">
                   <p className="text-sm text-gray-700">您好！我是恒念药业智能客服小恒，有什么可以帮您的吗？ 😊</p>
                 </div>
@@ -299,9 +296,6 @@ function ChatWidget({ forceOpen }) {
             {/* 正在输入指示器 */}
             {isAiThinking && (
               <div className="flex gap-2">
-                <div className={`w-7 h-7 ${persona === 'lijing' ? 'bg-[#B71C1C]' : 'bg-[#2E7D32]'} rounded-full flex items-center justify-center flex-shrink-0`}>
-                  <span className="text-white text-xs font-bold">{persona === 'lijing' ? '李' : '恒'}</span>
-                </div>
                 <div className="bg-white rounded-lg rounded-tl-sm px-3 py-2 shadow-sm">
                   <div className="flex gap-1">
                     <div className="w-2 h-2 bg-gray-300 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
