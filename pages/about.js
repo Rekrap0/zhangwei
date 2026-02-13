@@ -116,7 +116,7 @@ export default function About() {
 
                 {/* 底部 */}
                 <div className="text-center text-gray-600 text-xs pt-4 border-t border-white/5">
-                    © 2026 Jiangye
+                    © {new Date().getFullYear()} Jiangye
                 </div>
             </div>
         </div>

@@ -198,7 +198,7 @@ export default function StartScreen() {
                     )}
                     {/* 版权信息 */}
                     <div className="text-gray-500 text-xs">
-                        © 2026 Jiangye
+                        © {new Date().getFullYear()} Jiangye
                     </div>
                 </div>
 
