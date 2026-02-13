@@ -1,9 +1,11 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import { getPlayerCookies, setCookie, getCookie, setQZoneUnlocked, isQZoneUnlocked } from '../utils/cookies';
+import { useGameState } from '../hooks/useGameState';
 import { getRelativeDate, getZhangweiBirthday, getZhangweiRealAge, formatDateFull, formatDateShort, getStartDate } from '../utils/chatDates';
 import { IoChatbubbleEllipsesSharp, IoPersonSharp, IoCompassSharp, IoSettingsSharp } from 'react-icons/io5';
 import { IoMdArrowBack } from 'react-icons/io';
+import Image from "next/image"
 
 // ============ localStorage 存储 ============
 const QQ_MESSAGES_KEY = 'zhangwei_qq_messages';
@@ -70,17 +72,17 @@ function getQQContacts() {
         {
             id: 'txnews',
             name: '疼讯新闻',
-            avatarImg: null,
+            avatarImg: '/avatarTencentNews.png',
             avatarIcon: 'news',
             lastMessage: '父爱如磐，静待花开——恒念药业董事长田宇…',
-            time: '2天前',
+            time: '刚刚',
             unread: 1,
             chatType: 'service',
         },
         {
-            id: 'splatoon',
+            id: 'splat',
             name: '鱿谊第一',
-            avatarImg: null,
+            avatarImg: '/avatarSplat.jpg',
             avatarIcon: 'group',
             lastMessage: '朔月：有人打工吗',
             time: formatDateShort(oneWeekAgo),
@@ -90,7 +92,7 @@ function getQQContacts() {
         {
             id: 'class5',
             name: '5班班级群',
-            avatarImg: null,
+            avatarImg: '/avatarClassGroup.jpg',
             avatarIcon: 'group',
             lastMessage: '[群主] 辅导员-王老师：@全体成员 各位同学…',
             time: '5年前',
@@ -109,16 +111,18 @@ function getInitialQQMessages() {
                 id: 'c5_2',
                 sender: 'wanglaoshi',
                 senderName: '[群主] 辅导员-王老师',
+                avatarImg: '/avatarTutor.jpg',
                 content: '@全体成员 各位同学，毕业三年问卷调查麻烦填一下，收到请回复。',
                 type: 'text',
                 timestamp: fiveYearsAgo.toISOString(),
             },
         ],
-        splatoon: [
+        splat: [
             {
                 id: 'sp_1',
                 sender: 'sakugetsu',
-                senderName: '[管理员]朔月',
+                senderName: '朔月',
+                avatarImg: '/avatarSakugetsu.png',
                 content: '有人打工吗',
                 type: 'text',
                 timestamp: oneWeekAgo.toISOString(),
@@ -464,6 +468,10 @@ function QQChatView({ contact, messages, onBack, onSendMessage, isMobile, disabl
                             {isMe ? (
                                 <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
                                     <img src="/avatarPlayer.jpg" alt="我" className="w-full h-full object-cover" />
+                                </div>
+                            ) : msg.avatarImg ? (
+                                <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
+                                    <img src={msg.avatarImg} alt={msg.senderName || ''} className="w-full h-full object-cover" />
                                 </div>
                             ) : (
                                 <div className="w-8 h-8 rounded-full bg-[#12B7F5] flex items-center justify-center flex-shrink-0">
@@ -1278,6 +1286,7 @@ function QQBottomNav({ activeTab, onTabChange, totalUnread = 0 }) {
 // ============ 主页面组件 ============
 export default function QQ() {
     const router = useRouter();
+    const { state: gameState, isHydrated: gameHydrated } = useGameState();
     const [activeTab, setActiveTab] = useState('message');
     const [isSearching, setIsSearching] = useState(false);
     const [viewingProfile, setViewingProfile] = useState(null);
@@ -1354,8 +1363,14 @@ export default function QQ() {
         }
     }, [contacts, isInitialized]);
 
+    // 根据游戏状态过滤联系人（疼讯新闻仅在继续调查时显示）
+    const filteredContacts = contacts.filter(c => {
+        if (c.id === 'txnews' && !gameState.continueInvestigation) return false;
+        return true;
+    });
+
     // 计算未读总数用于badge
-    const totalUnread = contacts.reduce((sum, c) => sum + (c.unread || 0), 0);
+    const totalUnread = filteredContacts.reduce((sum, c) => sum + (c.unread || 0), 0);
 
     // 选择联系人打开聊天
     const handleSelectContact = (contact) => {
@@ -1454,7 +1469,7 @@ export default function QQ() {
                 return <LinkedQQView onBack={handleBackFromChat} />;
             }
 
-            // 群聊（5班、斯普拉遁）
+            // 群聊
             const msgs = messagesByContact[activeContact.id] || [];
             const isClass5 = activeContact.id === 'class5';
             const playerMsgCount = isClass5 ? msgs.filter(m => m.sender === 'player').length : 0;
@@ -1476,7 +1491,7 @@ export default function QQ() {
         if (activeTab === 'message') {
             return (
                 <MessageListView
-                    contacts={contacts}
+                    contacts={filteredContacts}
                     onStartSearch={handleStartSearch}
                     onSelectContact={handleSelectContact}
                 />
