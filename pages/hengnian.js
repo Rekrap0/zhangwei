@@ -492,22 +492,23 @@ export default function Hengnian() {
                 name: '田宇',
                 title: '创始人 / 董事长',
                 desc: '连续创业者，致力于神经科学研究转化。曾获"中关村高端领军人才"等荣誉。',
+                avatar: '/avatarTianyu.png',
               },
               {
                 name: '林晓琳',
                 title: '首席研究员（CRO）',
                 desc: '神经科学博士，海外归国学者。拥有15年以上神经系统疾病研究经验。',
+                avatar: '/avatarLinxiaolin.png',
               },
               {
                 name: '陈志远',
                 title: '首席运营官（COO）',
                 desc: '拥有超过12年医药行业运营管理经验，曾任某跨国药企中国区运营总监。',
+                avatar: '/avatarChenzhiyuan.png',
               },
             ].map((person, i) => (
               <div key={i} className="bg-[#FAFAFA] rounded-xl p-6 hover:shadow-md transition-shadow">
-                <div className="w-16 h-16 bg-gradient-to-br from-[#81C784] to-[#2E7D32] rounded-full flex items-center justify-center mb-4">
-                  <span className="text-white text-2xl font-bold">{person.name.charAt(0)}</span>
-                </div>
+                <img src={person.avatar} alt={person.name} className="w-16 h-16 rounded-full object-cover mb-4" />
                 <h4 className="font-bold text-gray-900">{person.name}</h4>
                 <p className="text-sm text-[#2E7D32] mt-0.5">{person.title}</p>
                 <p className="text-sm text-gray-600 mt-2 leading-relaxed">{person.desc}</p>

@@ -199,9 +199,7 @@ export default function HengnianPanel() {
           </div>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2 text-sm text-gray-600">
-              <div className="w-7 h-7 bg-blue-100 rounded-full flex items-center justify-center">
-                <span className="text-blue-600 text-xs font-bold">李</span>
-              </div>
+              <img src="/avatarLijing.png" alt="李静" className="w-7 h-7 rounded-full object-cover" />
               <span>李静</span>
             </div>
             <button
