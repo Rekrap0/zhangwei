@@ -6,7 +6,7 @@ import searchablePages from '../data/searchablePages.json';
 
 // 搜索结果黑名单：标题或URL中包含以下任意关键词的结果将被过滤
 const SEARCH_BLACKLIST = [
-  'po', 'vp', 'vn', 'xv', '习', '黄', '江', '人', '共', '台', '本', '毛', '党', '成'
+  'po', 'vp', 'vn', 'xv', '习', '黄', '江', '人', '共', '台', '本', '毛', '党', '成', '维基', '六'
 ];
 
 export default function Chrome() {
