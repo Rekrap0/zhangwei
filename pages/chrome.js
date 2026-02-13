@@ -88,23 +88,18 @@ export default function Chrome() {
         isSpecial: false,
       }));
 
-      // 特殊页面排在最前面，然后是 API 结果；过滤黑名单
-      const allResults = [...specialResults, ...apiResults].filter(r =>
+      // 特殊页面不过滤；仅对 API 结果应用黑名单
+      const filteredApiResults = apiResults.filter(r =>
         !SEARCH_BLACKLIST.some(term => {
           const t = term.toLowerCase();
           return (r.title || '').toLowerCase().includes(t) || (r.url || '').toLowerCase().includes(t);
         })
       );
-      setSearchResults(allResults);
+      setSearchResults([...specialResults, ...filteredApiResults]);
     } catch (error) {
       console.error('[Chrome] 搜索 API 调用失败:', error);
-      // API 失败时仅显示特殊页面（同样过滤黑名单）
-      setSearchResults(specialResults.filter(r =>
-        !SEARCH_BLACKLIST.some(term => {
-          const t = term.toLowerCase();
-          return (r.title || '').toLowerCase().includes(t) || (r.url || '').toLowerCase().includes(t);
-        })
-      ));
+      // API 失败时仅显示特殊页面（不过滤）
+      setSearchResults(specialResults);
     } finally {
       setIsSearching(false);
     }

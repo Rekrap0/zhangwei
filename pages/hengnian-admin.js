@@ -130,7 +130,7 @@ export default function HengnianAdmin() {
                     <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
                     </svg>
-                    <span>该账户因长期未修改初始密码已被锁定。一封密码重置邮件已发送至您的邮箱，如有疑问，请联系IT支持：it-support@hengnian-pharma.cn 或 <b>李静 13912345678 </b></span>
+                    <span>该账户因长期未修改初始密码已被锁定。一封密码重置邮件已发送至您的邮箱，如有疑问，请联系IT支持：<b>李静 13912345678</b></span>
                   </div>
                   <div className="border-t border-red-200 pt-3">
                     <h4 className="font-medium text-gray-900 mb-1 text-xs">密码修改建议</h4>
