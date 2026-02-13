@@ -32,6 +32,14 @@
     "url": "https://zhidao.baidu.com/question/558888538146292331.html",
     "displayUrl": "https://zhidao.baidu.com/question"
   },
+    {
+    "id": "base64-converter",
+    "keywords": ["base64"],
+    "title": "Base64 在线编码解码| Base64 加密解密- Base64.us",
+    "description": "请在上方第一个文本框中输入要编码/解码的字符。",
+    "url": "https://base64.us/",
+    "displayUrl": "https://base64.us/"
+  },
   {
     "id": "lijing_resume",
     "keywords": ["李静"],
