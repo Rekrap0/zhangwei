@@ -42,7 +42,7 @@ export default function LingxiaolinResume() {
             <div className="absolute -bottom-12 left-6">
               <div className="w-24 h-24 rounded-full border-4 border-white bg-gray-200 overflow-hidden shadow-lg">
                 <div className="w-full h-full bg-gradient-to-br from-pink-100 to-pink-200 flex items-center justify-center">
-                  <span className="text-4xl font-bold text-[#C2185B]">林</span>
+                  <img src="/avatarLinxiaolin.png" />
                 </div>
               </div>
             </div>

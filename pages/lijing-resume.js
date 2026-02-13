@@ -43,7 +43,7 @@ export default function LijingResume() {
           <div className="h-24 bg-gradient-to-r from-[#1A1A2E] via-[#2D2D44] to-[#1A1A2E] relative">
             <div className="absolute -bottom-10 left-8">
               <div className="w-20 h-20 rounded-2xl border-4 border-white bg-gradient-to-br from-[#00D4AA] to-[#00A080] overflow-hidden shadow-lg flex items-center justify-center">
-                <span className="text-3xl font-bold text-white">李</span>
+                <img src="/avatarLijing.png" />
               </div>
             </div>
             <div className="absolute top-4 right-6 flex items-center gap-2">
