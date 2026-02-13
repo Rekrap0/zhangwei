@@ -4,6 +4,11 @@ import Head from 'next/head';
 import { getPlayerCookies } from '../utils/cookies';
 import searchablePages from '../data/searchablePages.json';
 
+// 搜索结果黑名单：标题或URL中包含以下任意关键词的结果将被过滤
+const SEARCH_BLACKLIST = [
+  'po', 'vp', 'vn', 'xv', '习', '黄', '江', '人', '共', '台', '本', '毛', '党', '成'
+];
+
 export default function Chrome() {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
@@ -83,12 +88,23 @@ export default function Chrome() {
         isSpecial: false,
       }));
 
-      // 特殊页面排在最前面，然后是 API 结果
-      setSearchResults([...specialResults, ...apiResults]);
+      // 特殊页面排在最前面，然后是 API 结果；过滤黑名单
+      const allResults = [...specialResults, ...apiResults].filter(r =>
+        !SEARCH_BLACKLIST.some(term => {
+          const t = term.toLowerCase();
+          return (r.title || '').toLowerCase().includes(t) || (r.url || '').toLowerCase().includes(t);
+        })
+      );
+      setSearchResults(allResults);
     } catch (error) {
       console.error('[Chrome] 搜索 API 调用失败:', error);
-      // API 失败时仅显示特殊页面
-      setSearchResults(specialResults);
+      // API 失败时仅显示特殊页面（同样过滤黑名单）
+      setSearchResults(specialResults.filter(r =>
+        !SEARCH_BLACKLIST.some(term => {
+          const t = term.toLowerCase();
+          return (r.title || '').toLowerCase().includes(t) || (r.url || '').toLowerCase().includes(t);
+        })
+      ));
     } finally {
       setIsSearching(false);
     }
@@ -132,7 +148,7 @@ export default function Chrome() {
           <form onSubmit={handleSearch} className="w-full max-w-[584px]">
             <div className="flex items-center border border-gray-200 rounded-full px-5 py-3 hover:shadow-md focus-within:shadow-md transition-shadow bg-white">
               <svg className="w-5 h-5 text-gray-400 mr-4 flex-shrink-0" viewBox="0 0 24 24" fill="none">
-                <path d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
               </svg>
               <input
                 type="text"
@@ -148,7 +164,7 @@ export default function Chrome() {
                   className="ml-3 text-gray-400 hover:text-gray-600"
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"/>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </button>
               )}
@@ -229,13 +245,13 @@ export default function Chrome() {
                     className="ml-2 text-gray-400 hover:text-gray-600"
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"/>
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                     </svg>
                   </button>
                 )}
                 <button type="submit" className="ml-3 flex-shrink-0">
                   <svg className="w-5 h-5 text-[#4285F4]" viewBox="0 0 24 24" fill="none">
-                    <path d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </button>
               </div>
@@ -259,8 +275,8 @@ export default function Chrome() {
           <div className="py-12">
             <div className="flex items-center gap-3 text-gray-500">
               <svg className="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
               </svg>
               正在搜索...
             </div>
