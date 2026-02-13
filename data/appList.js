@@ -31,4 +31,18 @@ export const appList = [
     route: '/weibo',
     iconType: 'weibo',
   },
+  {
+    id: 'xiaohongshu',
+    name: '小红书',
+    keywords: ['小红书', 'xiaohongshu', 'rednote', 'redNote', 'RedNote', 'red note', '红书'],
+    route: '/xiaohongshu',
+    iconType: 'xiaohongshu',
+  },
+  {
+    id: 'bilibili',
+    name: '哔哩哔哩',
+    keywords: ['哔哩哔哩', 'bilibili', 'b站', 'B站', 'bili'],
+    route: '/bilibili',
+    iconType: 'bilibili',
+  },
 ];

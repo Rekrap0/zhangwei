@@ -4,11 +4,13 @@ import { useGameState } from '../hooks/useGameState';
 import { getPlayerCookies } from '../utils/cookies';
 import { formatDateShort, shouldShowTimestamp, formatTimestamp, getRelativeDate, formatMomentDate } from '../utils/chatDates';
 import { generateZhangweiMessages, getZhangweiContact } from '../data/zhangweiChat';
-import { IoChatbubbleEllipsesSharp, IoPersonSharp, IoCompassSharp, IoPersonCircleSharp, IoHeartOutline, IoHeart, IoChatbubbleOutline } from 'react-icons/io5';
+import { IoChatbubbleEllipsesSharp, IoPersonSharp, IoCompassSharp, IoPersonCircleSharp, IoHeartOutline, IoHeart, IoChatbubbleOutline, IoQrCodeOutline } from 'react-icons/io5';
 import { IoMdArrowBack, IoMdCall } from 'react-icons/io';
 import { BsThreeDots, BsImage } from 'react-icons/bs';
-import { MdOutlineInsertEmoticon } from 'react-icons/md';
+import { MdOutlineInsertEmoticon, MdPayment, MdOutlineBookmarkBorder, MdOutlineEmojiEmotions } from 'react-icons/md';
 import { FaCamera } from 'react-icons/fa';
+import { HiOutlinePhotograph } from 'react-icons/hi';
+import { FiSettings } from 'react-icons/fi';
 import { useAIChat } from '../hooks/useAIChat';
 import { ZHANGWEI_SYSTEM_PROMPT } from '../data/aiPrompts';
 
@@ -1468,12 +1470,109 @@ export default function Wechat() {
             <main className="flex-1 overflow-hidden relative">
                 {activeTab === 'chat' ? (
                     renderContent()
+                ) : activeTab === 'me' ? (
+                    <div className="h-full bg-[#F5F5F5] overflow-y-auto">
+                        {/* 个人信息卡片 */}
+                        <div className="bg-white px-4 pt-10 pb-5">
+                            <div className="flex items-center gap-4">
+                                {/* 玩家头像 */}
+                                <div className="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0">
+                                    <img src="/avatarPlayer.jpg" alt="头像" className="w-full h-full object-cover" />
+                                </div>
+                                {/* 昵称 & 状态 */}
+                                <div className="flex-1 min-w-0">
+                                    <h3 className="text-lg font-bold text-gray-900 truncate">{playerName || '玩家'}</h3>
+                                    <button className="mt-1 flex items-center gap-1 text-sm text-gray-400">
+                                        <span className="text-base leading-none">+</span>
+                                        <span>状态</span>
+                                    </button>
+                                </div>
+                                {/* 二维码按钮（装饰） */}
+                                <div className="p-2 text-gray-400 flex items-center gap-1">
+                                    <IoQrCodeOutline className="w-5 h-5" />
+                                    <IoMdArrowBack className="w-4 h-4 rotate-180 text-gray-300" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="h-2" />
+
+                        {/* 功能菜单 */}
+                        <div className="bg-white divide-y divide-gray-100">
+                            {/* 支付 */}
+                            <button className="w-full px-4 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-7 h-7 flex items-center justify-center">
+                                        <svg viewBox="0 0 24 24" className="w-6 h-6" fill="none">
+                                            <rect x="1" y="4" width="22" height="16" rx="3" stroke="#2DC100" strokeWidth="1.5" />
+                                            <circle cx="12" cy="12" r="3.5" stroke="#2DC100" strokeWidth="1.5" />
+                                            <circle cx="4.5" cy="12" r="1" fill="#2DC100" />
+                                            <circle cx="19.5" cy="12" r="1" fill="#2DC100" />
+                                        </svg>
+                                    </div>
+                                    <span className="text-gray-900">支付</span>
+                                </div>
+                                <IoMdArrowBack className="w-5 h-5 text-gray-300 rotate-180" />
+                            </button>
+                        </div>
+
+                        <div className="h-2" />
+
+                        <div className="bg-white divide-y divide-gray-100">
+                            {/* 收藏 */}
+                            <button className="w-full px-4 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-7 h-7 flex items-center justify-center">
+                                        <MdOutlineBookmarkBorder className="w-6 h-6 text-[#E8B830]" />
+                                    </div>
+                                    <span className="text-gray-900">收藏</span>
+                                </div>
+                                <IoMdArrowBack className="w-5 h-5 text-gray-300 rotate-180" />
+                            </button>
+                            {/* 朋友圈 */}
+                            <button className="w-full px-4 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-7 h-7 flex items-center justify-center">
+                                        <HiOutlinePhotograph className="w-6 h-6 text-[#4A90D9]" />
+                                    </div>
+                                    <span className="text-gray-900">朋友圈</span>
+                                </div>
+                                <IoMdArrowBack className="w-5 h-5 text-gray-300 rotate-180" />
+                            </button>
+                            {/* 表情 */}
+                            <button className="w-full px-4 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-7 h-7 flex items-center justify-center">
+                                        <MdOutlineEmojiEmotions className="w-6 h-6 text-[#E8B830]" />
+                                    </div>
+                                    <span className="text-gray-900">表情</span>
+                                </div>
+                                <IoMdArrowBack className="w-5 h-5 text-gray-300 rotate-180" />
+                            </button>
+                        </div>
+
+                        <div className="h-2" />
+
+                        <div className="bg-white divide-y divide-gray-100">
+                            {/* 设置 */}
+                            <button className="w-full px-4 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-7 h-7 flex items-center justify-center">
+                                        <FiSettings className="w-6 h-6 text-[#4A90D9]" />
+                                    </div>
+                                    <span className="text-gray-900">设置</span>
+                                </div>
+                                <IoMdArrowBack className="w-5 h-5 text-gray-300 rotate-180" />
+                            </button>
+                        </div>
+
+                        <div className="h-4" />
+                    </div>
                 ) : (
                     <div className="h-full flex items-center justify-center bg-white">
                         <p className="text-gray-400">
                             {activeTab === 'contacts' && '通讯录功能开发中...'}
                             {activeTab === 'discover' && '发现功能开发中...'}
-                            {activeTab === 'me' && '我的页面开发中...'}
                         </p>
                     </div>
                 )}

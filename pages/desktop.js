@@ -11,6 +11,8 @@ const ICON_MAP = {
   chrome: { src: '/icon-chrome.svg', bg: 'bg-white' },
   qq: { src: '/icon-qq.svg', bg: 'bg-white' },
   weibo: { src: '/icon-weibo.svg', bg: 'bg-[#E6162D]' },
+  xiaohongshu: { src: '/icon-rednote.svg', bg: 'bg-[#FF2442]' },
+  bilibili: { src: '/icon-bilibili.svg', bg: 'bg-[#FC538A]' },
 };
 
 // 应用图标组件（搜索下拉用）

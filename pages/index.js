@@ -214,6 +214,13 @@ export default function StartScreen() {
                     }
                     <div className='flex gap-4'>
                         <button
+                            onClick={() => window.location.href = '/about'}
+                            className="mt-4 text-gray-300 hover:text-white underline underline-offset-4 decoration-text-gray-300/50 hover:decoration-white transition-colors text-sm"
+                        >
+                            关于此项目
+                        </button>
+
+                        <button
                             onClick={() => window.location.href = 'mailto:songjiangye2021@gmail.com?subject=' + encodeURIComponent('张薇失联事件 - 问题反馈')}
                             className="mt-4 text-gray-300 hover:text-white underline underline-offset-4 decoration-text-gray-300/50 hover:decoration-white transition-colors text-sm"
                         >
