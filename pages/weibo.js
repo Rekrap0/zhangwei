@@ -257,12 +257,6 @@ export default function Weibo() {
           </div>
           <span className="text-white font-bold text-lg">微博</span>
         </div>
-        <button
-          onClick={() => router.push('/desktop')}
-          className="text-white/80 hover:text-white text-sm"
-        >
-          返回桌面
-        </button>
       </header>
 
       {/* 主体内容 */}
