@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 import { getPlayerCookies, setCookie, getCookie } from '../utils/cookies';
 
 const ADMIN_AUTH_KEY = 'zhangwei_admin_auth';
@@ -62,6 +63,7 @@ export default function HengnianAdmin() {
 
   return (
     <div className="min-h-screen bg-[#F5F5F5] flex flex-col">
+      <Head><title>恒念药业 - 管理员登录</title></Head>
       {/* 顶部 */}
       <header className="bg-white border-b border-gray-200">
         <div className="max-w-lg mx-auto px-6 h-14 flex items-center">

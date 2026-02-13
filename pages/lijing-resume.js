@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 import { getPlayerCookies } from '../utils/cookies';
 
 export default function LijingResume() {
@@ -14,6 +15,7 @@ export default function LijingResume() {
 
   return (
     <div className="min-h-screen bg-[#F5F7FA]">
+      <Head><title>李静 - 简历</title></Head>
       {/* 顶部导航 */}
       <header className="bg-[#1A1A2E] sticky top-0 z-10">
         <div className="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">

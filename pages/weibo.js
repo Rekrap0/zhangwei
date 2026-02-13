@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 import { getPlayerCookies } from '../utils/cookies';
 
 const WEIBO_STORAGE_KEY = 'zhangwei_weibo_state';
@@ -249,6 +250,7 @@ export default function Weibo() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#FF8200] to-[#E6162D] flex flex-col">
+      <Head><title>微博</title></Head>
       {/* 顶部栏 */}
       <header className="bg-[#E6162D] py-3 px-4 flex items-center justify-between shadow-md">
         <div className="flex items-center gap-2">

@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 import { useGameState } from '../hooks/useGameState';
 import { getPlayerCookies } from '../utils/cookies';
 import { formatDateShort, shouldShowTimestamp, formatTimestamp, getRelativeDate, formatMomentDate } from '../utils/chatDates';
@@ -1466,6 +1467,7 @@ export default function Wechat() {
 
     return (
         <div className="flex flex-col bg-[#EDEDED]" style={{ height: '100dvh' }}>
+            <Head><title>微信</title></Head>
             {/* 主内容区域 */}
             <main className="flex-1 overflow-hidden relative">
                 {activeTab === 'chat' ? (

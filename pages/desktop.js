@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 import { getPlayerCookies } from '../utils/cookies';
 import { appList } from '../data/appList';
 
@@ -152,6 +153,7 @@ export default function Desktop() {
 
   return (
     <div className="bg-gradient-to-br from-gray-900 via-slate-800 to-gray-900 relative flex flex-col overflow-hidden" style={{ height: '100dvh' }}>
+      <Head><title>桌面</title></Head>
       {/* 桌面壁纸效果 */}
       <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10" />
 

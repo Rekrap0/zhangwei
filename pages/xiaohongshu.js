@@ -1,9 +1,12 @@
+import Head from 'next/head';
+
 export default function Xiaohongshu() {
     return (
         <div
             className="flex flex-col items-center justify-center bg-white p-6"
             style={{ height: '100dvh' }}
         >
+            <Head><title>小红书</title></Head>
             <div className="text-center max-w-xs w-full">
                 {/* 小红书图标 */}
                 <div className="w-16 h-16 bg-[#FF2442] rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-lg shadow-red-200/50">

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 import { getPlayerCookies, getCookie, deleteCookie } from '../utils/cookies';
 import { useGameState } from '../hooks/useGameState';
 
@@ -157,6 +158,7 @@ export default function HengnianPanel() {
 
   return (
     <div className="min-h-screen bg-[#F0F2F5] flex flex-col">
+      <Head><title>恒念药业 - 管理面板</title></Head>
       {/* 手机消息通知弹窗 */}
       {showNotification && (
         <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 animate-slide-down w-[360px] max-w-[90vw]">

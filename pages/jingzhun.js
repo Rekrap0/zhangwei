@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 import { getPlayerCookies } from '../utils/cookies';
 
 export default function Jingzhun() {
@@ -25,6 +26,7 @@ export default function Jingzhun() {
 
   return (
     <div className="min-h-screen bg-[#E8F4FD]">
+      <Head><title>精准镇痛活动</title></Head>
       {/* 弹窗 */}
       {showPopup && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">

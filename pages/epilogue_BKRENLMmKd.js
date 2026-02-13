@@ -5,6 +5,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 
 export default function Epilogue() {
   const router = useRouter();
@@ -23,6 +24,7 @@ export default function Epilogue() {
 
   return (
     <div className="min-h-screen bg-black flex flex-col items-center justify-center p-8 text-white">
+      <Head><title>尾声</title></Head>
       <div className="max-w-2xl text-center space-y-8">
         {/* 描述 */}
         <div className={`transition-opacity duration-1000 ${phase >= 1 ? 'opacity-100' : 'opacity-0'}`}>

@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 import { getPlayerCookies } from '../utils/cookies';
 import { useAIChat } from '../hooks/useAIChat';
 import { SY_SYSTEM_PROMPT, LIJING_SYSTEM_PROMPT } from '../data/aiPrompts';
@@ -350,6 +351,7 @@ export default function Hengnian() {
 
   return (
     <div className="min-h-screen bg-white">
+      <Head><title>恒念药业</title></Head>
       {/* 顶部导航 */}
       <header className="bg-white border-b border-gray-200 sticky top-0 z-30">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">

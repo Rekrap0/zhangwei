@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 import { getPlayerCookies } from '../utils/cookies';
 import searchablePages from '../data/searchablePages.json';
 
@@ -195,6 +196,7 @@ export default function Chrome() {
   // ========== 搜索结果视图 ==========
   return (
     <div className="min-h-screen bg-white">
+      <Head><title>Chrome</title></Head>
       {/* 顶部搜索栏 */}
       <div className="border-b border-gray-200 sticky top-0 bg-white z-10">
         <div className="px-6 py-4">

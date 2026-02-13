@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 import { getPlayerCookies } from '../utils/cookies';
 import { IoMdArrowBack } from 'react-icons/io';
 
@@ -15,6 +16,7 @@ export default function TxNewsTianyu() {
 
     return (
         <div className="min-h-screen bg-white flex flex-col">
+            <Head><title>疼讯新闻</title></Head>
             {/* 顶部栏 */}
             <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
                 <div className="flex items-center h-12 px-4">

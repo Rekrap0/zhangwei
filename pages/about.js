@@ -1,3 +1,5 @@
+import Head from 'next/head';
+
 export default function About() {
     const credits = [
         { name: 'Claude Opus 4.6', role: '编程协助', icon: '🛠' },
@@ -9,6 +11,7 @@ export default function About() {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-800 to-gray-900 relative overflow-hidden">
+            <Head><title>关于此项目</title></Head>
             <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-5" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
 

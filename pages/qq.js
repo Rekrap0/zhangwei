@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 import { getPlayerCookies, setCookie, getCookie, setQZoneUnlocked, isQZoneUnlocked } from '../utils/cookies';
 import { useGameState } from '../hooks/useGameState';
 import { getRelativeDate, getZhangweiBirthday, getZhangweiRealAge, formatDateFull, formatDateShort, getStartDate } from '../utils/chatDates';
@@ -1614,6 +1615,7 @@ export default function QQ() {
 
     return (
         <div className="flex flex-col bg-[#EDEDED]" style={{ height: '100dvh' }}>
+            <Head><title>QQ</title></Head>
             <main className="flex-1 overflow-hidden">
                 {renderContent()}
             </main>

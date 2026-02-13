@@ -5,6 +5,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 import { getPlayerCookies } from '../utils/cookies';
 
 export default function Ending2() {
@@ -34,6 +35,7 @@ export default function Ending2() {
 
     return (
         <div className="min-h-screen bg-black flex flex-col items-center justify-center p-8">
+            <Head><title>结局 2 - 回声</title></Head>
             <div className={`max-w-md text-center transition-opacity duration-1000 ${fadeIn ? 'opacity-100' : 'opacity-0'}`}>
                 {/* 结局标题 */}
                 <div className="mb-12">

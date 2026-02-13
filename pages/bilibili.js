@@ -1,9 +1,12 @@
+import Head from 'next/head';
+
 export default function Bilibili() {
     return (
         <div
             className="flex flex-col items-center justify-center bg-white p-6"
             style={{ height: '100dvh' }}
         >
+            <Head><title>哔哩哔哩</title></Head>
             <div className="text-center max-w-xs w-full">
                 {/* B站图标 */}
                 <div className="w-16 h-16 bg-[#FC538A] rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-lg shadow-sky-200/50">

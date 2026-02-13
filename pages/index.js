@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 import { getPlayerCookies, setPlayerCookies, clearPlayerCookies } from '../utils/cookies';
 
 export default function StartScreen() {
@@ -126,6 +127,7 @@ export default function StartScreen() {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-800 to-gray-900 flex flex-col items-center justify-center relative overflow-hidden">
+            <Head><title>张薇失联事件</title></Head>
             {/* 背景效果 */}
             <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-5" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />

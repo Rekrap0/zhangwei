@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 import { getPlayerCookies } from '../utils/cookies';
 
 // 新闻数据
@@ -85,6 +86,7 @@ export default function HengyaoNews() {
 
   return (
     <div className="min-h-screen bg-[#F5F6FA]">
+      <Head><title>恒药新闻</title></Head>
       {/* 顶部导航栏 */}
       <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
         <div className="max-w-5xl mx-auto px-4">

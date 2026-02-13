@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 import { getPlayerCookies } from '../utils/cookies';
 
 export default function LingxiaolinResume() {
@@ -14,6 +15,7 @@ export default function LingxiaolinResume() {
 
   return (
     <div className="min-h-screen bg-[#F3F2EE]">
+      <Head><title>林晓琳 - 简历</title></Head>
       {/* 顶部导航 */}
       <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-4 h-12 flex items-center justify-between">
