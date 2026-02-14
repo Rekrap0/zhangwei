@@ -100,7 +100,7 @@ export default function HengnianAdmin() {
                 <input
                   type="email"
                   value={email}
-                  onChange={(e) => { setEmail(e.target.value); setError(''); }}
+                  onChange={(e) => { setEmail(e.target.value); }}
                   placeholder="your@hengnian-pharma.cn"
                   className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#2E7D32] focus:border-transparent transition-shadow"
                   required
@@ -112,7 +112,7 @@ export default function HengnianAdmin() {
                 <input
                   type="password"
                   value={password}
-                  onChange={(e) => { setPassword(e.target.value); setError(''); }}
+                  onChange={(e) => { setPassword(e.target.value); }}
                   placeholder="请输入密码"
                   className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#2E7D32] focus:border-transparent transition-shadow"
                   required
