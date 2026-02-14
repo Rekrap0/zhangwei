@@ -699,6 +699,21 @@ function LinkedQQView({ onBack }) {
 
 // ============ 消息列表视图 ============
 function MessageListView({ contacts, onStartSearch, onSelectContact }) {
+    const [showPlusMenu, setShowPlusMenu] = useState(false);
+    const plusMenuRef = useRef(null);
+
+    // 点击外部关闭弹窗
+    useEffect(() => {
+        if (!showPlusMenu) return;
+        const handleClickOutside = (e) => {
+            if (plusMenuRef.current && !plusMenuRef.current.contains(e.target)) {
+                setShowPlusMenu(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, [showPlusMenu]);
+
     return (
         <div className="flex flex-col h-full bg-white">
             {/* 顶部状态栏 */}
@@ -725,11 +740,34 @@ function MessageListView({ contacts, onStartSearch, onSelectContact }) {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
                         </svg>
                     </button>
-                    <button className="text-gray-600">
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                        </svg>
-                    </button>
+                    <div className="relative" ref={plusMenuRef}>
+                        <button
+                            className="text-gray-600"
+                            onClick={() => setShowPlusMenu(prev => !prev)}
+                        >
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                            </svg>
+                        </button>
+                        {showPlusMenu && (
+                            <div className="absolute right-0 top-full mt-2 w-40 bg-[#4C4C4C] rounded-lg shadow-xl z-50 overflow-hidden animate-fade-in">
+                                {/* 小三角 */}
+                                <div className="absolute -top-1.5 right-3 w-3 h-3 bg-[#4C4C4C] rotate-45" />
+                                <button
+                                    onClick={() => {
+                                        setShowPlusMenu(false);
+                                        onStartSearch();
+                                    }}
+                                    className="w-full flex items-center gap-2.5 px-4 py-3 text-white text-sm hover:bg-[#5A5A5A] active:bg-[#666] transition-colors"
+                                >
+                                    <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                                    </svg>
+                                    添加好友
+                                </button>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
 
