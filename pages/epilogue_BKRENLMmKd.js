@@ -54,7 +54,7 @@ export default function Epilogue() {
         {/* 继续按钮 */}
         <div className={`transition-opacity duration-1000 ${phase >= 3 ? 'opacity-100' : 'opacity-0'}`}>
           <button
-            onClick={() => router.push('/end3_HbRv0dYsrQ')}
+            onClick={() => router.push('/end4_HbRv0dYsrQ')}
             className="mt-8 px-8 py-3 text-gray-400 hover:text-white transition-colors  rounded-lg"
           >
             继续

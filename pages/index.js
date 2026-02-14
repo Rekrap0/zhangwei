@@ -19,7 +19,8 @@ export default function StartScreen() {
     const endingData = [
         { id: 1, name: '眼不见为净', code: 'ZW5kMV81emhVZHg3S3A=' },
         { id: 2, name: '回声', code: 'ZW5kMl9rMXNaeU5NWWQ2' },
-        { id: 3, name: '无声', code: 'ZW5kM19IYlJ2MGRZc3JR' },
+        { id: 3, name: '残响', code: 'ZW5kM19sMEtvak14NUMy' },
+        { id: 4, name: '无声', code: 'ZW5kNF9IYlJ2MGRZc3JR' },
     ];
 
     // 解码并跳转

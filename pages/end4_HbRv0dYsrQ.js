@@ -1,5 +1,5 @@
 /**
- * 结局3 - 真结局（无声）
+ * 结局4 - 真结局（无声）
  * 玩家揭露了真相，但张薇也随之消失
  */
 
@@ -40,11 +40,11 @@ export default function Ending3() {
 
     return (
         <div className="min-h-screen bg-white flex flex-col items-center justify-center p-8">
-            <Head><title>结局 3 - 无声</title></Head>
+            <Head><title>结局 4 - 无声</title></Head>
             <div className={`max-w-md text-center transition-opacity duration-1000 ${fadeIn ? 'opacity-100' : 'opacity-0'}`}>
                 {/* 结局标题 */}
                 <div className="mb-12">
-                    <p className="text-gray-400 text-sm mb-2">结局 3/3</p>
+                    <p className="text-gray-400 text-sm mb-2">结局 4/4</p>
                     <h1 className="text-3xl font-bold text-gray-900 mb-4">
                         无声
                     </h1>

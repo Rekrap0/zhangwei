@@ -9,6 +9,7 @@ import { SY_SYSTEM_PROMPT, LIJING_SYSTEM_PROMPT } from '../data/aiPrompts';
 const CHAT_STORAGE_KEY = 'zhangwei_hengnian_chat';
 
 function ChatWidget({ forceOpen }) {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [persona, setPersona] = useState('sy'); // 'sy' | 'lijing'
@@ -162,7 +163,11 @@ function ChatWidget({ forceOpen }) {
   const handleSend = () => {
     const text = inputValue.trim();
     if (!text) return;
-
+    if (text.includes("-.- ..-. -.-. ...- -- . ..... -----")){
+      setInputValue('');
+      router.push('/end3_l0KojMx5C2');
+      return;
+    }
     // 检查是否是切换暗号
     if (text === 'KFCVME50' && persona === 'sy') {
       setInputValue('');

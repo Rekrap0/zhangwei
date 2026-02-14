@@ -103,9 +103,9 @@ export function useAIChat({
       apiMessages.push({ role: 'assistant', content: firstMessage });
     }
 
-    // 添加消息历史
+    // 添加消息历史（每条消息截取前100个字符以控制token用量）
     for (const msg of messages) {
-      apiMessages.push({ role: msg.role, content: msg.content });
+      apiMessages.push({ role: msg.role, content: msg.content.slice(0, 100) });
     }
 
     return apiMessages;
