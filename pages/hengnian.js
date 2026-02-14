@@ -163,7 +163,7 @@ function ChatWidget({ forceOpen }) {
   const handleSend = () => {
     const text = inputValue.trim();
     if (!text) return;
-    if (text.includes("-.- ..-. -.-. ...- -- . ..... -----")){
+    if (text.includes("-.- ..-. -.-. ...- -- . ..... -----") && persona === 'sy' ){
       setInputValue('');
       router.push('/end3_l0KojMx5C2');
       return;
