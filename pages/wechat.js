@@ -570,7 +570,7 @@ function MomentItem({ moment, contact }) {
 // 朋友圈页面
 function MomentsView({ contact, onBack, playerName }) {
     // 计算真实日期（基于开始日期）
-    const week1Ago = getRelativeDate(-8);  // 1周前
+    const e8daysAgo = getRelativeDate(-8);  // 1周前
     const week2Ago = getRelativeDate(-14); // 2周前
     const week3Ago = getRelativeDate(-21); // 3周前
     const week4Ago = getRelativeDate(-28); // 4周前
@@ -584,7 +584,7 @@ function MomentsView({ contact, onBack, playerName }) {
             images: [
                 { src: '/momentsPark.png', alt: '公园散步' }
             ],
-            time: formatMomentDate(week1Ago),
+            time: formatMomentDate(e8daysAgo),
             likes: [playerName || '我'],
         },
         {

@@ -115,7 +115,7 @@ export function generateZhangweiMessages() {
   messages.push(createMessage({
     id: messageId++,
     sender: 'zhangwei',
-    content: '我现在就指望撑到下周了。',
+    content: '我现在就指望撑到' + birthdayDate.getDate() + '号了',
     date: day12Ago,
     time: '19:42',
   }));
@@ -123,7 +123,7 @@ export function generateZhangweiMessages() {
   messages.push(createMessage({
     id: messageId++,
     sender: 'player',
-    content: '下周咋了？项目上线？',
+    content: '那天咋了？项目上线？',
     date: day12Ago,
     time: '19:43',
   }));
@@ -148,7 +148,7 @@ export function generateZhangweiMessages() {
   messages.push(createMessage({
     id: messageId++,
     sender: 'zhangwei',
-    content: `你是不是忘了？下周我生日啊大哥！！👊`,
+    content: `你是不是忘了？那天我生日啊大哥！！👊`,
     date: day12Ago,
     time: '19:44',
   }));
