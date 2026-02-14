@@ -115,7 +115,7 @@ export function generateZhangweiMessages() {
   messages.push(createMessage({
     id: messageId++,
     sender: 'zhangwei',
-    content: '我现在就指望撑到下周四了。',
+    content: '我现在就指望撑到下周了。',
     date: day12Ago,
     time: '19:42',
   }));
@@ -123,7 +123,7 @@ export function generateZhangweiMessages() {
   messages.push(createMessage({
     id: messageId++,
     sender: 'player',
-    content: '下周四咋了？项目上线？',
+    content: '下周咋了？项目上线？',
     date: day12Ago,
     time: '19:43',
   }));
