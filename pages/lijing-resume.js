@@ -179,7 +179,7 @@ export default function LijingResume() {
                   <div className="absolute -left-2 top-0 w-4 h-4 bg-gray-400 rounded-full"></div>
                   <div className="pb-6">
                     <h3 className="font-semibold text-gray-900">技术专家</h3>
-                    <p className="text-sm text-gray-600">阿里巴巴集团 · 阿里云</p>
+                    <p className="text-sm text-gray-600">阿外巴巴集团 · 阿外云</p>
                     <p className="text-xs text-gray-500 mt-0.5">2011年 — 2014年 · 杭州</p>
                     <ul className="text-sm text-gray-700 mt-3 space-y-1.5 list-disc list-inside">
                       <li>参与阿里云ECS核心模块研发，负责虚拟化资源调度优化</li>
@@ -192,10 +192,10 @@ export default function LijingResume() {
                   <div className="absolute -left-2 top-0 w-4 h-4 bg-gray-400 rounded-full"></div>
                   <div>
                     <h3 className="font-semibold text-gray-900">软件开发工程师</h3>
-                    <p className="text-sm text-gray-600">百度在线网络技术</p>
+                    <p className="text-sm text-gray-600">千度在线网络技术</p>
                     <p className="text-xs text-gray-500 mt-0.5">2008年 — 2011年 · 北京</p>
                     <ul className="text-sm text-gray-700 mt-3 space-y-1.5 list-disc list-inside">
-                      <li>参与百度搜索后端系统开发，优化搜索响应速度</li>
+                      <li>参与千度搜索后端系统开发，优化搜索响应速度</li>
                       <li>负责内部工具链建设，提升团队开发效率</li>
                     </ul>
                   </div>
