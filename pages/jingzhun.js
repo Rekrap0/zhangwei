@@ -7,6 +7,7 @@ export default function Jingzhun() {
   const router = useRouter();
   const [showPopup, setShowPopup] = useState(true);
   const [showContent, setShowContent] = useState(false);
+  const [showToast, setShowToast] = useState(false);
 
   useEffect(() => {
     const { playerName, startDate } = getPlayerCookies();
@@ -22,6 +23,8 @@ export default function Jingzhun() {
   const handleStay = () => {
     setShowPopup(false);
     setShowContent(true);
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 4000);
   };
 
   return (
@@ -174,6 +177,15 @@ export default function Jingzhun() {
           <p>&copy; 2023 恒药新闻网 | 本页面仅供信息展示，相关活动已结束</p>
         </div>
       </main>
+
+      {/* Toast 通知 */}
+      {showToast && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 animate-fade-in">
+          <div className="bg-gray-900/90 text-white px-5 py-3 rounded-lg shadow-lg text-sm max-w-xs text-center backdrop-blur-sm">
+            <span className="opacity-80">🤔</span> 这个活动看起来很可疑，要是能找到它背后的公司就好了...
+          </div>
+        </div>
+      )}
     </div>
   );
 }

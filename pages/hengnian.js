@@ -378,6 +378,7 @@ export default function Hengnian() {
             <span className="text-gray-600 hover:text-[#2E7D32] cursor-pointer transition-colors"><a href="/hengyao-news">新闻中心</a></span>
             <span className="text-gray-600 hover:text-[#2E7D32] cursor-pointer transition-colors">社会责任</span>
             <span className="text-gray-600 hover:text-[#2E7D32] cursor-pointer transition-colors">加入我们</span>
+            <a href="/hengnian-admin" className="hover:text-white cursor-pointer"><span className="text-gray-600 hover:text-[#2E7D32] cursor-pointer transition-colors">管理员登录</span></a>
           </nav>
 
           {/* 语言切换 */}
@@ -409,6 +410,7 @@ export default function Hengnian() {
             <span className="text-gray-600 hover:text-[#2E7D32] text-sm py-2 cursor-pointer transition-colors"><a href="/hengyao-news">新闻中心</a></span>
             <span className="text-gray-600 hover:text-[#2E7D32] text-sm py-2 cursor-pointer transition-colors">社会责任</span>
             <span className="text-gray-600 hover:text-[#2E7D32] text-sm py-2 cursor-pointer transition-colors">加入我们</span>
+            <a href="/hengnian-admin" className="hover:text-white cursor-pointer"><span className="text-gray-600 hover:text-[#2E7D32] text-sm py-2 cursor-pointer transition-colors">管理员登录</span></a>
             <div className="flex items-center gap-2 text-xs text-gray-500 pt-2 border-t border-gray-100">
               <span className="text-[#2E7D32] font-medium">中文</span>
               <span>/</span>
@@ -618,7 +620,7 @@ export default function Hengnian() {
             <div className="flex items-center gap-6 text-sm text-white/80">
               <span className="hover:text-white cursor-pointer">法律声明</span>
               <span className="hover:text-white cursor-pointer">隐私政策</span>
-              <a href="/hengnian-admin" className="hover:text-white cursor-pointer">管理员登录</a>
+              <a href="/hengnian-admin" className="hover:text-white cursor-pointer"><b>管理员登录</b></a>
             </div>
           </div>
           <div className="mt-6 pt-4 border-t border-white/20 text-center text-xs text-white/50">
