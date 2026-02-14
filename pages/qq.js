@@ -256,17 +256,34 @@ function SearchResultItem({ qqNumber, nickname, avatarSrc, onClick }) {
     );
 }
 
+// ============ 搜索记录 localStorage ============
+const QQ_SEARCH_HISTORY_KEY = 'zhangwei_qq_search_history';
+
+function hasSearchedZhangwei() {
+    if (typeof window === 'undefined') return false;
+    try {
+        return localStorage.getItem(QQ_SEARCH_HISTORY_KEY) === 'true';
+    } catch { return false; }
+}
+
+function markSearchedZhangwei() {
+    if (typeof window === 'undefined') return;
+    try { localStorage.setItem(QQ_SEARCH_HISTORY_KEY, 'true'); } catch { }
+}
+
 // ============ 搜索页面 ============
 function SearchView({ onBack, onSelectQQ }) {
     const [query, setQuery] = useState('');
     const [searchResult, setSearchResult] = useState(null);
     const [isSearching, setIsSearching] = useState(false);
+    const [hasHistory, setHasHistory] = useState(false);
     const inputRef = useRef(null);
     const debounceRef = useRef(null);
 
     useEffect(() => {
         // 自动聚焦搜索框
         inputRef.current?.focus();
+        setHasHistory(hasSearchedZhangwei());
         return () => {
             if (debounceRef.current) clearTimeout(debounceRef.current);
         };
@@ -277,6 +294,8 @@ function SearchView({ onBack, onSelectQQ }) {
         if (/^\d+$/.test(trimmed) && parseInt(trimmed, 10) > 10000) {
             const qqNumber = trimmed;
             if (qqNumber === '2847593160') {
+                markSearchedZhangwei();
+                setHasHistory(true);
                 setSearchResult({
                     qqNumber,
                     nickname: 'w.',
@@ -352,6 +371,35 @@ function SearchView({ onBack, onSelectQQ }) {
 
             {/* 搜索结果 */}
             <div className="flex-1 overflow-y-auto">
+                {/* 搜索记录（搜索框为空时显示） */}
+                {!query && hasHistory && (
+                    <div>
+                        <div className="px-4 py-2 bg-[#F5F5F5] flex items-center justify-between">
+                            <span className="text-xs text-gray-500 font-medium">搜索记录</span>
+                        </div>
+                        <button
+                            onClick={() => onSelectQQ({
+                                qqNumber: ZHANGWEI_QQ,
+                                nickname: 'w.',
+                                avatarSrc: '/avatarWei2.png',
+                                isSpecial: true,
+                            })}
+                            className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-50 active:bg-gray-100 transition-colors"
+                        >
+                            <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 bg-gray-200">
+                                <img
+                                    src="/avatarWei2.png"
+                                    alt="w."
+                                    className="w-full h-full object-cover"
+                                />
+                            </div>
+                            <div className="flex-1 text-left">
+                                <p className="text-sm text-gray-900 font-medium">w.</p>
+                            </div>
+                        </button>
+                    </div>
+                )}
+
                 {searchResult && (
                     <div>
                         {/* 分类标题 */}
@@ -1631,10 +1679,10 @@ export default function QQ() {
 
         // 其他标签页
         return (
-            <div className="h-full flex items-center justify-center bg-white">
+            <div className="h-full flex items-center justify-center bg-white p-10">
                 <p className="text-gray-400">
-                    {activeTab === 'contacts' && '暂时无法显示此页面。'}
-                    {activeTab === 'dynamic' && '暂时无法显示此页面。'}
+                    {activeTab === 'contacts' && ('这里是' + (() => { const { playerName: name } = getPlayerCookies(); return name; })() + '的微信通讯录界面，应该不会有什么线索吧？')}
+                    {activeTab === 'dynamic' && ('这里是' + (() => { const { playerName: name } = getPlayerCookies(); return name; })() + '的好友动态界面，既然我没有张薇的好友，这里应该不会有什么线索吧？')}
                 </p>
             </div>
         );

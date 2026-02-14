@@ -1574,10 +1574,10 @@ export default function Wechat() {
                         <div className="h-4" />
                     </div>
                 ) : (
-                    <div className="h-full flex items-center justify-center bg-white">
+                    <div className="h-full flex items-center justify-center bg-white p-10">
                         <p className="text-gray-400">
-                            {activeTab === 'contacts' && '暂时无法显示此页面。'}
-                            {activeTab === 'discover' && '暂时无法显示此页面，虽然无法在发现页直接打开朋友圈，但你还是可以单独查看某一个好友的朋友圈。'}
+                            {activeTab === 'contacts' && ('这里是' + (() => { const { playerName: name } = getPlayerCookies(); return name; })() + '的微信通讯录界面，应该不会有什么线索吧？')}
+                            {activeTab === 'discover' && ('这里是' + (() => { const { playerName: name } = getPlayerCookies(); return name; })() + '的微信发现界面，有很多好友的情况下去查看朋友圈有些混乱吧？不如单独查看某一个好友的朋友圈？')}
                         </p>
                     </div>
                 )}
