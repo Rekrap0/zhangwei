@@ -186,7 +186,7 @@ export default function HengnianAdmin() {
       {/* Toast 通知 */}
       {showToast && (
         <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[200] bg-black/70 text-white text-sm px-6 py-3 rounded-lg pointer-events-none animate-fade-in">
-          既然林晓琳的账户被锁了，只能从其他员工的账号切入了。如果可以搜得到其他人的公司邮箱，再找到或猜出他们的密码的规律就好了。
+          既然林晓琳的账户被锁了，只能从其他员工的账号切入了。<br/>嗯……奇怪，为什么这个锁定提示有一些地方加粗了？也许可以利用一下？
         </div>
       )}
       {/* 关于管理员账户弹窗 */}
