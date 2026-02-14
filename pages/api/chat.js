@@ -8,11 +8,16 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { messages, persona } = req.body;
+  const { messages, persona, purpose } = req.body;
 
   if (!messages || !Array.isArray(messages)) {
     return res.status(400).json({ error: 'Missing or invalid messages array' });
   }
+
+  // Select model based on purpose
+  const model = purpose === 'summarize'
+    ? 'openai/gpt-oss-20b'
+    : 'moonshotai/kimi-k2-instruct-0905';
 
   const apiKey = process.env.GROQ_API_KEY;
   if (!apiKey) {
@@ -28,10 +33,10 @@ export default async function handler(req, res) {
         'Authorization': `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: 'qwen/qwen3-32b',
+        model,
         messages,
         temperature: 0.6,
-        max_tokens: 4096,
+        max_tokens: purpose === 'summarize' ? 512 : 1024,
       }),
     });
 

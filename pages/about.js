@@ -84,12 +84,12 @@ export default function About() {
                         <div className="bg-white/5 border border-white/10 rounded-xl p-5">
                             <h3 className="text-white font-medium mb-1">LLM 提供商</h3>
                             <p className="text-gray-400 text-sm mb-2">为游戏内 AI 角色提供回复能力</p>
-                            <div className="flex items-center gap-2 text-sm">
-                                <span className="text-green-400 font-medium">GroqCloud</span>
-                                <span className="text-gray-600">·</span>
-                                <span className="text-gray-400">模型：</span>
-                                <code className="text-gray-300 bg-white/10 px-2 py-0.5 rounded text-xs">qwen/qwen3-32b</code>
-                            </div>
+
+                            <p className="text-green-400 font-medium">GroqCloud</p>
+                            <p className="text-gray-400">对话模型：<code className="text-gray-300 bg-white/10 px-2 py-0.5 rounded text-xs inline">moonshotai/kimi-k2-instruct-0905</code></p>
+                            <p className="text-gray-400">总结模型：<code className="text-gray-300 bg-white/10 px-2 py-0.5 rounded text-xs inline">openai/gpt-oss-20b</code></p>
+
+
                         </div>
                     </div>
                 </section>

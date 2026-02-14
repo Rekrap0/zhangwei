@@ -134,7 +134,7 @@ export function useAIChat({
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: summaryMessages }),
+        body: JSON.stringify({ messages: summaryMessages, purpose: 'summarize' }),
       });
 
       if (response.ok) {
@@ -183,7 +183,7 @@ export function useAIChat({
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: apiMessages }),
+        body: JSON.stringify({ messages: apiMessages, purpose: 'chat' }),
       });
 
       console.log('[useAIChat] API response status:', response.status);
