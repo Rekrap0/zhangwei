@@ -625,7 +625,7 @@ export default function Hengnian() {
             </div>
           </div>
           <div className="mt-6 pt-4 border-t border-white/20 text-center text-xs text-white/50">
-            <p>&copy; 2015-2026 恒念药业 版权所有 | 京ICP备15088888号-1</p>
+            <p>&copy; 2015-2026 恒念药业 版权所有 </p>
           </div>
         </div>
       </footer>
