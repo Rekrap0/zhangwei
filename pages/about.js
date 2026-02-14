@@ -42,7 +42,10 @@ export default function About() {
                             本项目基于 <span className="text-blue-400 font-medium">Next.js</span> 构建，使用 Pages Router 进行页面路由管理，配合 <span className="text-blue-400 font-medium">Tailwind CSS</span> 实现界面样式。
                         </p>
                         <p>
-                            游戏内每个"应用"（微信、QQ、浏览器等）对应一个独立页面，通过模拟手机桌面的搜索框进行导航。游戏状态通过 Cookies 和 localStorage 在浏览器本地持久化，并借助 BroadcastChannel 实现跨标签页同步。
+                            游戏内每个"应用"（微信、Chrome浏览器等）对应一个独立页面，通过模拟手机桌面的搜索框进行导航。游戏状态通过 Cookies 和 localStorage 在浏览器本地持久化，并借助 BroadcastChannel 实现跨标签页同步。
+                        </p>
+                        <p>
+                            游戏使用了 <span className="text-blue-400 font-medium">Vercel</span> 部署。
                         </p>
                         <a
                             href="https://github.com/Rekrap0/zhangwei"
