@@ -436,12 +436,6 @@ export default function Hengnian() {
           <p className="text-lg text-gray-600 max-w-2xl mb-8 leading-relaxed">
             恒念药业专注于神经系统疾病治疗的创新研发，致力于为全球患者提供安全、有效的治疗方案。
           </p>
-          <button
-            onClick={() => setChatOpen(true)}
-            className="px-8 py-3 bg-[#2E7D32] text-white font-medium rounded-lg hover:bg-[#1B5E20] transition-colors text-sm shadow-lg shadow-green-200"
-          >
-            了解更多
-          </button>
         </div>
       </section>
 
