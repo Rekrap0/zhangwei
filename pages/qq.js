@@ -298,7 +298,7 @@ function SearchView({ onBack, onSelectQQ }) {
                 setHasHistory(true);
                 setSearchResult({
                     qqNumber,
-                    nickname: 'w.',
+                    nickname: 'zhangwei',
                     avatarSrc: '/avatarWei2.png',
                     isSpecial: true,
                 });
@@ -380,7 +380,7 @@ function SearchView({ onBack, onSelectQQ }) {
                         <button
                             onClick={() => onSelectQQ({
                                 qqNumber: ZHANGWEI_QQ,
-                                nickname: 'w.',
+                                nickname: 'zhangwei',
                                 avatarSrc: '/avatarWei2.png',
                                 isSpecial: true,
                             })}
@@ -389,7 +389,7 @@ function SearchView({ onBack, onSelectQQ }) {
                             <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 bg-gray-200">
                                 <img
                                     src="/avatarWei2.png"
-                                    alt="w."
+                                    alt="zhangwei"
                                     className="w-full h-full object-cover"
                                 />
                             </div>
