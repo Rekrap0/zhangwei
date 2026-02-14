@@ -13,6 +13,21 @@ export default function StartScreen() {
     const [isGameCompleted, setIsGameCompleted] = useState(false);
     const [activeTab, setActiveTab] = useState(0);
     const [hasViewedNotice, setHasViewedNotice] = useState(false);
+    const [nameError, setNameError] = useState('');
+
+    // 角色名黑名单，防止玩家使用与游戏角色重名的昵称
+    const BLACKLISTED_NAMES = [
+        '张薇', '田宇', '李静', '田念安', '林晓琳',
+        '小恒', 'SY', 'sy', 'Sy', 'sY', '思圆', '朔月',
+        '恒念', '小念医生',
+    ];
+
+    const isNameBlacklisted = (name) => {
+        const trimmed = name.trim();
+        return BLACKLISTED_NAMES.some(
+            (blocked) => trimmed === blocked || trimmed.toLowerCase() === blocked.toLowerCase()
+        );
+    };
 
     // 结局数据（路径经过编码，避免直接暴露）
     // 使用简单的字符替换混淆
@@ -60,10 +75,14 @@ export default function StartScreen() {
 
     // 确认网名并开始游戏
     const handleConfirmName = () => {
-        if (playerName.trim()) {
-            setPlayerCookies(playerName.trim());
-            router.push('/desktop');
+        if (!playerName.trim()) return;
+        if (isNameBlacklisted(playerName)) {
+            setNameError('无法使用这个名字');
+            return;
         }
+        setNameError('');
+        setPlayerCookies(playerName.trim());
+        router.push('/desktop');
     };
 
     // 清空游戏进度
@@ -179,11 +198,10 @@ export default function StartScreen() {
                                             setActiveTab(i);
                                             if (i === 2) setHasViewedNotice(true);
                                         }}
-                                        className={`flex-1 px-4 py-2 text-sm font-medium rounded-t-lg transition-colors ${
-                                            activeTab === i
+                                        className={`flex-1 px-4 py-2 text-sm font-medium rounded-t-lg transition-colors ${activeTab === i
                                                 ? 'text-white'
                                                 : 'text-gray-400 hover:text-gray-300 hover:bg-gray-700/30'
-                                        }`}
+                                            }`}
                                     >
                                         {label}
                                     </button>
@@ -296,12 +314,18 @@ export default function StartScreen() {
                             <input
                                 type="text"
                                 value={playerName}
-                                onChange={(e) => setPlayerName(e.target.value)}
+                                onChange={(e) => {
+                                    setPlayerName(e.target.value);
+                                    if (nameError) setNameError('');
+                                }}
                                 onKeyDown={(e) => e.key === 'Enter' && handleConfirmName()}
-                                placeholder="请输入你的网名..."
+                                placeholder="请输入你的昵称..."
                                 className="w-full px-4 py-3 bg-gray-900 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
                                 autoFocus
                             />
+                            {nameError && (
+                                <p className="text-red-400 text-sm mt-2">{nameError}</p>
+                            )}
 
                             <div className="flex gap-3 mt-6">
                                 <button

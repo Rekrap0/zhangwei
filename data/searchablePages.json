@@ -1,7 +1,12 @@
 [
   {
     "id": "hengnian",
-    "keywords": ["恒念", "恒念药业", "hengnian", "恒念制药"],
+    "keywords": [
+      "恒念",
+      "恒念药业",
+      "hengnian",
+      "恒念制药"
+    ],
     "title": "恒念药业 - 创新药物，恒念为民",
     "description": "恒念药业股份有限公司 — 专注于神经系统疾病治疗的创新型制药企业，致力于为全球患者提供安全、有效的治疗方案。公司总部位于北京。",
     "url": "/hengnian",
@@ -9,7 +14,13 @@
   },
   {
     "id": "jingzhun",
-    "keywords": ["精准镇痛", "精准", "镇痛", "神经调控", "封闭式治疗"],
+    "keywords": [
+      "精准镇痛",
+      "精准",
+      "镇痛",
+      "神经调控",
+      "封闭式治疗"
+    ],
     "title": "\u201c精准镇痛\u201d神经调控临床研究计划 - 志愿者招募",
     "description": "基于前沿神经调控技术的精准镇痛临床研究项目，面向慢性疼痛及情绪障碍患者招募志愿者。全封闭管理，费用全免。招募时间：2023年3月-8月。",
     "url": "/jingzhun",
@@ -17,24 +28,43 @@
   },
   {
     "id": "hengyao_news",
-    "keywords": ["恒药新闻", "恒药", "医药新闻"],
+    "keywords": [
+      "恒药新闻",
+      "恒药",
+      "医药新闻"
+    ],
     "title": "恒药新闻 - 中国医药行业资讯门户",
     "description": "恒药新闻网 — 关注中国医药行业最新动态、政策解读、企业报道、临床研究资讯。",
     "url": "/hengyao-news",
     "displayUrl": "https://www.hengyao-news.cn"
   },
   {
+    "id": "teapot",
+    "keywords": [
+      "茶壶","teapot","418"
+    ],
+    "exactMatch": true,
+    "title": "茶壶",
+    "description": "茶壶",
+    "url": "/teapot",
+    "displayUrl": "https://zw.jy-s.com/teapot"
+  },
+  {
     "id": "lijing_baidu",
-    "keywords": ["李静"],
+    "keywords": [
+      "李静"
+    ],
     "exactMatch": true,
     "title": "全中国有几个叫李静的_百度知道",
     "description": "通过身份信息系统查询，全国有超过243644人叫\u201c李静\u201d，搜寻时建议带上一些相关信息，如所在公司或个人信息等。",
     "url": "https://zhidao.baidu.com/question/558888538146292331.html",
     "displayUrl": "https://zhidao.baidu.com/question"
   },
-    {
+  {
     "id": "base64-converter",
-    "keywords": ["base64"],
+    "keywords": [
+      "base64"
+    ],
     "title": "Base64 在线编码解码| Base64 加密解密- Base64.us",
     "description": "请在上方第一个文本框中输入要编码/解码的字符。",
     "url": "https://base64.us/",
@@ -42,8 +72,18 @@
   },
   {
     "id": "lijing_resume",
-    "keywords": ["李静"],
-    "requireAny": ["恒念", "恒念药业", "13912345678", "hengnian",  "架构师", "IT", "系统"],
+    "keywords": [
+      "李静"
+    ],
+    "requireAny": [
+      "恒念",
+      "恒念药业",
+      "13912345678",
+      "hengnian",
+      "架构师",
+      "IT",
+      "系统"
+    ],
     "title": "李静 - 高级系统架构师 · 恒念药业IT负责人 | 码上招",
     "description": "李静，计算机科学硕士，现任恒念药业股份有限公司高级系统架构师兼IT基础设施负责人。12年IT从业经验，主导公司核心系统架构及智能客服系统开发。联系方式：lijing@hengnian-pharma.cn",
     "url": "/lijing-resume",
@@ -51,7 +91,9 @@
   },
   {
     "id": "lingxiaolin_resume",
-    "keywords": ["林晓琳"],
+    "keywords": [
+      "林晓琳"
+    ],
     "title": "林晓琳 - 首席运营官 · 恒念药业 | 医才网",
     "description": "林晓琳，资深医药行业运营管理专家，现任恒念药业股份有限公司首席运营官（COO）。拥有超过12年医药行业运营管理经验。联系方式：lingxiaolin@hengnian-pharma.cn",
     "url": "/lingxiaolin-resume",
