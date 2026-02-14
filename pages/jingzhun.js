@@ -166,7 +166,7 @@ export default function Jingzhun() {
               </div>
               <div className="flex items-center gap-3">
                 <span className="text-gray-500 w-20 flex-shrink-0">地点</span>
-                <span className="text-gray-900">北京市海淀区西北旺东路恒念科技园B座</span>
+                <span className="text-gray-900">北京市海淀区XXXXX路恒念科技园B座</span>
               </div>
             </div>
           </div>
@@ -180,10 +180,8 @@ export default function Jingzhun() {
 
       {/* Toast 通知 */}
       {showToast && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 animate-fade-in">
-          <div className="bg-gray-900/90 text-white px-5 py-3 rounded-lg shadow-lg text-sm max-w-xs text-center backdrop-blur-sm">
-            <span className="opacity-80">🤔</span> 这个活动看起来很可疑，要是能找到它背后的公司就好了...
-          </div>
+        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[200] bg-black/70 text-white text-sm px-6 py-3 rounded-lg pointer-events-none animate-fade-in">
+          这个活动看起来很可疑，要是能找到它背后的公司就好了...
         </div>
       )}
     </div>
