@@ -74,7 +74,7 @@ export default function LingxiaolinResume() {
               </svg>
               <div>
                 <p className="text-xs text-gray-500">邮箱</p>
-                <p className="text-sm text-gray-900 font-medium">lingxiaolin@hengnian-pharma.cn</p>
+                <p className="text-sm text-gray-900 font-medium">linxiaolin@hengnian-pharma.cn</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -83,7 +83,7 @@ export default function LingxiaolinResume() {
               </svg>
               <div>
                 <p className="text-xs text-gray-500">电话</p>
-                <p className="text-sm text-gray-900 font-medium">18610237856</p>
+                <p className="text-sm text-gray-900 font-medium">18612345678</p>
               </div>
             </div>
             <div className="flex items-center gap-3">

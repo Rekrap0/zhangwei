@@ -159,7 +159,7 @@ export default function Jingzhun() {
               </div>
               <div className="flex items-center gap-3">
                 <span className="text-gray-500 w-20 flex-shrink-0">电话</span>
-                <span className="text-[#4A9CC7] font-medium">16910237856</span>
+                <span className="text-[#4A9CC7] font-medium">18612345678</span>
               </div>
               <div className="flex items-center gap-3">
                 <span className="text-gray-500 w-20 flex-shrink-0">地点</span>

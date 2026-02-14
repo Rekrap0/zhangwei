@@ -10,7 +10,7 @@ const CORRECT_EMAIL = 'lijing@hengnian-pharma.cn';
 const CORRECT_PASSWORD = 'lj20150608';
 
 // 林晓琳的凭证（账户已锁定）
-const LOCKED_EMAIL = 'lingxiaolin@hengnian-pharma.cn';
+const LOCKED_EMAIL = 'linxiaolin@hengnian-pharma.cn';
 const LOCKED_PASSWORD = '19850217';
 
 export default function HengnianAdmin() {
