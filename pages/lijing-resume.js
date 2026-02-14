@@ -108,7 +108,7 @@ export default function LijingResume() {
                 </div>
                 <div>
                   <p className="text-xs text-gray-500 mb-1">GitHub</p>
-                  <p className="text-sm text-[#00D4AA] font-medium">github.com/lijing-dev</p>
+                  <p className="text-sm text-gray-500 font-medium">github.com/lijing-dev</p>
                 </div>
               </div>
             </div>
@@ -165,7 +165,7 @@ export default function LijingResume() {
                       <span className="text-xs text-[#00D4AA] font-medium bg-[#F0FDF9] px-2 py-0.5 rounded">在职</span>
                     </div>
                     <p className="text-sm text-[#00D4AA] font-medium">恒念药业股份有限公司</p>
-                    <p className="text-xs text-gray-500 mt-0.5">2014年6月 — 至今 · 北京</p>
+                    <p className="text-xs text-gray-500 mt-0.5">2015年6月 — 至今 · 北京</p>
                     <ul className="text-sm text-gray-700 mt-3 space-y-1.5 list-disc list-inside">
                       <li>主导公司核心业务系统架构设计与重构，支撑日均百万级数据处理</li>
                       <li>搭建内部AI平台，开发智能客服系统（SY），提升运营效率40%</li>
@@ -180,7 +180,7 @@ export default function LijingResume() {
                   <div className="pb-6">
                     <h3 className="font-semibold text-gray-900">技术专家</h3>
                     <p className="text-sm text-gray-600">阿外巴巴集团 · 阿外云</p>
-                    <p className="text-xs text-gray-500 mt-0.5">2011年 — 2014年 · 杭州</p>
+                    <p className="text-xs text-gray-500 mt-0.5">2011年 — 2015年 · 杭州</p>
                     <ul className="text-sm text-gray-700 mt-3 space-y-1.5 list-disc list-inside">
                       <li>参与阿里云ECS核心模块研发，负责虚拟化资源调度优化</li>
                       <li>设计并实现分布式日志系统，支撑万台级服务器规模</li>
