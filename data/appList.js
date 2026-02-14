@@ -13,7 +13,7 @@ export const appList = [
   {
     id: 'chrome',
     name: 'Chrome',
-    keywords: ['chrome', '浏览器', 'browser', 'google', '谷歌', '搜索', '上网'],
+    keywords: ['chrome', '浏览器', 'browser', 'google', 'googol', '谷歌', '搜索', '上网'],
     route: '/chrome',
     iconType: 'chrome',
   },

@@ -134,8 +134,8 @@ export default function Chrome() {
               <span className="text-[#EA4335]">o</span>
               <span className="text-[#FBBC05]">o</span>
               <span className="text-[#4285F4]">g</span>
-              <span className="text-[#34A853]">l</span>
-              <span className="text-[#EA4335]">e</span>
+              <span className="text-[#34A853]">o</span>
+              <span className="text-[#EA4335]">l</span>
             </h1>
           </div>
 
@@ -170,7 +170,7 @@ export default function Chrome() {
                 type="submit"
                 className="px-6 py-2.5 bg-[#F8F9FA] hover:bg-[#E8E8E8] text-sm text-gray-700 rounded border border-transparent hover:border-gray-200 transition-colors"
               >
-                Google 搜索
+                Googol 搜索
               </button>
               <button
                 type="button"
@@ -189,7 +189,7 @@ export default function Chrome() {
           </div>
           <div className="px-8 py-3 flex flex-wrap justify-between">
             <div className="flex gap-6">
-              <span className="hover:underline cursor-pointer">关于 Google</span>
+              <span className="hover:underline cursor-pointer">关于 Googol</span>
               <span className="hover:underline cursor-pointer">广告</span>
               <span className="hover:underline cursor-pointer">商务</span>
             </div>
@@ -219,8 +219,8 @@ export default function Chrome() {
                 <span className="text-[#EA4335]">o</span>
                 <span className="text-[#FBBC05]">o</span>
                 <span className="text-[#4285F4]">g</span>
-                <span className="text-[#34A853]">l</span>
-                <span className="text-[#EA4335]">e</span>
+                <span className="text-[#34A853]">o</span>
+                <span className="text-[#EA4335]">l</span>
               </span>
             </button>
 
