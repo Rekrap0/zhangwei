@@ -20,6 +20,7 @@ export default function HengnianAdmin() {
   const [error, setError] = useState('');
   const [showInfo, setShowInfo] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [showToast, setShowToast] = useState(false);
 
   useEffect(() => {
     const { playerName, startDate } = getPlayerCookies();
@@ -41,14 +42,17 @@ export default function HengnianAdmin() {
     // 模拟加载延迟
     setTimeout(() => {
       const emailLower = email.trim().toLowerCase();
-      
+
       // 检查林晓琳的锁定账户
       if (emailLower === LOCKED_EMAIL && password === LOCKED_PASSWORD) {
         setError('locked');
         setIsLoading(false);
+        setShowToast(true);
+        setTimeout(() => setShowToast(false), 7777);
+
         return;
       }
-      
+
       if (emailLower === CORRECT_EMAIL && password === CORRECT_PASSWORD) {
         setCookie(ADMIN_AUTH_KEY, 'true');
         router.push('/hengnian-panel');
@@ -179,7 +183,12 @@ export default function HengnianAdmin() {
           </div>
         </div>
       </main>
-
+      {/* Toast 通知 */}
+      {showToast && (
+        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[200] bg-black/70 text-white text-sm px-6 py-3 rounded-lg pointer-events-none animate-fade-in">
+          既然林晓琳的账户被锁了，只能从其他员工的账号切入了。如果可以搜得到其他人的公司邮箱，再找到或猜出他们的密码的规律就好了。
+        </div>
+      )}
       {/* 关于管理员账户弹窗 */}
       {showInfo && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">

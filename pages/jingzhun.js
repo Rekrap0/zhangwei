@@ -24,7 +24,7 @@ export default function Jingzhun() {
     setShowPopup(false);
     setShowContent(true);
     setShowToast(true);
-    setTimeout(() => setShowToast(false), 4000);
+    setTimeout(() => setShowToast(false), 7777);
   };
 
   return (

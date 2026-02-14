@@ -1017,7 +1017,7 @@ export default function Wechat() {
     const triggerToast = useCallback((msg) => {
         setToastMessage(msg);
         setShowToast(true);
-        setTimeout(() => setShowToast(false), 2000);
+        setTimeout(() => setShowToast(false), 7777);
     }, []);
 
     // 搜索选择处理

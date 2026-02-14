@@ -864,7 +864,7 @@ function QQProfileView({ result, onBack, onOpenQZone }) {
 
     const handleAddFriend = () => {
         setShowToast(true);
-        setTimeout(() => setShowToast(false), 2500);
+        setTimeout(() => setShowToast(false), 7777);
     };
 
     return (
@@ -1406,7 +1406,7 @@ export default function QQ() {
     const triggerToast = useCallback((msg) => {
         setToastMsg(msg);
         setShowToast(true);
-        setTimeout(() => setShowToast(false), 2500);
+        setTimeout(() => setShowToast(false), 7777);
     }, []);
 
     // 检查cookies并初始化
