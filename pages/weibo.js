@@ -167,8 +167,12 @@ export default function Weibo() {
     
     // 检查是否是田宇的邮箱且恒念已切换
     if (input.toLowerCase() === TIANYU_EMAIL && isHengnianSwitched()) {
-      // 生成 6 位验证码
-      const code = Math.floor(100000 + Math.random() * 900000).toString();
+      // 尝试从 localStorage 读取已生成的验证码，没有则生成新的
+      let code = localStorage.getItem('zhangwei_weibo_verification_code');
+      if (!code) {
+        code = Math.floor(100000 + Math.random() * 900000).toString();
+        localStorage.setItem('zhangwei_weibo_verification_code', code);
+      }
       setExpectedCode(code);
       
       // 发送验证码到恒念聊天

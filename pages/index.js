@@ -112,6 +112,8 @@ export default function StartScreen() {
             localStorage.removeItem('zhangwei_hengnian_chat');
             // 微博账户状态
             localStorage.removeItem('zhangwei_weibo_state');
+            // 微博验证码
+            localStorage.removeItem('zhangwei_weibo_verification_code');
             // 管理员登录状态已在 clearPlayerCookies 中清除（是 Cookie 不是 localStorage）
             // QQ空间解锁状态
             localStorage.removeItem('zhangwei_qzone_unlocked');
