@@ -213,6 +213,34 @@ export default function Desktop() {
                 <div className="border-t border-gray-700" />
               )}
 
+              {/* 直接跳转链接（当输入为URL时显示） */}
+              {/^https?:\/\/\S+$/.test(searchQuery.trim()) && (
+                <>
+                  <div className="p-2">
+                    <p className="text-xs text-gray-400 px-3 py-1.5 font-medium uppercase tracking-wide">链接</p>
+                    <button
+                      onClick={() => {
+                        window.open(searchQuery.trim(), '_blank', 'noopener,noreferrer');
+                        setSearchQuery('');
+                        setShowSearchResults(false);
+                      }}
+                      className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10 transition-colors"
+                    >
+                      <div className="w-10 h-10 bg-emerald-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.172 13.828a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.102 1.101" />
+                        </svg>
+                      </div>
+                      <span className="text-white text-sm">
+                        直接跳转至 <span className="text-emerald-400 font-medium">{searchQuery.trim()}</span>
+                      </span>
+                    </button>
+                  </div>
+                  <div className="border-t border-gray-700" />
+                </>
+              )}
+
               {/* 搜索网页（始终显示） */}
               <div className="p-2">
                 <p className="text-xs text-gray-400 px-3 py-1.5 font-medium uppercase tracking-wide">搜索</p>
