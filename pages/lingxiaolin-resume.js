@@ -102,7 +102,7 @@ export default function LingxiaolinResume() {
         <div className="bg-white rounded-xl shadow-sm p-6 mb-4">
           <h2 className="text-lg font-bold text-gray-900 mb-3">个人简介</h2>
           <p className="text-sm text-gray-700 leading-relaxed">
-            资深医药行业运营管理专家，拥有超过12年医药企业运营管理经验。北京大学MBA，
+            资深医药行业运营管理专家，拥有超过12年医药企业运营管理经验。北景大学MBA，
             曾先后就职于辉星中国、严氏制药，在医药企业战略规划、供应链管理、市场拓展
             等领域积累了丰富经验。2017年加入恒念药业担任首席运营官，全面负责公司日常
             运营管理、资源协调与战略执行。致力于推动公司数字化转型与管理创新。
