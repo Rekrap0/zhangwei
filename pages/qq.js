@@ -394,7 +394,7 @@ function SearchView({ onBack, onSelectQQ }) {
                                 />
                             </div>
                             <div className="flex-1 text-left">
-                                <p className="text-sm text-gray-900 font-medium">w.</p>
+                                <p className="text-sm text-gray-900 font-medium">zhangwei</p>
                             </div>
                         </button>
                     </div>
