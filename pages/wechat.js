@@ -1577,7 +1577,7 @@ export default function Wechat() {
                     <div className="h-full flex items-center justify-center bg-white">
                         <p className="text-gray-400">
                             {activeTab === 'contacts' && '暂时无法显示此页面。'}
-                            {activeTab === 'discover' && '暂时无法显示此页面。'}
+                            {activeTab === 'discover' && '暂时无法显示此页面，虽然无法在发现页直接打开朋友圈，但你还是可以单独查看某一个好友的朋友圈。'}
                         </p>
                     </div>
                 )}
