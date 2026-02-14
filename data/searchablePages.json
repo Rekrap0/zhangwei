@@ -41,13 +41,27 @@
   {
     "id": "teapot",
     "keywords": [
-      "茶壶","teapot","418"
+      "茶壶",
+      "teapot",
+      "418"
     ],
     "exactMatch": true,
     "title": "茶壶",
     "description": "茶壶",
     "url": "/teapot",
     "displayUrl": "https://zw.jy-s.com/teapot"
+  },
+  {
+    "id": "morse",
+    "keywords": [
+      "摩斯密码",
+      "morse",
+      "-.- ..-. -.-. ...- -- . ..... -----"
+    ],
+    "title": "在线摩斯密码翻译器",
+    "description": "在线摩斯密码翻译器，支持将文本（包含中文）编码为摩斯码，摩斯码解码为普通文本。支持在线播放摩斯码音频，下载摩斯码声音文件。文本支持所有的Unicode字符。",
+    "url": "https://www.lddgo.net/encrypt/morse",
+    "displayUrl": "https://www.lddgo.net/encrypt/morse"
   },
   {
     "id": "lijing_baidu",
@@ -63,10 +77,12 @@
   {
     "id": "base64-converter",
     "keywords": [
-      "base64","base","64"
+      "base64",
+      "base",
+      "64"
     ],
     "title": "Base64 在线编码解码| Base64 加密解密- Base64.us",
-    "description": "请在上方第一个文本框中输入要编码/解码的字符。",
+    "description": "请在文本框中输入要编码/解码的字符。",
     "url": "https://base64.us/",
     "displayUrl": "https://base64.us/"
   },

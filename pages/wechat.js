@@ -1043,6 +1043,7 @@ export default function Wechat() {
         isAiThinking: isZhangweiThinking,
         isDebouncing: isZhangweiDebouncing,
         addUserMessage: addZhangweiMessage,
+        isInitialized: isZhangweiAiInitialized,
     } = useAIChat({
         chatId: 'zhangwei',
         systemPrompt: ZHANGWEI_SYSTEM_PROMPT,
@@ -1050,6 +1051,7 @@ export default function Wechat() {
         enabled: !!state.networkRepaired,
     });
     const lastAiMsgCountRef = useRef(0);
+    const aiSyncedRef = useRef(false);
 
     // 检测屏幕宽度和获取玩家名称 - 仅在客户端执行
     useEffect(() => {
@@ -1148,9 +1150,19 @@ export default function Wechat() {
         );
     }, [state.networkRepaired, isInitialized]);
 
+    // 当 AI 聊天从 localStorage 加载完成后，同步 ref 避免重复注入历史消息
+    useEffect(() => {
+        if (!isZhangweiAiInitialized) return;
+        if (aiSyncedRef.current) return;
+        aiSyncedRef.current = true;
+        const assistantMsgs = zhangweiAiMessages.filter(m => m.role === 'assistant');
+        lastAiMsgCountRef.current = assistantMsgs.length;
+    }, [isZhangweiAiInitialized, zhangweiAiMessages]);
+
     // 监听张薇 AI 的回复，注入到微信消息列表（多行拆分并延迟显示）
     useEffect(() => {
         if (!isInitialized) return;
+        if (!aiSyncedRef.current) return;
         // 只关注 assistant 消息
         const assistantMsgs = zhangweiAiMessages.filter(m => m.role === 'assistant');
         if (assistantMsgs.length <= lastAiMsgCountRef.current) return;
