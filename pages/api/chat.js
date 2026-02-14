@@ -1,7 +1,6 @@
 /**
  * Groq Chat API Route
  * Proxies chat requests to GroqCloud
- * Model: openai/gpt-oss-20b
  */
 
 export default async function handler(req, res) {
@@ -32,7 +31,7 @@ export default async function handler(req, res) {
         model: 'qwen/qwen3-32b',
         messages,
         temperature: 0.6,
-        max_tokens: 300,
+        max_tokens: 4096,
       }),
     });
 
@@ -43,7 +42,10 @@ export default async function handler(req, res) {
     }
 
     const data = await response.json();
-    const content = data.choices?.[0]?.message?.content || '';
+    let content = data.choices?.[0]?.message?.content || '';
+
+    // Strip <think>...</think> blocks from thinking models (e.g. qwen3)
+    content = content.replace(/<think>[\s\S]*?<\/think>\s*/g, '').trim();
 
     return res.status(200).json({ content });
   } catch (error) {

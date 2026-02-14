@@ -179,7 +179,7 @@ function ChatWidget({ forceOpen }) {
           const updated = [
             ...prev,
             { role: 'system', content: '██ 系统接口已切换 ██' },
-            { role: 'assistant', content: '你终于找到这里了。我是李静。时间不多了，公司的安全系统马上就会发现我们，我们长话短说！' },
+            { role: 'assistant', content: '你终于找到这里了。时间不多了，公司的安全部门马上就会发现我们，我们长话短说！' },
           ];
           saveState(updated, 'lijing', 0);
           return updated;

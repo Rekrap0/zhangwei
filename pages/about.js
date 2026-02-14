@@ -88,7 +88,7 @@ export default function About() {
                                 <span className="text-green-400 font-medium">GroqCloud</span>
                                 <span className="text-gray-600">·</span>
                                 <span className="text-gray-400">模型：</span>
-                                <code className="text-gray-300 bg-white/10 px-2 py-0.5 rounded text-xs">gpt-oss-20b</code>
+                                <code className="text-gray-300 bg-white/10 px-2 py-0.5 rounded text-xs">qwen/qwen3-32b</code>
                             </div>
                         </div>
                     </div>
