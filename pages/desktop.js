@@ -283,7 +283,10 @@ export default function Desktop() {
           </>
         ) : (
           <div className="flex-1 flex items-center justify-center">
-            <p className="text-gray-500 text-sm">最近打开的应用将显示在这里</p>
+            <div className="text-center">
+              <p className="text-gray-500 text-sm">最近打开的应用将显示在这里</p>
+              <p className="text-gray-500 text-xs"><br />还是不知道做什么？试试搜索“微信”吧！</p>
+            </div>
           </div>
         )}
       </div>
