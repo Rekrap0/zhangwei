@@ -117,6 +117,44 @@ export default function About() {
                     </div>
                 </section>
 
+                <section className="mb-12">
+                    <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
+                        <span className="w-1 h-5 bg-red-500 rounded-full inline-block" />
+                        鸣谢
+                    </h2>
+                    <div className="space-y-3">
+                        <div className="bg-white/5 border border-white/10 rounded-xl p-5">
+                            <h3 className="text-white font-medium mb-1">灵感提供</h3>
+                            <a
+                                href="https://missing.shiroki-y.top/introduction.html"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="items-center gap-1.5 text-sm text-blue-400 hover:text-blue-300 transition-colors"
+                            >
+                                <p className="text-gray-400 text-sm mb-2">大学生登山失踪事件</p>
+                            </a>
+                            <a
+                                href="https://mp.weixin.qq.com/s/kKsnzFsLFwwm2nwv8DseAA"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="items-center gap-1.5 text-sm text-blue-400 hover:text-blue-300 transition-colors"
+                            >
+                                <p className="text-gray-400 text-sm mb-2">永安温泉度假酒店</p>
+                            </a>
+                                                        <a
+                                href="https://xsn1204.github.io/qmgame"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="items-center gap-1.5 text-sm text-blue-400 hover:text-blue-300 transition-colors"
+                            >
+                                <p className="text-gray-400 text-sm mb-2">404工位消失事件</p>
+                            </a>
+                            
+                        </div>
+                    </div>
+                </section>
+
+
                 {/* 底部 */}
                 <div className="text-center text-gray-600 text-xs pt-4 border-t border-white/5">
                     © {new Date().getFullYear()} Jiangye
