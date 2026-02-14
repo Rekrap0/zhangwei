@@ -148,7 +148,7 @@ export function generateZhangweiMessages() {
   messages.push(createMessage({
     id: messageId++,
     sender: 'zhangwei',
-    content: `你是不是忘了？那天我生日啊大哥！！👊`,
+    content: `你是不是忘了？下周我生日啊大哥！！👊`,
     date: day12Ago,
     time: '19:44',
   }));
