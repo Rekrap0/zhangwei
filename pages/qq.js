@@ -1072,8 +1072,8 @@ function getQZonePosts() {
         },
         {
             daysAgo: 1101,
-            content: '在医院门口捡到的 搞得像是科幻小说里把灵魂卖给魔鬼的契约 但无所谓了 这种日复一日的凌迟我真的一秒都忍不了了',
-            image: '/momentsEvent.png',
+            content: '在医院门口捡到的 像是科幻小说里把灵魂卖给魔鬼的契约 不过正好 这种日复一日的凌迟我真的一秒都忍不了了',
+            image: '/momentsEvent.jpg',
         },
         {
             daysAgo: 1103,
