@@ -554,7 +554,7 @@ export default function Hengnian() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
               { date: '2025-12-01', title: '恒念药业荣获"2025中国医药创新企业50强"', desc: '在近日举办的中国医药创新发展大会上，恒念药业凭借在神经调控技术领域的突出贡献……' },
-              { date: '2025-09-15', title: '公司与北京大学签署战略合作协议', desc: '恒念药业与北京大学生命科学学院签署为期五年的产学研合作框架协议……' },
+              { date: '2025-09-15', title: '公司与北景大学签署战略合作协议', desc: '恒念药业与北京大学生命科学学院签署为期五年的产学研合作框架协议……' },
             ].map((news, i) => (
               <div key={i} className="bg-white rounded-xl p-5 hover:shadow-md transition-shadow cursor-pointer">
                 <span className="text-xs text-gray-400">{news.date}</span>

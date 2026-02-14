@@ -218,7 +218,7 @@ export default function LijingResume() {
                   <span className="text-[#00A080] font-bold text-lg">清</span>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900">清华大学</h3>
+                  <h3 className="font-semibold text-gray-900">庆华大学</h3>
                   <p className="text-sm text-gray-600">计算机科学与技术 · 硕士</p>
                   <p className="text-xs text-gray-500 mt-0.5">2005年 — 2008年</p>
                 </div>

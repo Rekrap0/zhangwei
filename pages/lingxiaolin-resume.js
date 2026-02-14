@@ -103,7 +103,7 @@ export default function LingxiaolinResume() {
           <h2 className="text-lg font-bold text-gray-900 mb-3">个人简介</h2>
           <p className="text-sm text-gray-700 leading-relaxed">
             资深医药行业运营管理专家，拥有超过12年医药企业运营管理经验。北京大学MBA，
-            曾先后就职于辉瑞中国、罗氏制药，在医药企业战略规划、供应链管理、市场拓展
+            曾先后就职于辉星中国、严氏制药，在医药企业战略规划、供应链管理、市场拓展
             等领域积累了丰富经验。2017年加入恒念药业担任首席运营官，全面负责公司日常
             运营管理、资源协调与战略执行。致力于推动公司数字化转型与管理创新。
           </p>
@@ -167,7 +167,7 @@ export default function LingxiaolinResume() {
                 <span className="text-red-700 font-bold text-lg">北</span>
               </div>
               <div>
-                <h3 className="font-medium text-gray-900">北京大学</h3>
+                <h3 className="font-medium text-gray-900">北景大学</h3>
                 <p className="text-sm text-gray-600">工商管理硕士（MBA）</p>
                 <p className="text-xs text-gray-500 mt-0.5">2006年 — 2009年</p>
               </div>
@@ -177,7 +177,7 @@ export default function LingxiaolinResume() {
                 <span className="text-purple-700 font-bold text-lg">复</span>
               </div>
               <div>
-                <h3 className="font-medium text-gray-900">复旦大学</h3>
+                <h3 className="font-medium text-gray-900">复但大学</h3>
                 <p className="text-sm text-gray-600">药学 学士</p>
                 <p className="text-xs text-gray-500 mt-0.5">2002年 — 2006年</p>
               </div>
