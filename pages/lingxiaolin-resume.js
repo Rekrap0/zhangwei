@@ -148,7 +148,7 @@ export default function LingxiaolinResume() {
               </div>
               <div className="flex-1">
                 <h3 className="font-medium text-gray-900">高级运营经理</h3>
-                <p className="text-sm text-gray-600">辉瑞制药（中国）</p>
+                <p className="text-sm text-gray-600">辉星制药（中国）</p>
                 <p className="text-xs text-gray-500 mt-0.5">2009年 — 2013年 · 北京</p>
                 <p className="text-sm text-gray-700 mt-2 leading-relaxed">
                   参与公司运营体系建设，负责多个重点项目的运营支持与执行。
@@ -177,7 +177,7 @@ export default function LingxiaolinResume() {
                 <span className="text-purple-700 font-bold text-lg">复</span>
               </div>
               <div>
-                <h3 className="font-medium text-gray-900">复但大学</h3>
+                <h3 className="font-medium text-gray-900">复旭大学</h3>
                 <p className="text-sm text-gray-600">药学 学士</p>
                 <p className="text-xs text-gray-500 mt-0.5">2002年 — 2006年</p>
               </div>

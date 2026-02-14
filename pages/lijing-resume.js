@@ -215,7 +215,7 @@ export default function LijingResume() {
               </h2>
               <div className="flex gap-4">
                 <div className="w-12 h-12 bg-[#F0FDF9] rounded-xl flex items-center justify-center flex-shrink-0">
-                  <span className="text-[#00A080] font-bold text-lg">清</span>
+                  <span className="text-[#00A080] font-bold text-lg">庆</span>
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900">庆华大学</h3>
