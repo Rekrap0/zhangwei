@@ -56,6 +56,9 @@ export default function About() {
                             Rekrap0/zhangwei
                         </a>
                         <p className="inline text-xs">（如果打不开就是还没公开）</p>
+                        <p className="opacity-10 hover:opacity-100 text-xs">
+                            虽然本Next.js项目使用 <span className="text-blue-400 font-medium">JavaScript</span> 作为开发语言，但其实作者强烈建议使用 <span className="text-blue-400 font-medium">TypeScript</span> 编写，只是发现项目初始化为JS的时候已经懒得改了（JS虽然很垃圾，但已经2026年了，代码还是完全靠人写的话也太落后了吧）。
+                        </p>
                     </div>
                 </section>
 
@@ -141,7 +144,7 @@ export default function About() {
                             >
                                 <p className="text-gray-400 text-sm mb-2">永安温泉度假酒店</p>
                             </a>
-                                                        <a
+                            <a
                                 href="https://xsn1204.github.io/qmgame"
                                 target="_blank"
                                 rel="noopener noreferrer"
@@ -149,7 +152,7 @@ export default function About() {
                             >
                                 <p className="text-gray-400 text-sm mb-2">404工位消失事件</p>
                             </a>
-                            
+
                         </div>
                     </div>
                 </section>

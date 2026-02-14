@@ -5,8 +5,9 @@ import { getPlayerCookies } from '../utils/cookies';
 import searchablePages from '../data/searchablePages.json';
 
 const DISCOVERED_RESULTS_KEY = 'zhangwei_discovered_results';
+const DISCOVERED_CHANNEL = 'zhangwei_discovered_sync';
 
-// 保存已发现的特殊结果到 localStorage
+// 保存已发现的特殊结果到 localStorage 并广播
 function saveDiscoveredResult(result) {
   if (typeof window === 'undefined') return;
   try {
@@ -16,6 +17,12 @@ function saveDiscoveredResult(result) {
     if (list.some(r => r.url === result.url)) return;
     list.push({ title: result.title, url: result.url });
     localStorage.setItem(DISCOVERED_RESULTS_KEY, JSON.stringify(list));
+    // 广播到其他标签页（桌面）
+    try {
+      const ch = new BroadcastChannel(DISCOVERED_CHANNEL);
+      ch.postMessage({ type: 'DISCOVERED_UPDATE', payload: list });
+      ch.close();
+    } catch (_) { }
   } catch (e) { }
 }
 

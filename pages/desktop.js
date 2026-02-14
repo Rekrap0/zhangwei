@@ -6,6 +6,7 @@ import { appList } from '../data/appList';
 
 const DESKTOP_ICONS_KEY = 'zhangwei_desktop_icons';
 const DISCOVERED_RESULTS_KEY = 'zhangwei_discovered_results';
+const DISCOVERED_CHANNEL = 'zhangwei_discovered_sync';
 
 // 从 localStorage 加载已发现的结果
 function loadDiscoveredResults() {
@@ -101,7 +102,15 @@ export default function Desktop() {
     // 加载已发现的结果
     setDiscoveredResults(loadDiscoveredResults());
 
-    // 监听 localStorage 变化（来自其他标签页的更新）
+    // BroadcastChannel 实时同步已发现的结果
+    const channel = new BroadcastChannel(DISCOVERED_CHANNEL);
+    channel.onmessage = (event) => {
+      if (event.data.type === 'DISCOVERED_UPDATE') {
+        setDiscoveredResults(event.data.payload);
+      }
+    };
+
+    // 监听 localStorage 变化（来自其他标签页的更新，作为备用）
     const handleStorageChange = (e) => {
       if (e.key === DESKTOP_ICONS_KEY && e.newValue) {
         try { setDesktopIcons(JSON.parse(e.newValue)); } catch (_) { }
@@ -111,7 +120,10 @@ export default function Desktop() {
       }
     };
     window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
+    return () => {
+      channel.close();
+      window.removeEventListener('storage', handleStorageChange);
+    };
   }, [router]);
 
   // 点击外部关闭搜索下拉框
@@ -298,33 +310,8 @@ export default function Desktop() {
         </div>
       </div>
 
-      {/* 已发现的结果 + 最近使用 */}
+      {/* 最近使用 + 已发现的结果 */}
       <div className="relative z-10 flex-1 flex flex-col items-center px-6 pt-4 gap-2 overflow-hidden">
-        {/* 已发现的结果 */}
-        <div className="w-full max-w-lg" style={{ height: '40dvh' }}>
-          <p className="text-gray-400 text-xs font-medium tracking-wide mb-2">已发现的结果</p>
-          <div className="overflow-y-auto pr-1" style={{ height: 'calc(40dvh - 24px)' }}>
-            {discoveredResults.length > 0 ? (
-              <div className="space-y-1">
-                {discoveredResults.map((result, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => window.open(result.url, '_blank', 'noopener,noreferrer')}
-                    className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/10 transition-colors text-left group"
-                  >
-                    <GlobeIcon />
-                    <span className="text-white text-sm truncate group-hover:text-blue-300 transition-colors">{result.title}</span>
-                  </button>
-                ))}
-              </div>
-            ) : (
-              <div className="flex items-center justify-center h-full">
-                <p className="text-gray-500 text-sm">搜索到的关键结果将显示在这里</p>
-              </div>
-            )}
-          </div>
-        </div>
-
         {/* 最近使用 */}
         <div className="w-full max-w-lg" style={{ height: '40dvh' }}>
           <p className="text-gray-400 text-xs font-medium tracking-wide mb-2">最近使用</p>
@@ -348,6 +335,31 @@ export default function Desktop() {
                   <p className="text-gray-500 text-sm">最近打开的应用将显示在这里</p>
                   <p className="text-gray-500 text-xs"><br />还是不知道做什么？试试搜索“微信”吧！</p>
                 </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* 已发现的结果 */}
+        <div className="w-full max-w-lg" style={{ height: '40dvh' }}>
+          <p className="text-gray-400 text-xs font-medium tracking-wide mb-2">已发现的结果</p>
+          <div className="overflow-y-auto pr-1" style={{ height: 'calc(40dvh - 24px)' }}>
+            {discoveredResults.length > 0 ? (
+              <div className="space-y-1">
+                {discoveredResults.map((result, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => window.open(result.url, '_blank', 'noopener,noreferrer')}
+                    className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/10 transition-colors text-left group"
+                  >
+                    <GlobeIcon />
+                    <span className="text-white text-sm truncate group-hover:text-blue-300 transition-colors">{result.title}</span>
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <div className="flex items-center justify-center h-full">
+                <p className="text-gray-500 text-sm">搜索到的关键结果将显示在这里</p>
               </div>
             )}
           </div>
