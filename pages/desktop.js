@@ -5,6 +5,26 @@ import { getPlayerCookies } from '../utils/cookies';
 import { appList } from '../data/appList';
 
 const DESKTOP_ICONS_KEY = 'zhangwei_desktop_icons';
+const DISCOVERED_RESULTS_KEY = 'zhangwei_discovered_results';
+
+// 从 localStorage 加载已发现的结果
+function loadDiscoveredResults() {
+  if (typeof window === 'undefined') return [];
+  try {
+    const stored = localStorage.getItem(DISCOVERED_RESULTS_KEY);
+    if (stored) return JSON.parse(stored);
+  } catch (e) { }
+  return [];
+}
+
+// 互联网图标 SVG 组件
+function GlobeIcon() {
+  return (
+    <svg className="w-5 h-5 text-blue-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5a17.92 17.92 0 01-8.716-2.247m0 0A9 9 0 013 12c0-1.605.42-3.113 1.157-4.418" />
+    </svg>
+  );
+}
 
 // 图标路径映射
 const ICON_MAP = {
@@ -67,6 +87,7 @@ export default function Desktop() {
   const [searchQuery, setSearchQuery] = useState('');
   const [showSearchResults, setShowSearchResults] = useState(false);
   const [desktopIcons, setDesktopIcons] = useState([]);
+  const [discoveredResults, setDiscoveredResults] = useState([]);
   const searchRef = useRef(null);
 
   // 检查是否有玩家cookies，没有则重定向到开始页面
@@ -77,6 +98,20 @@ export default function Desktop() {
     }
     // 加载桌面图标
     setDesktopIcons(loadDesktopIcons());
+    // 加载已发现的结果
+    setDiscoveredResults(loadDiscoveredResults());
+
+    // 监听 localStorage 变化（来自其他标签页的更新）
+    const handleStorageChange = (e) => {
+      if (e.key === DESKTOP_ICONS_KEY && e.newValue) {
+        try { setDesktopIcons(JSON.parse(e.newValue)); } catch (_) { }
+      }
+      if (e.key === DISCOVERED_RESULTS_KEY && e.newValue) {
+        try { setDiscoveredResults(JSON.parse(e.newValue)); } catch (_) { }
+      }
+    };
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
   }, [router]);
 
   // 点击外部关闭搜索下拉框
@@ -263,32 +298,60 @@ export default function Desktop() {
         </div>
       </div>
 
-      {/* 桌面图标区域 */}
-      <div className="relative z-10 flex-1 p-6 pt-4 flex flex-col items-center">
-        {visibleApps.length > 0 ? (
-          <>
-            <p className="text-gray-400 text-xs font-medium tracking-wide mb-3">最近使用</p>
-            <div className="flex flex-wrap gap-2 justify-center">
-              {visibleApps.map(app => (
-                <button
-                  key={app.id}
-                  onClick={() => openApp(app.route)}
-                  className="flex flex-col items-center gap-2 p-3 rounded-lg hover:bg-white/10 transition-colors group w-24"
-                >
-                  <DesktopAppIcon iconType={app.iconType} />
-                  <span className="text-white text-sm font-medium drop-shadow-lg">{app.name}</span>
-                </button>
-              ))}
-            </div>
-          </>
-        ) : (
-          <div className="flex-1 flex items-center justify-center">
-            <div className="text-center">
-              <p className="text-gray-500 text-sm">最近打开的应用将显示在这里</p>
-              <p className="text-gray-500 text-xs"><br />还是不知道做什么？试试搜索“微信”吧！</p>
-            </div>
+      {/* 已发现的结果 + 最近使用 */}
+      <div className="relative z-10 flex-1 flex flex-col items-center px-6 pt-4 gap-2 overflow-hidden">
+        {/* 已发现的结果 */}
+        <div className="w-full max-w-lg" style={{ height: '40dvh' }}>
+          <p className="text-gray-400 text-xs font-medium tracking-wide mb-2">已发现的结果</p>
+          <div className="overflow-y-auto pr-1" style={{ height: 'calc(40dvh - 24px)' }}>
+            {discoveredResults.length > 0 ? (
+              <div className="space-y-1">
+                {discoveredResults.map((result, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => window.open(result.url, '_blank', 'noopener,noreferrer')}
+                    className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/10 transition-colors text-left group"
+                  >
+                    <GlobeIcon />
+                    <span className="text-white text-sm truncate group-hover:text-blue-300 transition-colors">{result.title}</span>
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <div className="flex items-center justify-center h-full">
+                <p className="text-gray-500 text-sm">搜索到的关键结果将显示在这里</p>
+              </div>
+            )}
           </div>
-        )}
+        </div>
+
+        {/* 最近使用 */}
+        <div className="w-full max-w-lg" style={{ height: '40dvh' }}>
+          <p className="text-gray-400 text-xs font-medium tracking-wide mb-2">最近使用</p>
+          <div className="overflow-y-auto pr-1" style={{ height: 'calc(40dvh - 24px)' }}>
+            {visibleApps.length > 0 ? (
+              <div className="flex flex-wrap gap-2 justify-center">
+                {visibleApps.map(app => (
+                  <button
+                    key={app.id}
+                    onClick={() => openApp(app.route)}
+                    className="flex flex-col items-center gap-2 p-3 rounded-lg hover:bg-white/10 transition-colors group w-24"
+                  >
+                    <DesktopAppIcon iconType={app.iconType} />
+                    <span className="text-white text-sm font-medium drop-shadow-lg">{app.name}</span>
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <div className="flex items-center justify-center h-full">
+                <div className="text-center">
+                  <p className="text-gray-500 text-sm">最近打开的应用将显示在这里</p>
+                  <p className="text-gray-500 text-xs"><br />还是不知道做什么？试试搜索“微信”吧！</p>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );

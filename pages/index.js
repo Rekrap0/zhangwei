@@ -104,6 +104,8 @@ export default function StartScreen() {
             localStorage.removeItem('zhangwei_wechat_contacts');
             // 桌面图标
             localStorage.removeItem('zhangwei_desktop_icons');
+            // 已发现的搜索结果
+            localStorage.removeItem('zhangwei_discovered_results');
             // 游戏状态
             localStorage.removeItem('zhangwei_game_state');
             // 恒念客服聊天

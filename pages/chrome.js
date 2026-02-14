@@ -4,6 +4,21 @@ import Head from 'next/head';
 import { getPlayerCookies } from '../utils/cookies';
 import searchablePages from '../data/searchablePages.json';
 
+const DISCOVERED_RESULTS_KEY = 'zhangwei_discovered_results';
+
+// 保存已发现的特殊结果到 localStorage
+function saveDiscoveredResult(result) {
+  if (typeof window === 'undefined') return;
+  try {
+    const stored = localStorage.getItem(DISCOVERED_RESULTS_KEY);
+    const list = stored ? JSON.parse(stored) : [];
+    // 避免重复
+    if (list.some(r => r.url === result.url)) return;
+    list.push({ title: result.title, url: result.url });
+    localStorage.setItem(DISCOVERED_RESULTS_KEY, JSON.stringify(list));
+  } catch (e) { }
+}
+
 // 搜索结果黑名单：标题或URL中包含以下任意关键词的结果将被过滤
 const SEARCH_BLACKLIST = [
   'po', 'vp', 'vn', 'xv', '习', '黄', '江', '人', '共', '台', '本', '毛', '党', '成', '维基', '六'
@@ -303,6 +318,11 @@ export default function Chrome() {
                     target={result.url.startsWith('http') ? '_blank' : '_self'}
                     rel="noopener noreferrer"
                     className="text-xl text-[#1A0DAB] hover:underline block leading-snug"
+                    onClick={() => {
+                      if (result.isSpecial) {
+                        saveDiscoveredResult(result);
+                      }
+                    }}
                   >
                     {result.title}
                   </a>
