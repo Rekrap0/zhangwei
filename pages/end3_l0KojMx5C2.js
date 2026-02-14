@@ -70,7 +70,7 @@ export default function Ending3() {
                         ......
                     </p>
                     <p className="text-gray-500 text-sm">
-                        我是不是做错了什么？
+                        我是不是做漏了什么？
                     </p>
                 </div>
 
