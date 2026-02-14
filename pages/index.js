@@ -14,6 +14,7 @@ export default function StartScreen() {
     const [activeTab, setActiveTab] = useState(0);
     const [hasViewedNotice, setHasViewedNotice] = useState(false);
     const [nameError, setNameError] = useState('');
+    const [isInAppBrowser, setIsInAppBrowser] = useState(false);
 
     // 角色名黑名单，防止玩家使用与游戏角色重名的昵称
     const BLACKLISTED_NAMES = [
@@ -58,6 +59,10 @@ export default function StartScreen() {
         if (typeof window !== 'undefined') {
             const completed = localStorage.getItem('zhangwei_game_completed') === 'true';
             setIsGameCompleted(completed);
+            // 检测是否在微信/QQ内置浏览器中
+            if (/micromessenger|qq\//i.test(navigator.userAgent)) {
+                setIsInAppBrowser(true);
+            }
         }
         setIsLoading(false);
     }, []);
@@ -148,6 +153,26 @@ export default function StartScreen() {
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-800 to-gray-900 flex flex-col items-center justify-center relative overflow-hidden">
             <Head><title>张薇失联事件</title></Head>
+            {/* 内置浏览器警告 */}
+            {isInAppBrowser && (
+                <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[9999] flex items-start justify-center overflow-y-auto">
+                    <div className="bg-gray-900 border border-gray-700 rounded-xl m-5 p-6 max-w-md w-full shadow-2xl mt-20">
+                        <p className="text-red-400 font-bold text-lg mb-3">
+                            您似乎正在通过QQ或微信内置浏览器访问此网站，这会导致网站显示不正常。
+                        </p>
+                        <p className="text-white mb-3">
+                            请点击右上角 → 在浏览器打开。
+                        </p>
+                        <p className="text-red-400 mb-3">
+                            如果右上角未显示按钮，请长按选择下方链接，点击&ldquo;打开&rdquo;或手动复制并粘贴到浏览器打开。
+                        </p>
+                        <p className="text-white font-bold break-all select-all">
+                            {typeof window !== 'undefined' ? window.location.href : ''}
+                        </p>
+                    </div>
+                </div>
+            )}
+
             {/* 背景效果 */}
             <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-5" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
