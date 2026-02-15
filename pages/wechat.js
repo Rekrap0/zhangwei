@@ -1034,7 +1034,7 @@ export default function Wechat() {
                 setShowBannedAccount(false);
             }
         } else {
-            triggerToast('未能搜索到该用户');
+            triggerToast('用户不存在或对方设置了被搜索权限');
         }
     }, [contacts, triggerToast]);
 

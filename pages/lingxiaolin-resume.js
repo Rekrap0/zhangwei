@@ -1,10 +1,18 @@
-import { useEffect } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { getPlayerCookies } from '../utils/cookies';
 
 export default function LingxiaolinResume() {
   const router = useRouter();
+  const [toastMsg, setToastMsg] = useState('');
+  const [showToast, setShowToast] = useState(false);
+
+  const triggerToast = useCallback((msg) => {
+    setToastMsg(msg);
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 3000);
+  }, []);
 
   useEffect(() => {
     const { playerName, startDate } = getPlayerCookies();
@@ -54,7 +62,7 @@ export default function LingxiaolinResume() {
             <p className="text-sm text-gray-500 mt-1">北京 · 中国</p>
 
             <div className="flex gap-2 mt-4">
-              <button className="px-4 py-1.5 bg-[#0A66C2] text-white text-sm font-medium rounded-full hover:bg-[#004182] transition-colors">
+              <button onClick={() => triggerToast('聊天系统维护中')} className="px-4 py-1.5 bg-[#0A66C2] text-white text-sm font-medium rounded-full hover:bg-[#004182] transition-colors">
                 联系TA
               </button>
               <button className="px-4 py-1.5 border border-[#0A66C2] text-[#0A66C2] text-sm font-medium rounded-full hover:bg-blue-50 transition-colors">
@@ -190,6 +198,12 @@ export default function LingxiaolinResume() {
           <p>&copy; 2025 医才网 MedTalent.cn &middot; 医药行业人才服务平台</p>
         </div>
       </main>
+
+      {showToast && (
+        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[200] bg-black/70 text-white text-sm px-6 py-3 rounded-lg pointer-events-none animate-fade-in">
+          {toastMsg}
+        </div>
+      )}
     </div>
   );
 }

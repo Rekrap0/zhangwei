@@ -122,6 +122,7 @@ export default function StartScreen() {
             localStorage.removeItem('zhangwei_qq_contacts');
             localStorage.removeItem('zhangwei_qq_class5_dissolved');
             localStorage.removeItem('zhangwei_qq_search_history');
+            localStorage.removeItem('zhangwei_qq_search_history_linxiaolin');
             localStorage.removeItem('zhangwei_qq_splat_stage');
             // 清除所有 AI 聊天记录 (zhangwei_ai_chat_*)
             const keysToRemove = [];

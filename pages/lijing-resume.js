@@ -1,10 +1,18 @@
-import { useEffect } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { getPlayerCookies } from '../utils/cookies';
 
 export default function LijingResume() {
   const router = useRouter();
+  const [toastMsg, setToastMsg] = useState('');
+  const [showToast, setShowToast] = useState(false);
+
+  const triggerToast = useCallback((msg) => {
+    setToastMsg(msg);
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 3000);
+  }, []);
 
   useEffect(() => {
     const { playerName, startDate } = getPlayerCookies();
@@ -75,7 +83,7 @@ export default function LijingResume() {
                 </div>
               </div>
               <div className="flex gap-3">
-                <button className="px-5 py-2 bg-[#00D4AA] text-white text-sm font-medium rounded-lg hover:bg-[#00C49A] transition-colors">
+                <button onClick={() => triggerToast('聊天系统维护中')} className="px-5 py-2 bg-[#00D4AA] text-white text-sm font-medium rounded-lg hover:bg-[#00C49A] transition-colors">
                   立即沟通
                 </button>
                 <button className="px-5 py-2 border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors">
@@ -232,6 +240,12 @@ export default function LijingResume() {
           <p>&copy; 2025 码上招 CodeHire.cn · 程序员专属招聘平台</p>
         </div>
       </main>
+
+      {showToast && (
+        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[200] bg-black/70 text-white text-sm px-6 py-3 rounded-lg pointer-events-none animate-fade-in">
+          {toastMsg}
+        </div>
+      )}
     </div>
   );
 }

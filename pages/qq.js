@@ -250,6 +250,7 @@ function SearchResultItem({ qqNumber, nickname, avatarSrc, onClick }) {
 
 // ============ 搜索记录 localStorage ============
 const QQ_SEARCH_HISTORY_KEY = 'zhangwei_qq_search_history';
+const QQ_SEARCH_HISTORY_LINXIAOLIN_KEY = 'zhangwei_qq_search_history_linxiaolin';
 
 function hasSearchedZhangwei() {
     if (typeof window === 'undefined') return false;
@@ -263,12 +264,25 @@ function markSearchedZhangwei() {
     try { localStorage.setItem(QQ_SEARCH_HISTORY_KEY, 'true'); } catch { }
 }
 
+function hasSearchedLinxiaolin() {
+    if (typeof window === 'undefined') return false;
+    try {
+        return localStorage.getItem(QQ_SEARCH_HISTORY_LINXIAOLIN_KEY) === 'true';
+    } catch { return false; }
+}
+
+function markSearchedLinxiaolin() {
+    if (typeof window === 'undefined') return;
+    try { localStorage.setItem(QQ_SEARCH_HISTORY_LINXIAOLIN_KEY, 'true'); } catch { }
+}
+
 // ============ 搜索页面 ============
 function SearchView({ onBack, onSelectQQ }) {
     const [query, setQuery] = useState('');
     const [searchResult, setSearchResult] = useState(null);
     const [isSearching, setIsSearching] = useState(false);
     const [hasHistory, setHasHistory] = useState(false);
+    const [hasLinxiaolinHistory, setHasLinxiaolinHistory] = useState(false);
     const inputRef = useRef(null);
     const debounceRef = useRef(null);
 
@@ -276,6 +290,7 @@ function SearchView({ onBack, onSelectQQ }) {
         // 自动聚焦搜索框
         inputRef.current?.focus();
         setHasHistory(hasSearchedZhangwei());
+        setHasLinxiaolinHistory(hasSearchedLinxiaolin());
         return () => {
             if (debounceRef.current) clearTimeout(debounceRef.current);
         };
@@ -293,6 +308,16 @@ function SearchView({ onBack, onSelectQQ }) {
                     nickname: 'zhangwei',
                     avatarSrc: '/avatarWei2.png',
                     isSpecial: true,
+                });
+            } else if (qqNumber === LINXIAOLIN_QQ || qqNumber === LINXIAOLIN_PHONE) {
+                markSearchedLinxiaolin();
+                setHasLinxiaolinHistory(true);
+                setSearchResult({
+                    qqNumber: LINXIAOLIN_QQ,
+                    nickname: '晓琳',
+                    avatarSrc: '/avatarLinxiaolin.png',
+                    isSpecial: false,
+                    isLinxiaolin: true,
                 });
             } else {
                 setSearchResult({
@@ -339,7 +364,7 @@ function SearchView({ onBack, onSelectQQ }) {
                         type="text"
                         value={query}
                         onChange={(e) => handleSearch(e.target.value)}
-                        placeholder="搜索"
+                        placeholder="搜索QQ号/手机号/群"
                         className="flex-1 text-sm bg-transparent focus:outline-none text-gray-700"
                     />
                     {query && (
@@ -364,31 +389,56 @@ function SearchView({ onBack, onSelectQQ }) {
             {/* 搜索结果 */}
             <div className="flex-1 overflow-y-auto">
                 {/* 搜索记录（搜索框为空时显示） */}
-                {!query && hasHistory && (
+                {!query && (hasHistory || hasLinxiaolinHistory) && (
                     <div>
                         <div className="px-4 py-2 bg-[#F5F5F5] flex items-center justify-between">
                             <span className="text-xs text-gray-500 font-medium">搜索记录</span>
                         </div>
-                        <button
-                            onClick={() => onSelectQQ({
-                                qqNumber: ZHANGWEI_QQ,
-                                nickname: 'zhangwei',
-                                avatarSrc: '/avatarWei2.png',
-                                isSpecial: true,
-                            })}
-                            className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-50 active:bg-gray-100 transition-colors"
-                        >
-                            <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 bg-gray-200">
-                                <img
-                                    src="/avatarWei2.png"
-                                    alt="zhangwei"
-                                    className="w-full h-full object-cover"
-                                />
-                            </div>
-                            <div className="flex-1 text-left">
-                                <p className="text-sm text-gray-900 font-medium">zhangwei</p>
-                            </div>
-                        </button>
+                        {hasHistory && (
+                            <button
+                                onClick={() => onSelectQQ({
+                                    qqNumber: ZHANGWEI_QQ,
+                                    nickname: 'zhangwei',
+                                    avatarSrc: '/avatarWei2.png',
+                                    isSpecial: true,
+                                })}
+                                className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-50 active:bg-gray-100 transition-colors"
+                            >
+                                <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 bg-gray-200">
+                                    <img
+                                        src="/avatarWei2.png"
+                                        alt="zhangwei"
+                                        className="w-full h-full object-cover"
+                                    />
+                                </div>
+                                <div className="flex-1 text-left">
+                                    <p className="text-sm text-gray-900 font-medium">zhangwei</p>
+                                </div>
+                            </button>
+                        )}
+                        {hasLinxiaolinHistory && (
+                            <button
+                                onClick={() => onSelectQQ({
+                                    qqNumber: LINXIAOLIN_QQ,
+                                    nickname: '晓琳',
+                                    avatarSrc: '/avatarLinxiaolin.png',
+                                    isSpecial: false,
+                                    isLinxiaolin: true,
+                                })}
+                                className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-50 active:bg-gray-100 transition-colors"
+                            >
+                                <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 bg-gray-200">
+                                    <img
+                                        src="/avatarLinxiaolin.png"
+                                        alt="晓琳"
+                                        className="w-full h-full object-cover"
+                                    />
+                                </div>
+                                <div className="flex-1 text-left">
+                                    <p className="text-sm text-gray-900 font-medium">晓琳</p>
+                                </div>
+                            </button>
+                        )}
                     </div>
                 )}
 
@@ -841,9 +891,24 @@ function MessageListView({ contacts, onStartSearch, onSelectContact }) {
 // ============ 张薇QQ号常量 ============
 const ZHANGWEI_QQ = '2847593160';
 
+// ============ 林晓琳QQ号常量 ============
+const LINXIAOLIN_QQ = '703066656';
+const LINXIAOLIN_PHONE = '18612345678';
+
+function getLinxiaolinAge() {
+    const now = new Date();
+    let age = now.getFullYear() - 1985;
+    const monthDiff = now.getMonth() - 1; // Feb = 1
+    if (monthDiff < 0 || (monthDiff === 0 && now.getDate() < 17)) {
+        age--;
+    }
+    return age;
+}
+
 // ============ 用户详情页（亮色模式） ============
 function QQProfileView({ result, onBack, onOpenQZone }) {
     const isZhangwei = result.qqNumber === ZHANGWEI_QQ;
+    const isLinxiaolin = result.qqNumber === LINXIAOLIN_QQ;
     const [imgError, setImgError] = useState(false);
     const [showToast, setShowToast] = useState(false);
     const [realAge, setRealAge] = useState(null);
@@ -929,6 +994,19 @@ function QQProfileView({ result, onBack, onOpenQZone }) {
                         <span>女</span>
                         <span className="text-gray-300">|</span>
                         <span>{realAge}岁</span>
+                    </div>
+                )}
+
+                {/* 林晓琳特有信息 */}
+                {isLinxiaolin && (
+                    <div className="mt-4 flex items-center gap-2 text-gray-500 text-sm">
+                        <span>女</span>
+                        <span className="text-gray-300">|</span>
+                        <span>{getLinxiaolinAge()}岁</span>
+                        <span className="text-gray-300">|</span>
+                        <span>2月17日</span>
+                        <span className="text-gray-300"> </span>
+                        <span>水瓶座</span>
                     </div>
                 )}
             </div>
