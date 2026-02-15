@@ -1012,6 +1012,7 @@ export default function Wechat() {
     const [showBannedAccount, setShowBannedAccount] = useState(false);
     const [toastMessage, setToastMessage] = useState('');
     const [showToast, setShowToast] = useState(false);
+    const [showQQNotification, setShowQQNotification] = useState(false);
 
     // Toast 辅助函数
     const triggerToast = useCallback((msg) => {
@@ -1334,6 +1335,8 @@ export default function Wechat() {
     // 继续调查 - 关闭覆盖层，同步到所有标签页
     const handleContinueInvestigation = () => {
         updateState({ continueInvestigation: true });
+        // 显示QQ消息通知
+        setTimeout(() => setShowQQNotification(true), 800);
     };
 
     // 是否显示调查选择覆盖层
@@ -1635,6 +1638,34 @@ export default function Wechat() {
             {/* 底部导航 - 仅在非聊天详情页显示（移动端）或始终显示（桌面端） */}
             {(!isMobile || (!activeContact && !showProfile)) && (
                 <BottomNav activeTab={activeTab} onTabChange={setActiveTab} />
+            )}
+
+            {/* QQ 消息通知弹窗 */}
+            {showQQNotification && (
+                <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 animate-slide-down w-[360px] max-w-[90vw]">
+                    <button
+                        onClick={() => {
+                            setShowQQNotification(false);
+                            window.open('/qq', '_blank');
+                        }}
+                        className="w-full bg-white rounded-2xl shadow-2xl shadow-black/20 p-4 flex items-start gap-3 text-left hover:bg-gray-50 active:scale-[0.98] transition-all"
+                    >
+                        {/* QQ图标 */}
+                        <div className="w-10 h-10 bg-[#12B7F5] rounded-xl flex items-center justify-center flex-shrink-0">
+                            <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12.003 2C6.004 2 3 6.857 3 10.002c0 2.232.78 3.632 1.094 4.965-.37 1.22-.963 2.39-.682 2.73.28.34 1.322-.09 2.24-.572.15.91.577 1.728 1.24 2.396-.84.27-1.39.6-1.39.97 0 .656 1.57 1.188 3.504 1.188.822 0 1.57-.078 2.178-.206a7.685 7.685 0 001.818 0c.608.128 1.356.206 2.178.206 1.934 0 3.504-.532 3.504-1.188 0-.37-.55-.7-1.39-.97a4.77 4.77 0 001.24-2.396c.918.482 1.96.912 2.24.572.28-.34-.312-1.51-.682-2.73C20.22 13.634 21 12.234 21 10.002 21 6.857 17.996 2 12.003 2z" />
+                            </svg>
+                        </div>
+                        {/* 通知内容 */}
+                        <div className="flex-1 min-w-0">
+                            <div className="flex items-center justify-between mb-0.5">
+                                <span className="text-sm font-semibold text-gray-900">QQ</span>
+                                <span className="text-xs text-gray-400">现在</span>
+                            </div>
+                            <p className="text-sm text-gray-700 truncate">您收到了一条QQ消息</p>
+                        </div>
+                    </button>
+                </div>
             )}
 
             {/* Toast 提示 */}

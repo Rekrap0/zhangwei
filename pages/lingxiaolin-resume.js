@@ -50,7 +50,7 @@ export default function LingxiaolinResume() {
 
           <div className="pt-16 pb-6 px-6">
             <h1 className="text-2xl font-bold text-gray-900">林晓琳</h1>
-            <p className="text-lg text-gray-600 mt-1">首席运营官（COO）| 恒念药业股份有限公司</p>
+            <p className="text-lg text-gray-600 mt-1">首席研究员（CRO）| 恒念药业股份有限公司</p>
             <p className="text-sm text-gray-500 mt-1">北京 · 中国</p>
 
             <div className="flex gap-2 mt-4">
@@ -134,7 +134,7 @@ export default function LingxiaolinResume() {
               </div>
               <div className="flex-1">
                 <h3 className="font-medium text-gray-900">运营总监</h3>
-                <p className="text-sm text-gray-600">罗氏制药（中国）</p>
+                <p className="text-sm text-gray-600">严氏制药（中国）</p>
                 <p className="text-xs text-gray-500 mt-0.5">2013年 — 2017年 · 上海</p>
                 <p className="text-sm text-gray-700 mt-2 leading-relaxed">
                   负责华东区域运营管理，带领团队完成年度业绩目标。优化区域供应链体系，
