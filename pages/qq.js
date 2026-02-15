@@ -309,6 +309,7 @@ function SearchView({ onBack, onSelectQQ }) {
                     avatarSrc: '/avatarWei2.png',
                     isSpecial: true,
                 });
+                setIsSearching(false);
             } else if (qqNumber === LINXIAOLIN_QQ || qqNumber === LINXIAOLIN_PHONE) {
                 markSearchedLinxiaolin();
                 setHasLinxiaolinHistory(true);
@@ -319,18 +320,34 @@ function SearchView({ onBack, onSelectQQ }) {
                     isSpecial: false,
                     isLinxiaolin: true,
                 });
+                setIsSearching(false);
             } else {
+                // Show result immediately with QQ number as placeholder nickname
                 setSearchResult({
                     qqNumber,
                     nickname: qqNumber,
                     avatarSrc: `https://q1.qlogo.cn/g?b=qq&nk=${qqNumber}&s=100`,
                     isSpecial: false,
                 });
+                setIsSearching(false);
+                // Try to fetch real nickname from QQ portrait API
+                fetch(`/api/qq-portrait?uin=${qqNumber}`)
+                    .then(r => r.json())
+                    .then(data => {
+                        if (data.nickname) {
+                            setSearchResult(prev => prev && prev.qqNumber === qqNumber
+                                ? { ...prev, nickname: data.nickname }
+                                : prev
+                            );
+                        }
+                    })
+                    .catch(() => { /* keep QQ number as fallback */ });
+                return;
             }
         } else {
             setSearchResult(null);
+            setIsSearching(false);
         }
-        setIsSearching(false);
     }, []);
 
     // 处理搜索逻辑（带1秒延迟）
