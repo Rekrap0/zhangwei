@@ -580,7 +580,7 @@ function MomentsView({ contact, onBack, playerName }) {
     const moments = [
         {
             id: 1,
-            content: '今天终于放假休息了，出来散步～阳光暖暖的(๑´0`๑)',
+            content: '难得给我批了半天假期，出来散步～阳光暖暖的(๑´0`๑)',
             images: [
                 { src: '/momentsPark.png', alt: '公园散步' }
             ],

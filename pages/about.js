@@ -3,10 +3,22 @@ import Head from 'next/head';
 export default function About() {
     const credits = [
         { name: 'Claude Opus 4.6', role: '编程协助', icon: '🛠' },
-        { name: 'Gemini 3 Pro', role: '流程设计', icon: '🧩' },
-        { name: '久言', role: '剧本编写', icon: '🎬' },
-        { name: '朔月', role: '架构设计', icon: '💻' },
+        { name: 'Gemini 3 Pro', role: '内容填充', icon: '🧩' },
+        { name: '久言', role: '剧本编写、图片处理', icon: '🎬' },
+        { name: '朔月', role: '架构设计、流程设计', icon: '💻' },
         { name: '豆包', role: '图片生成', icon: '🎨' },
+    ];
+
+    const testers = [
+        { name: '包鱿', icon: '🦑' },
+        { name: '竹林', icon: '🎋' },
+    ];
+
+    const inspiredby = [
+        { name: '大学生登山失踪事件', icon: '📿', href: 'https://missing.shiroki-y.top/introduction.html' },
+        { name: '永安温泉度假酒店', icon: '🧪', href: 'https://mp.weixin.qq.com/s/kKsnzFsLFwwm2nwv8DseAA' },
+        { name: '404工位消失事件', icon: '📜', href: 'https://xsn1204.github.io/qmgame' },
+
     ];
 
     return (
@@ -59,7 +71,7 @@ export default function About() {
                             Rekrap0/zhangwei
                         </a>
                         <p className="inline text-xs">（如果打不开就是还没公开）</p>
-                        <p className="opacity-10 hover:opacity-100 text-xs">
+                        <p className="opacity-5 hover:opacity-15 text-xs">
                             虽然本Next.js项目使用 <span className="text-blue-400 font-medium">JavaScript</span> 作为开发语言，但其实作者强烈建议使用 <span className="text-blue-400 font-medium">TypeScript</span> 编写，只是发现项目初始化为JS的时候已经懒得改了（JS虽然很垃圾，但已经2026年了，代码还是完全靠人写的话也太落后了吧）。
                         </p>
                     </div>
@@ -94,8 +106,6 @@ export default function About() {
                             <p className="text-green-400 font-medium">GroqCloud</p>
                             <p className="text-gray-400">对话模型：<code className="text-gray-300 bg-white/10 px-2 py-0.5 rounded text-xs inline">moonshotai/kimi-k2-instruct-0905</code></p>
                             <p className="text-gray-400">总结模型：<code className="text-gray-300 bg-white/10 px-2 py-0.5 rounded text-xs inline">openai/gpt-oss-20b</code></p>
-
-
                         </div>
                     </div>
                 </section>
@@ -106,7 +116,7 @@ export default function About() {
                         <span className="w-1 h-5 bg-purple-500 rounded-full inline-block" />
                         制作人员
                     </h2>
-                    <p className="text-white text-sm pb-2">由字母表A-Z排序，不分先后</p>
+                    <p className="text-white text-xs pb-2">（由字母表A-Z排序）</p>
                     <div className="grid gap-2">
                         {credits.map((person) => (
                             <div
@@ -114,7 +124,7 @@ export default function About() {
                                 className="bg-white/5 border border-white/10 rounded-xl px-5 py-4 flex items-center justify-between"
                             >
                                 <div className="flex items-center gap-3">
-                                    <span className="text-lg">{person.icon}</span>
+                                    <span className="text-lg w-8">{person.icon}</span>
                                     <span className="text-white font-medium">{person.name}</span>
                                 </div>
                                 <span className="text-gray-500 text-sm">{person.role}</span>
@@ -125,41 +135,59 @@ export default function About() {
 
                 <section className="mb-12">
                     <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
-                        <span className="w-1 h-5 bg-red-500 rounded-full inline-block" />
+                        <span className="w-1 h-5 bg-cyan-500 rounded-full inline-block" />
                         鸣谢
                     </h2>
                     <div className="space-y-3">
-                        <div className="bg-white/5 border border-white/10 rounded-xl p-5">
-                            <h3 className="text-white font-medium mb-1">灵感提供</h3>
-                            <a
-                                href="https://missing.shiroki-y.top/introduction.html"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="items-center gap-1.5 text-sm text-blue-400 hover:text-blue-300 transition-colors"
-                            >
-                                <p className="text-gray-400 text-sm mb-2">大学生登山失踪事件</p>
-                            </a>
-                            <a
-                                href="https://mp.weixin.qq.com/s/kKsnzFsLFwwm2nwv8DseAA"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="items-center gap-1.5 text-sm text-blue-400 hover:text-blue-300 transition-colors"
-                            >
-                                <p className="text-gray-400 text-sm mb-2">永安温泉度假酒店</p>
-                            </a>
-                            <a
-                                href="https://xsn1204.github.io/qmgame"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="items-center gap-1.5 text-sm text-blue-400 hover:text-blue-300 transition-colors"
-                            >
-                                <p className="text-gray-400 text-sm mb-2">404工位消失事件</p>
-                            </a>
+                        <div className="grid gap-2">
+                            <h3 className="text-white font-medium mt-2">游戏测试</h3>
+                            {testers.map((person) => (
+                                <div
+                                    key={person.name}
+                                    className="bg-white/5 border border-white/10 rounded-xl px-5 py-4 flex items-center justify-between"
+                                >
+                                    <div className="flex items-center gap-3">
+                                        <span className="text-lg w-8">{person.icon}</span>
+                                        <span className="text-white font-medium">{person.name}</span>
+                                    </div>
+                                </div>
+                            ))}
+                            <h3 className="text-white font-medium mt-2">灵感提供</h3>
+                            {inspiredby.map((person) => (
+                                <div
+                                    key={person.name}
+                                    className="bg-white/5 border border-white/10 rounded-xl px-5 py-4 flex items-center justify-between"
+                                >
+                                    <div className="flex items-center gap-3">
+                                        <span className="text-lg w-8">{person.icon}</span>
+                                        <span className="text-white font-medium">{person.name}</span>
+                                    </div>
 
+                                    <a href={person.href} target="_blank">
+                                        <button type="button" class="inline-flex items-center text-white font-medium leading-5 rounded-base text-sm p-2.5 focus:outline-none">
+                                        <svg class="w-4 h-4 ms-1.5 -me-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 12H5m14 0-4 4m4-4-4-4" />
+                                        </svg>
+                                    </button>
+                                    </a>
+                                </div>
+                            ))}
                         </div>
+
                     </div>
                 </section>
 
+                <section className="mb-12">
+                    <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
+                        <span className="w-1 h-5 bg-red-500 rounded-full inline-block" />
+                        关于AI作画的声明
+                    </h2>
+                    <div className="grid gap-2">
+                        <div className="bg-white/5 border border-white/10 rounded-xl p-5">
+                            <p className="text-gray-400">为了保护隐私、个人隐私并保持开发节奏和效率，一部分图片使用AI生成。本游戏的所有人类作者拒绝使用也不鼓励在现实生活中使用AI生成头像或插画。</p>
+                        </div>
+                    </div>
+                </section>
 
                 {/* 底部 */}
                 <div className="text-center text-gray-600 text-xs pt-4 border-t border-white/5">

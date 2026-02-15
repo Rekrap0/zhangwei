@@ -186,7 +186,7 @@ export default function StartScreen() {
             {/* 主内容区域 */}
             <div className="relative z-10 flex flex-col items-center gap-8 my-10">
                 {/* 游戏标题 */}
-                <div className="text-center mb-8">
+                <div className="text-center">
                     <section className='p-5'>
                         <h1 className="text-5xl font-bold text-white mb-4 tracking-wider">
                             张薇失联事件
@@ -230,8 +230,8 @@ export default function StartScreen() {
                                             if (i === 2) setHasViewedNotice(true);
                                         }}
                                         className={`flex-1 px-4 py-2 text-sm font-medium rounded-t-lg transition-colors ${activeTab === i
-                                                ? 'text-white'
-                                                : 'text-gray-400 hover:text-gray-300 hover:bg-gray-700/30'
+                                            ? 'text-white'
+                                            : 'text-gray-400 hover:text-gray-300 hover:bg-gray-700/30'
                                             }`}
                                     >
                                         {label}
@@ -276,7 +276,6 @@ export default function StartScreen() {
                                             <li>本游戏不要求任何编程、it知识。请你只从肉眼可见的信息中进行推理，无需查看页面元素改/解析文件等。</li>
                                             <li>本网站使用Cookies等技术在你的浏览器本地储存游戏进度（Cookies内容被不会发送，也不包含任何分析型Cookies），本项目未连接或使用任何数据库。</li>
                                             <li>部分文本输入框/搜索框会使用外部的API来提供更好的游戏体验，请勿在文本框/搜索框搜索真实世界的个人信息。</li>
-                                            <li>为了提高效率和保护隐私，部分动态图片、新闻图片、包括真实人脸的图片使用AI生成。本游戏的所有人类作者拒绝使用也不鼓励在现实生活中使用AI生成头像或插画。</li>
                                             <li>游戏中没有跳脸或血腥画面（因为作者本人很讨厌这些）。游戏不包含任何音效。</li>
                                         </ul>
                                     </section>
@@ -285,13 +284,10 @@ export default function StartScreen() {
                         </>
                     )}
                     {/* 版权信息 */}
-                    <div className="text-gray-500 text-xs">
-                        © {new Date().getFullYear()} Jiangye
-                    </div>
                 </div>
 
                 {/* 按钮区域 */}
-                <div className="flex flex-col items-center gap-4">
+                <div className="flex flex-col items-center">
                     {!isGameCompleted &&
                         <button
                             onClick={() => {
@@ -303,7 +299,7 @@ export default function StartScreen() {
                                     handleStartGame();
                                 }
                             }}
-                            className="px-12 py-4 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white text-xl font-semibold rounded-lg shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all duration-300 transform hover:scale-105"
+                            className="px-12 py-4 bg-gradient-to-r from-green-600 to-blue-700 hover:from-green-500 hover:to-blue-600 text-white text-xl font-semibold rounded-full shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all duration-300 transform hover:scale-105"
                         >
                             {isReturningPlayer ? '继续游戏' : (hasViewedNotice ? '开始游戏' : '下一步')}
                         </button>
@@ -332,7 +328,9 @@ export default function StartScreen() {
                         </button>
                     </div>
                 </div>
-
+                <div className="text-center text-gray-600 text-xs pt-4 border-t border-white/5">
+                    © {new Date().getFullYear()} Jiangye
+                </div>
             </div>
 
             {/* 输入网名弹窗 */}
