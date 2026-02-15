@@ -832,6 +832,78 @@ function FriendSettingsView({ contact, onBack, onDeleteFriend }) {
     );
 }
 
+// 陌生人详情页（非好友，用于林晓琳等）
+function StrangerProfileView({ contact, onBack }) {
+    const [showToast, setShowToast] = useState(false);
+
+    const handleAddContact = () => {
+        setShowToast(true);
+        setTimeout(() => setShowToast(false), 7777);
+    };
+
+    return (
+        <div className="flex flex-col h-full bg-white relative">
+            {/* Toast */}
+            {showToast && (
+                <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[200] bg-black/70 text-white text-sm px-6 py-3 rounded-lg pointer-events-none animate-fade-in">
+                    好友申请已发送
+                </div>
+            )}
+
+            {/* 头部 */}
+            <header className="bg-[#EDEDED] px-4 py-3 flex items-center justify-between border-b border-gray-300">
+                <div className="flex items-center gap-3">
+                    <button onClick={onBack} className="p-1 -ml-1 text-gray-600">
+                        <IoMdArrowBack className="w-6 h-6" />
+                    </button>
+                    <h2 className="font-medium text-gray-900">个人信息</h2>
+                </div>
+                <button className="p-1 text-gray-600">
+                    <BsThreeDots className="w-5 h-5" />
+                </button>
+            </header>
+
+            {/* 用户信息卡片 */}
+            <div className="p-4">
+                <div className="flex items-center gap-4 pb-4 border-b border-gray-200">
+                    <div className="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 bg-gray-100">
+                        <img
+                            src={contact.avatarImg}
+                            alt={contact.name}
+                            className="w-full h-full object-cover"
+                        />
+                    </div>
+                    <div className="flex-1">
+                        <h3 className="text-xl font-bold text-gray-900">{contact.name}</h3>
+                        <p className="text-sm text-gray-500 mt-1">微信号：{contact.wechatId || contact.id}</p>
+                        {contact.region && (
+                            <p className="text-sm text-gray-500">地区：{contact.region}</p>
+                        )}
+                    </div>
+                </div>
+
+                {/* 个性签名 */}
+                {contact.signature && (
+                    <div className="py-4 border-b border-gray-200">
+                        <p className="text-sm text-gray-500 mb-1">个性签名</p>
+                        <p className="text-gray-900">{contact.signature}</p>
+                    </div>
+                )}
+
+                {/* 操作按钮 */}
+                <div className="mt-6">
+                    <button
+                        onClick={handleAddContact}
+                        className="w-full py-3 bg-[#07C160] text-white rounded-lg font-medium hover:bg-[#06AD56] transition-colors"
+                    >
+                        添加到通讯录
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+}
+
 // 封禁账号页面
 function BannedAccountView({ onBack }) {
     return (
@@ -1010,6 +1082,7 @@ export default function Wechat() {
     const [isInitialized, setIsInitialized] = useState(false);
     const [playerName, setPlayerName] = useState('');
     const [showBannedAccount, setShowBannedAccount] = useState(false);
+    const [strangerProfile, setStrangerProfile] = useState(null); // 陌生人资料页
     const [toastMessage, setToastMessage] = useState('');
     const [showToast, setShowToast] = useState(false);
     const [showQQNotification, setShowQQNotification] = useState(false);
@@ -1033,6 +1106,19 @@ export default function Wechat() {
                 setShowMoments(false);
                 setShowBannedAccount(false);
             }
+        } else if (query === '18612345678') {
+            // 搜索林晓琳的手机号
+            setStrangerProfile({
+                id: 'linxiaolin',
+                name: '晓琳',
+                wechatId: 'lxl_0217',
+                avatarImg: '/avatarLinxiaolin.png',
+                signature: '暂时不使用微信。',
+            });
+            setShowProfile(false);
+            setShowFriendSettings(false);
+            setShowMoments(false);
+            setShowBannedAccount(false);
         } else {
             triggerToast('用户不存在或对方设置了被搜索权限');
         }
@@ -1364,6 +1450,16 @@ export default function Wechat() {
             return (
                 <BannedAccountView
                     onBack={() => setShowBannedAccount(false)}
+                />
+            );
+        }
+
+        // 显示陌生人资料页
+        if (strangerProfile) {
+            return (
+                <StrangerProfileView
+                    contact={strangerProfile}
+                    onBack={() => setStrangerProfile(null)}
                 />
             );
         }

@@ -62,7 +62,7 @@ export default function LingxiaolinResume() {
             <p className="text-sm text-gray-500 mt-1">北京 · 中国</p>
 
             <div className="flex gap-2 mt-4">
-              <button onClick={() => triggerToast('聊天系统维护中')} className="px-4 py-1.5 bg-[#0A66C2] text-white text-sm font-medium rounded-full hover:bg-[#004182] transition-colors">
+              <button onClick={() => triggerToast('聊天系统维护中，请尝试使用其他渠道联系对方')} className="px-4 py-1.5 bg-[#0A66C2] text-white text-sm font-medium rounded-full hover:bg-[#004182] transition-colors">
                 联系TA
               </button>
               <button className="px-4 py-1.5 border border-[#0A66C2] text-[#0A66C2] text-sm font-medium rounded-full hover:bg-blue-50 transition-colors">
@@ -92,15 +92,6 @@ export default function LingxiaolinResume() {
               <div>
                 <p className="text-xs text-gray-500">电话</p>
                 <p className="text-sm text-gray-900 font-medium">18612345678</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-3">
-              <svg className="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
-              </svg>
-              <div>
-                <p className="text-xs text-gray-500">生日</p>
-                <p className="text-sm text-gray-900 font-medium">1985年2月17日</p>
               </div>
             </div>
           </div>
