@@ -673,7 +673,7 @@ function QQServiceView({ contact, onBack }) {
                             </div>
                             <div className="border-t border-gray-100">
                                 <button
-                                    onClick={() => window.open('/txnews-tianyu', '_blank')}
+                                    onClick={() => window.location.href = '/txnews-tianyu'}
                                     className="w-full px-4 py-3 text-sm text-[#12B7F5] flex items-center justify-between hover:bg-gray-50 transition-colors"
                                 >
                                     <span>阅读全文</span>
