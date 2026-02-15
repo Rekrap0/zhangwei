@@ -188,12 +188,9 @@ export default function StartScreen() {
                 {/* 游戏标题 */}
                 <div className="text-center">
                     <section className='p-5'>
-                        <h1 className="text-5xl font-bold text-white mb-4 tracking-wider">
+                        <h1 className="text-4xl font-bold text-white mb-4 tracking-wider">
                             张薇失联事件
                         </h1>
-                        <p className="text-gray-400 text-lg">
-                            一个关于寻找真相的故事
-                        </p>
                     </section>
                     {isGameCompleted ? (
                         <>
@@ -268,16 +265,18 @@ export default function StartScreen() {
                                 )}
                                 {activeTab === 2 && (
                                     <section>
-                                        <ul className="text-white text-left max-w-[500px] px-5 list-disc">
-                                            <li>本游戏剧情纯属虚构，与现实的人、地点、组织没有任何关系。请勿将游戏内的任何内容带入现实，或对现实中同名的真实公司、真实人物进行联系或骚扰。</li>
-                                            <li>和同类网页解密游戏有所不同的是，此游戏没有页面编号，你已经访问过的页面<b>可能会随游戏的进度推动继续变化</b>。</li>
-                                            <li>游戏内的时间由您开始游戏的时间而定，<b>部分线索的时间将会随游戏开始时间而变化</b>（也就是说，直接复制其他人解除来的密码不一定有用的）</li>
-                                            <li>游戏可能会调用真实世界的网页或搜索结果以提升沉浸感和游戏难度，您可以通过查看网站地址栏域名是否为{window.location.href}的方式来判断自己是在游戏内还是在外部网站。</li>
-                                            <li>本游戏不要求任何编程、it知识。请你只从肉眼可见的信息中进行推理，无需查看页面元素改/解析文件等。</li>
-                                            <li>本网站使用Cookies等技术在你的浏览器本地储存游戏进度（Cookies内容被不会发送，也不包含任何分析型Cookies），本项目未连接或使用任何数据库。</li>
-                                            <li>部分文本输入框/搜索框会使用外部的API来提供更好的游戏体验，请勿在文本框/搜索框搜索真实世界的个人信息。</li>
-                                            <li>游戏中没有跳脸或血腥画面（因为作者本人很讨厌这些）。游戏不包含任何音效。</li>
-                                        </ul>
+                                        <p className="text-white max-w-[500px] px-5 text-left my-2">
+                                            <ul className="text-white text-left max-w-[500px] px-5 list-disc">
+                                                <li>本游戏剧情纯属虚构，与现实的人、地点、组织没有任何关系。请勿将游戏内的任何内容带入现实，或对现实中同名的真实公司、真实人物进行联系或骚扰。</li>
+                                                <li>和同类网页解密游戏有所不同的是，此游戏没有页面编号，你已经访问过的页面<b>可能会随游戏的进度推动继续变化</b>。</li>
+                                                <li>游戏内的时间由您开始游戏的时间而定，<b>部分线索的时间将会随游戏开始时间而变化</b>（也就是说，直接复制其他人解除来的密码不一定有用的）</li>
+                                                <li>游戏可能会调用真实世界的网页或搜索结果以提升沉浸感和游戏难度，您可以通过查看网站地址栏域名是否为{window.location.href}的方式来判断自己是在游戏内还是在外部网站。</li>
+                                                <li>本游戏不要求任何编程、it知识。请你只从肉眼可见的信息中进行推理，无需查看页面元素改/解析文件等。</li>
+                                                <li>本网站使用Cookies等技术在你的浏览器本地储存游戏进度（Cookies内容被不会发送，也不包含任何分析型Cookies），本项目未连接或使用任何数据库。</li>
+                                                <li>部分文本输入框/搜索框会使用外部的API来提供更好的游戏体验，请勿在文本框/搜索框搜索真实世界的个人信息。</li>
+                                                <li>游戏中没有跳脸或血腥画面（因为作者本人很讨厌这些）。游戏不包含任何音效。</li>
+                                            </ul>
+                                        </p>
                                     </section>
                                 )}
                             </div>
