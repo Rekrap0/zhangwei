@@ -118,7 +118,7 @@ export default function LingxiaolinResume() {
                 <span className="text-[#2E7D32] font-bold text-lg">恒</span>
               </div>
               <div className="flex-1">
-                <h3 className="font-medium text-gray-900">首席运营官（COO）</h3>
+                <h3 className="font-medium text-gray-900">首席研究员（CRO）</h3>
                 <p className="text-sm text-gray-600">恒念药业股份有限公司</p>
                 <p className="text-xs text-gray-500 mt-0.5">2017年3月 — 至今 · 北京</p>
                 <p className="text-sm text-gray-700 mt-2 leading-relaxed">
@@ -130,7 +130,7 @@ export default function LingxiaolinResume() {
             </div>
             <div className="flex gap-4">
               <div className="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center flex-shrink-0">
-                <span className="text-blue-600 font-bold text-lg">罗</span>
+                <span className="text-blue-600 font-bold text-lg">严</span>
               </div>
               <div className="flex-1">
                 <h3 className="font-medium text-gray-900">运营总监</h3>
