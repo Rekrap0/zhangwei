@@ -184,7 +184,7 @@ export default function About() {
                     </h2>
                     <div className="grid gap-2">
                         <div className="bg-white/5 border border-white/10 rounded-xl p-5">
-                            <p className="text-gray-400">为了保护隐私、个人隐私并保持开发节奏和效率，一部分图片使用AI生成。本游戏的所有人类作者拒绝使用也不鼓励在现实生活中使用AI生成头像或插画。</p>
+                            <p className="text-gray-400">为了保护个人肖像、隐私并保持开发节奏和效率，一部分图片使用AI生成。本游戏的所有人类作者拒绝使用也不鼓励在现实生活中使用AI生成头像或插画。</p>
                         </div>
                     </div>
                 </section>
