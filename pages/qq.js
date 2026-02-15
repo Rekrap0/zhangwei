@@ -85,7 +85,7 @@ function getQQContacts() {
             name: '鱿谊第一',
             avatarImg: '/avatarSplat.jpg',
             avatarIcon: 'group',
-            lastMessage: '朔月：有人打工吗',
+            lastMessage: '暂无群消息',
             time: formatDateShort(oneWeekAgo),
             unread: 0,
             chatType: 'group',
@@ -119,15 +119,7 @@ function getInitialQQMessages() {
             },
         ],
         splat: [
-            {
-                id: 'sp_1',
-                sender: 'sakugetsu',
-                senderName: '朔月',
-                avatarImg: '/avatarSakugetsu.png',
-                content: '有人打工吗',
-                type: 'text',
-                timestamp: oneWeekAgo.toISOString(),
-            }
+
         ],
         other_qq: [],
         qqteam: [],
@@ -142,8 +134,8 @@ const _d = (s) => {
 };
 
 // ============ 鱿谊第一 对话数据 (encoded) ============
-const _SPLAT_R1 = ['5Zev77yf5L2g5piv6LCB77yf', '5L2g55+l6YGT6L+Z5Liq5piv5LuA5LmI5ri45oiP55qE576k5ZCX77yf'];
-const _SPLAT_T = ['U3BsYXRvb24gMw==', '5pav5pmu5ouJ6YGBMw=='];
+const _SPLAT_R1 = ['5Zev77yf5L2g5piv6LCB77yf', '5L2g55+l6YGT6L+Z5Liq5piv5LuA5LmI55qE576k5ZCX77yf'];
+const _SPLAT_T = ['c3BsdA==', 'c3BsYXRvb24=','5Za35Za3', '5pav5pmu5ouJ6YGB'];
 const _SPLAT_R2 = ['T0tPSw==', '6YKj5omT5bel5ZCX', '6KaB5LiN5L2g5YWIPGEgaHJlZj0iaHR0cHM6Ly9nYW1lLmp5LXMuY29tIj7liqDkuIvmiJHlpb3lj4s8L2E+77yf'];
 
 // ============ 底部导航配置 ============
@@ -1542,9 +1534,9 @@ export default function QQ() {
                     });
                 } else if (currentStage === 1) {
                     // 等待正确答案
-                    const lastPlayerMsg = content.trim();
-                    const triggers = _SPLAT_T.map(e => _d(e));
-                    if (triggers.includes(lastPlayerMsg)) {
+                    const lastPlayerMsg = content.trim().toLowerCase();
+                    const triggers = _SPLAT_T.map(e => _d(e).toLowerCase());
+                    if (triggers.some(t => lastPlayerMsg.includes(t))) {
                         splatReplyingRef.current = true;
                         const replies = _SPLAT_R2;
                         replies.forEach((encoded, i) => {
@@ -1573,10 +1565,10 @@ export default function QQ() {
                 }
             }
 
-            // 5班班级群：第5条玩家消息后解散
+            // 5班班级群：第3条玩家消息后解散
             if (contactId === 'class5') {
                 const playerMsgs = updated[contactId].filter(m => m.sender === 'player');
-                if (playerMsgs.length >= 5 && !class5Dissolved) {
+                if (playerMsgs.length >= 3 && !class5Dissolved) {
                     setClass5Dissolved(true);
                     if (typeof window !== 'undefined') {
                         localStorage.setItem('zhangwei_qq_class5_dissolved', 'true');
