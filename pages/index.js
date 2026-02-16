@@ -259,9 +259,6 @@ export default function StartScreen() {
                                                 <li>找到事件的真相。</li>
                                             </ul>
                                         </p>
-                                        <p className="text-white max-w-[500px] px-5 text-left my-2">
-                                            如果不知道怎么开始的话，请想起你们最后的聊天记录在"<b>微信</b>"里，试着用搜索框打开这个应用吧。
-                                        </p>
                                     </section>
                                 )}
                                 {activeTab === 2 && (
