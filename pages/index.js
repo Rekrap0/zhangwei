@@ -19,7 +19,7 @@ export default function StartScreen() {
     // 角色名黑名单，防止玩家使用与游戏角色重名的昵称
     const BLACKLISTED_NAMES = [
         '张薇', '田宇', '李静', '田念安', '林晓琳',
-        '小恒', 'SY', 'sy', 'Sy', 'sY', '思圆', '朔月',
+        '小念', 'SY', 'sy', 'Sy', 'sY', '思圆', '朔月',
         '恒念', '小念医生',
     ];
 

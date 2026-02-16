@@ -265,7 +265,7 @@ function ChatWidget({ forceOpen }) {
             {displayMessages.length === 0 && persona === 'sy' && (
               <div className="flex gap-2">
                 <div className="bg-white rounded-lg rounded-tl-sm px-3 py-2 max-w-[80%] shadow-sm">
-                  <p className="text-sm text-gray-700">您好！我是恒念药业智能客服小恒，有什么可以帮您的吗？ 😊</p>
+                  <p className="text-sm text-gray-700">您好！我是恒念药业智能客服思圆，有什么可以帮您的吗？ 😊</p>
                 </div>
               </div>
             )}

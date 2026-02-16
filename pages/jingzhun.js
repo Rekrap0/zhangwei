@@ -42,8 +42,8 @@ export default function Jingzhun() {
               </div>
               <h3 className="text-lg font-bold text-gray-900 mb-2">活动已结束!</h3>
               <p className="text-gray-600 text-sm leading-relaxed">
-                更多活动请返回主页或关注公众号
-                <span className="font-medium text-[#4A9CC7]">&ldquo;小念医生&rdquo;</span>
+                更多活动和新闻请返回主页或关注公众号
+                &ldquo;小念医生&rdquo;
               </p>
             </div>
             <div className="border-t border-gray-200 flex">
