@@ -183,7 +183,12 @@ export default function Desktop() {
   // 回车键搜索
   const handleSearchKeyDown = (e) => {
     if (e.key === 'Enter' && searchQuery.trim()) {
-      handleWebSearch();
+      const apps = getMatchingApps();
+      if (apps.length > 0) {
+        handleAppSelect(apps[0]);
+      } else {
+        handleWebSearch();
+      }
     }
     if (e.key === 'Escape') {
       setShowSearchResults(false);
