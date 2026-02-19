@@ -224,7 +224,7 @@ export function useAIChat({
         console.error('[useAIChat] API request failed:', response.status, errorText);
         // 添加错误提示消息
         setAiMessages(prev => {
-          const errorMsg = { role: 'assistant', content: '（连接失败，请给作者提供以下信息：' + e + '）' };
+          const errorMsg = { role: 'assistant', content: '（连接失败，请给作者提供以下信息：' + response.status + ' ' + errorText + '）' };
           return [...prev, errorMsg];
         });
       }
