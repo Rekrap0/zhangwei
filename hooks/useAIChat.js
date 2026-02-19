@@ -143,7 +143,8 @@ export function useAIChat({
           setSummary(data.content);
           // 总结完成后削减消息到最近4条
           setAiMessages(prev => {
-            const trimmed = prev.slice(-4);
+            const current = prev || [];
+            const trimmed = current.slice(-4);
             saveState(trimmed, data.content);
             return trimmed;
           });
@@ -167,7 +168,8 @@ export function useAIChat({
     // 先同步更新用户消息
     let updatedMessages;
     setAiMessages(prev => {
-      updatedMessages = [...prev, userMsg];
+      const current = prev || [];
+      updatedMessages = [...current, userMsg];
       console.log('[useAIChat] updatedMessages:', updatedMessages);
       return updatedMessages;
     });
@@ -195,7 +197,8 @@ export function useAIChat({
         const assistantMsg = { role: 'assistant', content: assistantContent };
 
         setAiMessages(prev => {
-          let newMessages = [...prev, assistantMsg];
+          const current = prev || [];
+          let newMessages = [...current, assistantMsg];
           console.log('[useAIChat] newMessages after assistant reply:', newMessages);
 
           // 限制消息数量
@@ -224,16 +227,18 @@ export function useAIChat({
         console.error('[useAIChat] API request failed:', response.status, errorText);
         // 添加错误提示消息
         setAiMessages(prev => {
+          const current = prev || [];
           const errorMsg = { role: 'assistant', content: '（连接失败，请给作者提供以下信息：' + response.status + ' ' + errorText + '）' };
-          return [...prev, errorMsg];
+          return [...current, errorMsg];
         });
       }
     } catch (e) {
       console.error('[useAIChat] API request error:', e);
       // 添加错误提示消息
       setAiMessages(prev => {
+        const current = prev || [];
         const errorMsg = { role: 'assistant', content: '（连接失败，请给作者提供以下信息：' + e + '）' };
-        return [...prev, errorMsg];
+        return [...current, errorMsg];
       });
     } finally {
       setIsAiThinking(false);
