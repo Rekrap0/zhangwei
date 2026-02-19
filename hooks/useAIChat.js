@@ -105,7 +105,7 @@ export function useAIChat({
 
     // 添加消息历史（每条消息截取前100个字符以控制token用量）
     for (const msg of messages) {
-      apiMessages.push({ role: msg.role, content: msg.content.slice(0, 100) });
+      apiMessages.push({ role: msg.role, content: (msg.content || '').slice(0, 100) });
     }
 
     return apiMessages;
@@ -118,7 +118,7 @@ export function useAIChat({
 
     try {
       const chatLog = messages
-        .map(m => `${m.role === 'user' ? '用户' : 'AI'}: ${m.content}`)
+        .map(m => `${m.role === 'user' ? '用户' : 'AI'}: ${m.content || ''}`)
         .join('\n');
 
       const summaryMessages = [
