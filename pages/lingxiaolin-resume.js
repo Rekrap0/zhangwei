@@ -101,10 +101,10 @@ export default function LingxiaolinResume() {
         <div className="bg-white rounded-xl shadow-sm p-6 mb-4">
           <h2 className="text-lg font-bold text-gray-900 mb-3">个人简介</h2>
           <p className="text-sm text-gray-700 leading-relaxed">
-            资深医药行业运营管理专家，拥有超过12年医药企业运营管理经验。北景大学MBA，
-            曾先后就职于辉星中国、严氏制药，在医药企业战略规划、供应链管理、市场拓展
-            等领域积累了丰富经验。2017年加入恒念药业担任首席运营官，全面负责公司日常
-            运营管理、资源协调与战略执行。致力于推动公司数字化转型与管理创新。
+            资深神经科学研究专家，拥有超过15年神经药理学与脑科学研究经验。复旭大学神经生物学博士，
+            曾先后就职于中科院神经科学研究所、辉星制药研发中心，在神经退行性疾病机制研究、
+            新型神经调节药物开发等领域取得多项突破性成果。2017年加入恒念药业担任首席研究员，
+            主导公司核心研发项目。发表SCI论文30余篇，拥有国际专利12项。
           </p>
         </div>
 
@@ -121,36 +121,36 @@ export default function LingxiaolinResume() {
                 <p className="text-sm text-gray-600">恒念药业股份有限公司</p>
                 <p className="text-xs text-gray-500 mt-0.5">2017年3月 — 至今 · 北京</p>
                 <p className="text-sm text-gray-700 mt-2 leading-relaxed">
-                  全面负责公司运营管理，统筹协调各部门资源。推动公司管理系统数字化升级，
-                  建立标准化运营流程，提升整体运营效率超过35%。负责公司内部管理系统的
-                  账户和权限管理工作。
+                  全面负责公司核心研发项目的规划与执行，带领研发团队开展神经科学前沿研究。
+                  主导多项创新药物临床前研究，成功推动2个候选药物进入临床试验阶段。
+                  建立公司神经科学实验室标准化流程，引进先进研究设备与技术平台。
                 </p>
               </div>
             </div>
             <div className="flex gap-4">
               <div className="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center flex-shrink-0">
-                <span className="text-blue-600 font-bold text-lg">严</span>
+                <span className="text-blue-600 font-bold text-lg">辉</span>
               </div>
               <div className="flex-1">
-                <h3 className="font-medium text-gray-900">运营总监</h3>
-                <p className="text-sm text-gray-600">严氏制药（中国）</p>
-                <p className="text-xs text-gray-500 mt-0.5">2013年 — 2017年 · 上海</p>
+                <h3 className="font-medium text-gray-900">高级研究员</h3>
+                <p className="text-sm text-gray-600">辉星制药研发中心</p>
+                <p className="text-xs text-gray-500 mt-0.5">2012年 — 2017年 · 上海</p>
                 <p className="text-sm text-gray-700 mt-2 leading-relaxed">
-                  负责华东区域运营管理，带领团队完成年度业绩目标。优化区域供应链体系，
-                  降低运营成本15%。
+                  负责神经退行性疾病药物研发项目，主持阿尔茨海默病相关靶点的筛选与验证。
+                  发表高影响因子论文8篇，申请专利5项。
                 </p>
               </div>
             </div>
             <div className="flex gap-4">
               <div className="w-12 h-12 bg-indigo-50 rounded-lg flex items-center justify-center flex-shrink-0">
-                <span className="text-indigo-600 font-bold text-lg">辉</span>
+                <span className="text-indigo-600 font-bold text-lg">中</span>
               </div>
               <div className="flex-1">
-                <h3 className="font-medium text-gray-900">高级运营经理</h3>
-                <p className="text-sm text-gray-600">辉星制药（中国）</p>
-                <p className="text-xs text-gray-500 mt-0.5">2009年 — 2013年 · 北京</p>
+                <h3 className="font-medium text-gray-900">助理研究员</h3>
+                <p className="text-sm text-gray-600">中科院神经科学研究所</p>
+                <p className="text-xs text-gray-500 mt-0.5">2008年 — 2012年 · 北京</p>
                 <p className="text-sm text-gray-700 mt-2 leading-relaxed">
-                  参与公司运营体系建设，负责多个重点项目的运营支持与执行。
+                  参与国家重点研发计划"脑科学与类脑研究"项目，从事神经可塑性机制研究。
                 </p>
               </div>
             </div>
@@ -162,13 +162,13 @@ export default function LingxiaolinResume() {
           <h2 className="text-lg font-bold text-gray-900 mb-4">教育背景</h2>
           <div className="space-y-4">
             <div className="flex gap-4">
-              <div className="w-12 h-12 bg-red-50 rounded-lg flex items-center justify-center flex-shrink-0">
-                <span className="text-red-700 font-bold text-lg">北</span>
+              <div className="w-12 h-12 bg-purple-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                <span className="text-purple-700 font-bold text-lg">复</span>
               </div>
               <div>
-                <h3 className="font-medium text-gray-900">北景大学</h3>
-                <p className="text-sm text-gray-600">工商管理硕士（MBA）</p>
-                <p className="text-xs text-gray-500 mt-0.5">2006年 — 2009年</p>
+                <h3 className="font-medium text-gray-900">复旭大学</h3>
+                <p className="text-sm text-gray-600">神经生物学 博士</p>
+                <p className="text-xs text-gray-500 mt-0.5">2005年 — 2008年</p>
               </div>
             </div>
             <div className="flex gap-4">
@@ -177,8 +177,8 @@ export default function LingxiaolinResume() {
               </div>
               <div>
                 <h3 className="font-medium text-gray-900">复旭大学</h3>
-                <p className="text-sm text-gray-600">药学 学士</p>
-                <p className="text-xs text-gray-500 mt-0.5">2002年 — 2006年</p>
+                <p className="text-sm text-gray-600">生物科学 学士</p>
+                <p className="text-xs text-gray-500 mt-0.5">2001年 — 2005年</p>
               </div>
             </div>
           </div>
