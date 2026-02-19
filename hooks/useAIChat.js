@@ -157,6 +157,14 @@ export function useAIChat({
     }
   }, [saveState]);
 
+  // 使用 ref 跟踪最新消息，避免 Safari 的异步问题
+  const messagesRef = useRef([]);
+
+  // 同步更新 ref
+  useEffect(() => {
+    messagesRef.current = aiMessages;
+  }, [aiMessages]);
+
   // 发送消息到 Groq API
   const sendToApi = useCallback(async (userContent) => {
     console.log('[useAIChat] sendToApi called with:', userContent);
@@ -165,17 +173,15 @@ export function useAIChat({
     // 将用户消息加入记录
     const userMsg = { role: 'user', content: userContent };
 
-    // 先同步更新用户消息
-    let updatedMessages;
-    setAiMessages(prev => {
-      const current = prev || [];
-      updatedMessages = [...current, userMsg];
-      console.log('[useAIChat] updatedMessages:', updatedMessages);
-      return updatedMessages;
-    });
-
-    // 等待状态更新完成
-    await new Promise(resolve => setTimeout(resolve, 0));
+    // 使用 ref 获取当前消息，避免 Safari 回调延迟问题
+    const currentMessages = messagesRef.current || [];
+    const updatedMessages = [...currentMessages, userMsg];
+    
+    // 更新 ref 和 state
+    messagesRef.current = updatedMessages;
+    setAiMessages(updatedMessages);
+    
+    console.log('[useAIChat] updatedMessages:', updatedMessages);
 
     try {
       // 使用 ref 获取最新的 systemPrompt
