@@ -56,7 +56,7 @@ export function useAIChat({
 
     // 标记为未初始化
     setIsInitialized(false);
-    
+
     // 先清空状态，防止残留
     setAiMessages([]);
     setSummary('');
@@ -224,7 +224,7 @@ export function useAIChat({
         console.error('[useAIChat] API request failed:', response.status, errorText);
         // 添加错误提示消息
         setAiMessages(prev => {
-          const errorMsg = { role: 'assistant', content: '（连接出现问题，请稍后再试）' };
+          const errorMsg = { role: 'assistant', content: '（连接失败，请给作者提供以下信息：' + e + '）' };
           return [...prev, errorMsg];
         });
       }
@@ -232,7 +232,7 @@ export function useAIChat({
       console.error('[useAIChat] API request error:', e);
       // 添加错误提示消息
       setAiMessages(prev => {
-        const errorMsg = { role: 'assistant', content: '（网络连接失败，请检查网络后重试）' };
+        const errorMsg = { role: 'assistant', content: '（连接失败，请给作者提供以下信息：' + e + '）' };
         return [...prev, errorMsg];
       });
     } finally {
