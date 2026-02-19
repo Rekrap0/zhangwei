@@ -249,8 +249,15 @@ export default function StartScreen() {
                                 {activeTab === 1 && (
                                     <section>
                                         <p className="text-white max-w-[500px] px-5 text-left my-2">
-                                            这是一款"没有进度条"的ARG游戏，你可以使用主角的手机里的搜索框去打开主角的手机应用、搜索网页结果，一步步推进找到线索。<br />
-                                            你只能通过搜索框搜索正确、完整的应用名来打开应用，不过在搜索一次并打开应用之后，应用图标会添加至桌面的"最近使用"界面。
+                                            这是一款"没有进度条"的ARG游戏，你可以使用主角的手机里的搜索框去打开主角的<u>手机应用</u>和一些特殊的<u>网页</u>，一步步推进找到线索。
+                                            <ul className="px-5 list-disc">
+                                                <li>你只能通过搜索框搜索正确、完整的应用名来打开应用，不过在搜索一次并打开应用之后，应用图标会添加至桌面的"最近使用"界面。</li>
+                                                <li>当你搜索到一个特殊网页并打开时，桌面上“已发现的结果”会添加该网页的链接，便于快速翻阅。</li>
+                                            </ul>
+                                        </p>
+                                        <p className="text-white max-w-[500px] px-5 text-left my-2">
+                                            这是一款"没有进度条"的ARG游戏，你可以使用主角的手机里的搜索框去打开主角的手机应用、搜索网页结果，一步步推进找到线索。
+
                                         </p>
                                         <p className="text-white max-w-[500px] px-5 text-left my-2">
                                             你的目标：
@@ -259,6 +266,9 @@ export default function StartScreen() {
                                                 <li>找到事件的真相。</li>
                                             </ul>
                                         </p>
+                                        <p className="text-white max-w-[500px] px-5 text-left my-2">和同类网页解密游戏有所不同的是，此游戏没有页面编号，你已经访问过的页面<b>可能会随游戏的进度推动继续变化</b>。</p>
+                                        <p className="text-white max-w-[500px] px-5 text-left my-2">每个人获得的线索或密码可能会<b>有所不同</b>，直接复制其他人解出的密码不一定有作用。</p>
+                                        <p className="text-white max-w-[500px] px-5 text-left my-2">游戏中没有跳脸或血腥画面（因为作者本人很讨厌这些）。游戏不包含任何音效。</p>
                                     </section>
                                 )}
                                 {activeTab === 2 && (
@@ -266,13 +276,10 @@ export default function StartScreen() {
                                         <p className="text-white max-w-[500px] px-5 text-left my-2">
                                             <ul className="text-white text-left max-w-[500px] px-5 list-disc">
                                                 <li>本游戏剧情纯属虚构，与现实的人、地点、组织没有任何关系。请勿将游戏内的任何内容带入现实，或对现实中同名的真实公司、真实人物进行联系或骚扰。</li>
-                                                <li>和同类网页解密游戏有所不同的是，此游戏没有页面编号，你已经访问过的页面<b>可能会随游戏的进度推动继续变化</b>。</li>
-                                                <li>游戏内的时间由您开始游戏的时间而定，<b>部分线索的时间将会随游戏开始时间而变化</b>（也就是说，直接复制其他人解除来的密码不一定有用的）</li>
-                                                <li>游戏可能会调用真实世界的网页或搜索结果以提升沉浸感和游戏难度，您可以通过查看网站地址栏域名是否为{window.location.href}的方式来判断自己是在游戏内还是在外部网站。</li>
                                                 <li>本游戏不要求任何编程、it知识。请你只从肉眼可见的信息中进行推理，无需查看页面元素改/解析文件等。</li>
+                                                <li>游戏可能会调用真实世界的网页或搜索结果以提升沉浸感和游戏难度，您可以通过查看网站地址栏域名是否为{window.location.href}的方式来判断自己是在游戏内还是在外部网站。</li>
                                                 <li>本网站使用Cookies等技术在你的浏览器本地储存游戏进度（Cookies内容被不会发送，也不包含任何分析型Cookies），本项目未连接或使用任何数据库。</li>
                                                 <li>部分文本输入框/搜索框会使用外部的API来提供更好的游戏体验，请勿在文本框/搜索框搜索真实世界的个人信息。</li>
-                                                <li>游戏中没有跳脸或血腥画面（因为作者本人很讨厌这些）。游戏不包含任何音效。</li>
                                             </ul>
                                         </p>
                                     </section>
