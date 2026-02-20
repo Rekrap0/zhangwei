@@ -169,7 +169,7 @@ function ChatWidget({ forceOpen }) {
       return;
     }
     // 检查是否是切换暗号
-    if (text === 'KFCVME50' && persona === 'sy') {
+    if (text.toUpperCase() === 'KFCVME50' && persona === 'sy') {
       setInputValue('');
       // 显示闪烁特效
       setIsFlickering(true);
