@@ -167,7 +167,7 @@ export default function Weibo() {
     
     // 检查是否是田宇的邮箱且恒念已切换
     if (input.toLowerCase() === TIANYU_EMAIL && isHengnianSwitched()) {
-      // 尝试从 localStorage 读取已生成的验证码，没有则生成新的
+      // 尝试从 localStorage 读取已生成的验证码，没有则生成新的（一局游戏只生成一次）
       let code = localStorage.getItem('zhangwei_weibo_verification_code');
       if (!code) {
         code = Math.floor(100000 + Math.random() * 900000).toString();
@@ -178,6 +178,12 @@ export default function Weibo() {
       // 发送验证码到恒念聊天
       sendCodeToHengnian(code);
     }
+    // 如果邮箱不正确，不做任何事情（李静聊天不会收到验证码）
+    // expectedCode 保持为空，后续验证任何验证码都会失败
+    
+    // 清除之前的验证码输入和错误
+    setVerifyCode('');
+    setVerifyError('');
     
     // 无论如何都进入验证码页面
     setView('verify');
@@ -283,7 +289,7 @@ export default function Weibo() {
                 <input
                   type="text"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => setEmail(e.target.value.replace(/\s/g, ''))}
                   placeholder="手机号或邮箱"
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-[#E6162D] transition-colors"
                 />
@@ -339,7 +345,7 @@ export default function Weibo() {
                 <input
                   type="text"
                   value={forgotInput}
-                  onChange={(e) => setForgotInput(e.target.value)}
+                  onChange={(e) => setForgotInput(e.target.value.replace(/\s/g, ''))}
                   placeholder="请输入手机号或邮箱"
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-[#E6162D] transition-colors"
                 />
