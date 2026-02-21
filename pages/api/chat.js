@@ -3,25 +3,15 @@
  * Proxies chat requests to GroqCloud
  */
 
-export const config = {
-  runtime: 'edge',
-};
-
-export default async function handler(req) {
+export default async function handler(req, res) {
   if (req.method !== 'POST') {
-    return new Response(JSON.stringify({ error: 'Method not allowed' }), {
-      status: 405,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { messages, persona, purpose } = await req.json();
+  const { messages, persona, purpose } = req.body;
 
   if (!messages || !Array.isArray(messages)) {
-    return new Response(JSON.stringify({ error: 'Missing or invalid messages array' }), {
-      status: 400,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return res.status(400).json({ error: 'Missing or invalid messages array' });
   }
 
   // Select model based on purpose
@@ -29,15 +19,11 @@ export default async function handler(req) {
     ? 'openai/gpt-oss-20b'
     : 'moonshotai/kimi-k2-instruct-0905';
 
-  // process.env is polyfilled by @cloudflare/next-on-pages
   const apiKey = process.env.GROQ_API_KEY;
   
   if (!apiKey) {
     console.error('[Chat API] GROQ_API_KEY not configured');
-    return new Response(JSON.stringify({ error: 'API key not configured' }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return res.status(500).json({ error: 'API key not configured' });
   }
 
   try {
@@ -58,10 +44,7 @@ export default async function handler(req) {
     if (!response.ok) {
       const errorText = await response.text();
       console.error('[Chat API] Groq API error:', response.status, errorText);
-      return new Response(JSON.stringify({ error: 'Groq API request failed', details: errorText }), {
-        status: response.status,
-        headers: { 'Content-Type': 'application/json' },
-      });
+      return res.status(response.status).json({ error: 'Groq API request failed', details: errorText });
     }
 
     const data = await response.json();
@@ -70,15 +53,9 @@ export default async function handler(req) {
     // Strip <think>...</think> blocks from thinking models (e.g. qwen3)
     content = content.replace(/<think>[\s\S]*?<\/think>\s*/g, '').trim();
 
-    return new Response(JSON.stringify({ content }), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return res.status(200).json({ content });
   } catch (error) {
     console.error('[Chat API] Request failed:', error);
-    return new Response(JSON.stringify({ error: 'Internal server error' }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return res.status(500).json({ error: 'Internal server error' });
   }
 }
