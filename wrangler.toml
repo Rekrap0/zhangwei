@@ -1,7 +1,10 @@
-# Cloudflare Pages configuration
+# Cloudflare Pages configuration for Next.js
+# Note: This file is used by `wrangler pages dev` for local development
+# For deployment, configure in Cloudflare Dashboard or use `wrangler pages deploy`
+
 name = "zhangwei"
 compatibility_date = "2024-01-01"
 compatibility_flags = ["nodejs_compat"]
 
-[vars]
-# 在 Cloudflare Dashboard 中设置 GROQ_API_KEY 环境变量
+# Pages 项目不需要 main 入口，使用 pages 命令部署
+pages_build_output_dir = ".vercel/output/static"

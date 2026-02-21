@@ -1,5 +1,9 @@
 // Edge-compatible: using fetch instead of Node.js https module
 
+export const config = {
+  runtime: 'edge',
+};
+
 export default async function handler(req, res) {
   const { uin } = req.query;
 
