@@ -1768,7 +1768,7 @@ export default function QQ() {
         return (
             <div className="h-full flex items-center justify-center bg-white p-10">
                 <p className="text-gray-400">
-                    {activeTab === 'contacts' && ('这里是' + (() => { const { playerName: name } = getPlayerCookies(); return name; })() + '的微信通讯录界面，应该不会有什么线索吧？')}
+                    {activeTab === 'contacts' && ('这里是' + (() => { const { playerName: name } = getPlayerCookies(); return name; })() + '的QQ通讯录界面，应该不会有什么线索吧？')}
                     {activeTab === 'dynamic' && ('这里是' + (() => { const { playerName: name } = getPlayerCookies(); return name; })() + '的好友动态界面，既然我在QQ上没有张薇的好友，这里应该不会有什么线索吧？')}
                 </p>
             </div>
