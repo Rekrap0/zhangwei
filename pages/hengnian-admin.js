@@ -53,7 +53,7 @@ export default function HengnianAdmin() {
         return;
       }
 
-      if (emailLower === CORRECT_EMAIL && password === CORRECT_PASSWORD) {
+      if (emailLower === CORRECT_EMAIL && password.toLocaleLowerCase() === CORRECT_PASSWORD) {
         setCookie(ADMIN_AUTH_KEY, 'true');
         router.push('/hengnian-panel');
       } else if (emailLower === CORRECT_EMAIL || emailLower === LOCKED_EMAIL) {
