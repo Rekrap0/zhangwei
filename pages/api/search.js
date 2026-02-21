@@ -2,11 +2,15 @@ export const config = {
   runtime: 'edge',
 };
 
-export default async function handler(req, res) {
-  const { query } = req.query;
+export default async function handler(req) {
+  const url = new URL(req.url);
+  const query = url.searchParams.get('query');
 
   if (!query) {
-    return res.status(400).json({ error: 'Missing query parameter' });
+    return new Response(JSON.stringify({ error: 'Missing query parameter' }), {
+      status: 400,
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 
   try {
@@ -14,9 +18,15 @@ export default async function handler(req, res) {
       `https://websearch.miyami.tech/search-api?query=${encodeURIComponent(query)}&language=zh-CN&categories=general`
     );
     const data = await response.json();
-    res.status(200).json(data);
+    return new Response(JSON.stringify(data), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
   } catch (error) {
     console.error('Search API proxy error:', error);
-    res.status(500).json({ error: 'Search request failed' });
+    return new Response(JSON.stringify({ error: 'Search request failed' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 }

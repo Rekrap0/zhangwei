@@ -4,23 +4,30 @@ export const config = {
   runtime: 'edge',
 };
 
-export default async function handler(req, res) {
-  const { uin } = req.query;
+export default async function handler(req) {
+  const url = new URL(req.url);
+  const uin = url.searchParams.get('uin');
 
   if (!uin || !/^\d{5,12}$/.test(uin)) {
-    return res.status(400).json({ error: 'Invalid QQ number' });
+    return new Response(JSON.stringify({ error: 'Invalid QQ number' }), {
+      status: 400,
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 
-  const url = `https://users.qzone.qq.com/fcg-bin/cgi_get_portrait.fcg?uins=${uin}`;
+  const qqUrl = `https://users.qzone.qq.com/fcg-bin/cgi_get_portrait.fcg?uins=${uin}`;
 
   try {
-    const response = await fetch(url);
+    const response = await fetch(qqUrl);
     const text = await response.text();
 
     // Parse JSONP: portraitCallBack({"uin":[...]})
     const match = text.match(/portraitCallBack\((\{.*\})\)/);
     if (!match) {
-      return res.status(200).json({ nickname: null });
+      return new Response(JSON.stringify({ nickname: null }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
     }
 
     const data = JSON.parse(match[1]);
@@ -34,12 +41,21 @@ export default async function handler(req, res) {
         nickname = null; // corrupted, fall back to QQ number on client
       }
 
-      return res.status(200).json({ nickname });
+      return new Response(JSON.stringify({ nickname }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
     } else {
-      return res.status(200).json({ nickname: null });
+      return new Response(JSON.stringify({ nickname: null }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
     }
   } catch (error) {
     console.error('QQ portrait fetch error:', error);
-    return res.status(200).json({ nickname: null });
+    return new Response(JSON.stringify({ nickname: null }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 }
