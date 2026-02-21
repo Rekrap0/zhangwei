@@ -5,7 +5,10 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "pages:build": "npx @cloudflare/next-on-pages",
+    "pages:dev": "npx wrangler pages dev .vercel/output/static --compatibility-flags=nodejs_compat",
+    "pages:deploy": "pnpm pages:build && npx wrangler pages deploy .vercel/output/static"
   },
   "dependencies": {
     "next": "^14.2.0",

@@ -1,0 +1,7 @@
+# Cloudflare Pages configuration
+name = "zhangwei"
+compatibility_date = "2024-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+# 在 Cloudflare Dashboard 中设置 GROQ_API_KEY 环境变量
