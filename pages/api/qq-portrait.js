@@ -1,18 +1,8 @@
-// Edge-compatible: using fetch instead of Node.js https module
-
-export const config = {
-  runtime: 'edge',
-};
-
-export default async function handler(req) {
-  const url = new URL(req.url);
-  const uin = url.searchParams.get('uin');
+export default async function handler(req, res) {
+  const { uin } = req.query;
 
   if (!uin || !/^\d{5,12}$/.test(uin)) {
-    return new Response(JSON.stringify({ error: 'Invalid QQ number' }), {
-      status: 400,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return res.status(400).json({ error: 'Invalid QQ number' });
   }
 
   const qqUrl = `https://users.qzone.qq.com/fcg-bin/cgi_get_portrait.fcg?uins=${uin}`;
@@ -24,10 +14,7 @@ export default async function handler(req) {
     // Parse JSONP: portraitCallBack({"uin":[...]})
     const match = text.match(/portraitCallBack\((\{.*\})\)/);
     if (!match) {
-      return new Response(JSON.stringify({ nickname: null }), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      });
+      return res.status(200).json({ nickname: null });
     }
 
     const data = JSON.parse(match[1]);
@@ -41,21 +28,12 @@ export default async function handler(req) {
         nickname = null; // corrupted, fall back to QQ number on client
       }
 
-      return new Response(JSON.stringify({ nickname }), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      });
+      return res.status(200).json({ nickname });
     } else {
-      return new Response(JSON.stringify({ nickname: null }), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      });
+      return res.status(200).json({ nickname: null });
     }
   } catch (error) {
     console.error('QQ portrait fetch error:', error);
-    return new Response(JSON.stringify({ nickname: null }), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return res.status(200).json({ nickname: null });
   }
 }
