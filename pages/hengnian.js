@@ -16,6 +16,8 @@ function ChatWidget({ forceOpen }) {
   const [displayMessages, setDisplayMessages] = useState([]); // [{role, content}]
   const [isFlickering, setIsFlickering] = useState(false);
   const [lijingDisconnected, setLijingDisconnected] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
   const messagesEndRef = useRef(null);
   const lastAiCountRef = useRef(-1); // -1 表示未初始化
   const isInitializedRef = useRef(false);
@@ -112,12 +114,27 @@ function ChatWidget({ forceOpen }) {
     addUserMessage,
     resetChat,
     isInitialized: isAiInitialized,
+    lastError,
+    clearError,
   } = useAIChat({
     chatId: currentChatId,
     systemPrompt: currentPrompt,
     enabled: true,
     debounceMs: 3000, // 3秒消息合并
   });
+
+  // 监听 API 错误并显示 Toast
+  useEffect(() => {
+    if (lastError) {
+      const msg = lastError.status > 0
+        ? `连接错误: ${lastError.status} ${lastError.message}`
+        : `连接错误: ${lastError.message}`;
+      setToastMessage(msg);
+      setShowToast(true);
+      clearError();
+      setTimeout(() => setShowToast(false), 3000);
+    }
+  }, [lastError, clearError]);
 
   // 同步 AI 消息到显示列表
   useEffect(() => {
@@ -338,6 +355,13 @@ function ChatWidget({ forceOpen }) {
               </button>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* 错误 Toast */}
+      {showToast && (
+        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[200] bg-black/70 text-white text-sm px-6 py-3 rounded-lg">
+          {toastMessage}
         </div>
       )}
     </>

@@ -10,6 +10,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { SUMMARY_SYSTEM_PROMPT } from '../data/aiPrompts';
+import { getFallbackReply, inferPersonaFromChatId } from '../data/aiFallback';
 
 const STORAGE_PREFIX = 'zhangwei_ai_chat_';
 
@@ -38,6 +39,7 @@ export function useAIChat({
   const [isAiThinking, setIsAiThinking] = useState(false);
   const [isDebouncing, setIsDebouncing] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
+  const [lastError, setLastError] = useState(null); // { status: number, message: string } | null
 
   // 消息批处理相关
   const pendingUserMessages = useRef([]);
@@ -231,25 +233,60 @@ export function useAIChat({
       } else {
         const errorText = await response.text();
         console.error('[useAIChat] API request failed:', response.status, errorText);
-        // 添加错误提示消息
+        // 设置错误状态
+        const statusMessages = {
+          400: '请求格式错误',
+          401: '认证失败',
+          403: '访问被禁止',
+          404: '接口不存在',
+          405: '方法不支持',
+          429: '请求过于频繁',
+          500: '服务器内部错误',
+          502: '网关错误',
+          503: '服务暂时不可用',
+        };
+        setLastError({
+          status: response.status,
+          message: statusMessages[response.status] || `HTTP ${response.status}`
+        });
+        // 使用 fallback 回复
+        const persona = inferPersonaFromChatId(chatId);
+        const fallbackContent = getFallbackReply(userContent, persona);
         setAiMessages(prev => {
           const current = prev || [];
-          const errorMsg = { role: 'assistant', content: '（连接失败，请给作者提供以下信息：' + response.status + ' ' + errorText + '）' };
-          return [...current, errorMsg];
+          const fallbackMsg = { role: 'assistant', content: fallbackContent };
+          const newMessages = [...current, fallbackMsg];
+          setSummary(currentSummary => {
+            saveState(newMessages, currentSummary);
+            return currentSummary;
+          });
+          return newMessages;
         });
       }
     } catch (e) {
       console.error('[useAIChat] API request error:', e);
-      // 添加错误提示消息
+      // 设置网络错误状态
+      setLastError({
+        status: 0,
+        message: e.message || '网络连接失败'
+      });
+      // 使用 fallback 回复
+      const persona = inferPersonaFromChatId(chatId);
+      const fallbackContent = getFallbackReply(userContent, persona);
       setAiMessages(prev => {
         const current = prev || [];
-        const errorMsg = { role: 'assistant', content: '（连接失败，请给作者提供以下信息：' + e + '）' };
-        return [...current, errorMsg];
+        const fallbackMsg = { role: 'assistant', content: fallbackContent };
+        const newMessages = [...current, fallbackMsg];
+        setSummary(currentSummary => {
+          saveState(newMessages, currentSummary);
+          return currentSummary;
+        });
+        return newMessages;
       });
     } finally {
       setIsAiThinking(false);
     }
-  }, [buildApiMessages, summary, maxMessages, summarizeThreshold, saveState, triggerSummarize]);
+  }, [buildApiMessages, summary, maxMessages, summarizeThreshold, saveState, triggerSummarize, chatId]);
 
   /**
    * 添加用户消息（支持10秒内合并）
@@ -316,6 +353,8 @@ export function useAIChat({
     isAiThinking,
     isDebouncing,
     isInitialized,
+    lastError,
+    clearError: () => setLastError(null),
     addUserMessage,
     resetChat,
   };
