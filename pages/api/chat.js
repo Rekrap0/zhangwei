@@ -3,8 +3,6 @@
  * Proxies chat requests to GroqCloud
  */
 
-import { getRequestContext } from '@cloudflare/next-on-pages';
-
 export const config = {
   runtime: 'edge',
 };
@@ -31,14 +29,8 @@ export default async function handler(req) {
     ? 'openai/gpt-oss-20b'
     : 'moonshotai/kimi-k2-instruct-0905';
 
-  // Try Cloudflare context first, fallback to process.env for Vercel
-  let apiKey;
-  try {
-    const { env } = getRequestContext();
-    apiKey = env.GROQ_API_KEY;
-  } catch {
-    apiKey = process.env.GROQ_API_KEY;
-  }
+  // process.env is polyfilled by @cloudflare/next-on-pages
+  const apiKey = process.env.GROQ_API_KEY;
   
   if (!apiKey) {
     console.error('[Chat API] GROQ_API_KEY not configured');
