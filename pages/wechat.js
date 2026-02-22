@@ -1199,10 +1199,20 @@ export default function Wechat() {
 
         if (storedContacts && storedContacts.length > 0) {
             // 合并存储的联系人状态与动态联系人数据
-            setContacts(dynamicContacts.map(c => {
+            let mergedContacts = dynamicContacts.map(c => {
                 const stored = storedContacts.find(sc => sc.id === c.id);
                 return stored ? { ...c, ...stored } : c;
-            }));
+            });
+            // 通关后更新张薇的最后消息
+            if (gameCompleted) {
+                mergedContacts = mergedContacts.map(c => {
+                    if (c.id === 'zhangwei') {
+                        return { ...c, lastMessage: '我梦见你了' };
+                    }
+                    return c;
+                });
+            }
+            setContacts(mergedContacts);
         } else {
             setContacts(dynamicContacts);
         }
