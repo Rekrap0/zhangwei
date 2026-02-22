@@ -28,6 +28,11 @@ export default function HengnianAdmin() {
       router.replace('/');
       return;
     }
+    // 通关后跳转到恒念主页
+    if (typeof window !== 'undefined' && localStorage.getItem('zhangwei_game_completed') === 'true') {
+      router.replace('/hengnian');
+      return;
+    }
     // 如果已经登录，跳转到管理面板
     if (getCookie(ADMIN_AUTH_KEY) === 'true') {
       router.replace('/hengnian-panel');

@@ -23,6 +23,11 @@ export default function HengnianPanel() {
       router.replace('/');
       return;
     }
+    // 通关后跳转到恒念主页
+    if (typeof window !== 'undefined' && localStorage.getItem('zhangwei_game_completed') === 'true') {
+      router.replace('/hengnian');
+      return;
+    }
     // 计算上次登录日期（开始日期 - 2年）
     const d = new Date(startDate);
     d.setFullYear(d.getFullYear() - 2);

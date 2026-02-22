@@ -308,6 +308,14 @@ export default function StartScreen() {
                             {isReturningPlayer ? '继续游戏' : (hasViewedNotice ? '开始游戏' : '下一步')}
                         </button>
                     }
+                    {isGameCompleted && (
+                        <button
+                            onClick={() => router.push('/desktop')}
+                            className="px-12 py-4 bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-500 hover:to-gray-600 text-white text-xl font-semibold rounded-full shadow-lg shadow-gray-500/25 hover:shadow-gray-500/40 transition-all duration-300 transform hover:scale-105"
+                        >
+                            回到桌面
+                        </button>
+                    )}
                     <div className='flex gap-4'>
                         <button
                             onClick={() => window.location.href = '/about'}

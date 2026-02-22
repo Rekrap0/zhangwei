@@ -372,13 +372,41 @@ export default function Hengnian() {
   const router = useRouter();
   const [chatOpen, setChatOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isGameCompleted, setIsGameCompleted] = useState(false);
+  const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
     const { playerName, startDate } = getPlayerCookies();
     if (!playerName || !startDate) {
       router.replace('/');
     }
+    // 检查通关状态
+    if (typeof window !== 'undefined') {
+      setIsGameCompleted(localStorage.getItem('zhangwei_game_completed') === 'true');
+      setIsHydrated(true);
+    }
   }, [router]);
+
+  // 451 错误页面（通关后显示）
+  if (isHydrated && isGameCompleted) {
+    return (
+      <div className="min-h-screen bg-[#1a1a1a] flex flex-col items-center justify-center p-6">
+        <Head><title>451 Unavailable For Legal Reasons</title></Head>
+        <div className="max-w-lg w-full text-center">
+          <h1 className="text-8xl font-bold text-red-500 mb-4">451</h1>
+          <h2 className="text-2xl font-medium text-white mb-6">Unavailable For Legal Reasons</h2>
+          <div className="bg-[#252525] border border-gray-700 rounded-lg p-6 text-left mb-8">
+            <p className="text-gray-300 text-sm leading-relaxed mb-4">
+              您访问的网站因涉嫌违反相关法律已被封停，请求已被授权部门依法拒绝。
+            </p>
+            <p className="text-gray-500 text-xs">
+              参考条款：HTTP 451 – 因法律原因不可用
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white">

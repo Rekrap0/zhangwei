@@ -1125,6 +1125,7 @@ export default function Wechat() {
     }, [contacts, triggerToast]);
 
     // 张薇 AI 聊天
+    const isGameCompleted = typeof window !== 'undefined' && localStorage.getItem('zhangwei_game_completed') === 'true';
     const {
         aiMessages: zhangweiAiMessages,
         isAiThinking: isZhangweiThinking,
@@ -1135,7 +1136,7 @@ export default function Wechat() {
         chatId: 'zhangwei',
         systemPrompt: ZHANGWEI_SYSTEM_PROMPT,
         firstMessage: '你在吗？？我好像做了一个很长的梦……',
-        enabled: !!state.networkRepaired,
+        enabled: !!state.networkRepaired && !isGameCompleted,
     });
     const lastAiMsgCountRef = useRef(0);
     const aiSyncedRef = useRef(false);
@@ -1168,8 +1169,28 @@ export default function Wechat() {
         const dynamicContacts = getContacts();
         const dynamicMessages = getInitialMessages();
 
+        // 检查是否通关
+        const gameCompleted = typeof window !== 'undefined' && localStorage.getItem('zhangwei_game_completed') === 'true';
+
         if (storedMessages && Object.keys(storedMessages).length > 0) {
             // 如果有存储的消息，使用存储的
+            // 通关后追加玩家发送的消息
+            if (gameCompleted) {
+                const zhangweiMsgs = storedMessages['zhangwei'] || [];
+                const alreadyHasDreamMsg = zhangweiMsgs.some(m => m.id === 'player_dream_msg');
+                if (!alreadyHasDreamMsg) {
+                    const now = new Date();
+                    const dreamMsg = {
+                        id: 'player_dream_msg',
+                        sender: 'player',
+                        content: '我梦见你了',
+                        timestamp: now.toISOString(),
+                        time: now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
+                        type: 'text',
+                    };
+                    storedMessages['zhangwei'] = [...zhangweiMsgs, dreamMsg];
+                }
+            }
             setMessagesByContact(storedMessages);
         } else {
             // 否则使用动态生成的初始消息
@@ -1409,6 +1430,12 @@ export default function Wechat() {
 
     // 删除好友（结局1）
     const handleDeleteFriend = () => {
+        // 通关后阻止触发结局1
+        const gameCompleted = typeof window !== 'undefined' && localStorage.getItem('zhangwei_game_completed') === 'true';
+        if (gameCompleted) {
+            triggerToast('不会忘记你的');
+            return;
+        }
         router.push('/end1_5zhUdx7Kp');
     };
 

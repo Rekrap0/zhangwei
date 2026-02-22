@@ -15,6 +15,11 @@ export default function HengnianConfig() {
       router.replace('/');
       return;
     }
+    // 通关后跳转到恒念主页
+    if (typeof window !== 'undefined' && localStorage.getItem('zhangwei_game_completed') === 'true') {
+      router.replace('/hengnian');
+      return;
+    }
   }, [router]);
 
   // 未达到此步骤时跳转到恒念主页

@@ -9,7 +9,7 @@ const TIANYU_EMAIL = 'tianyu@hengnian-pharma.cn';
 
 export default function Weibo() {
   const router = useRouter();
-  const [view, setView] = useState('login'); // login | forgot | verify | reset | success | home
+  const [view, setView] = useState('login'); // login | forgot | verify | reset | success | home | news
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState('');
@@ -31,6 +31,9 @@ export default function Weibo() {
   // 存储的账户信息
   const [storedAccounts, setStoredAccounts] = useState({}); // { email: password }
   
+  // 通关状态
+  const [isGameCompleted, setIsGameCompleted] = useState(false);
+  
   const broadcastChannelRef = useRef(null);
 
   useEffect(() => {
@@ -42,6 +45,15 @@ export default function Weibo() {
     
     // 加载存储的账户信息
     if (typeof window !== 'undefined') {
+      // 检查通关状态
+      const gameCompleted = localStorage.getItem('zhangwei_game_completed') === 'true';
+      setIsGameCompleted(gameCompleted);
+      
+      // 通关后直接显示新闻页面
+      if (gameCompleted) {
+        setView('news');
+      }
+      
       try {
         const stored = localStorage.getItem(WEIBO_STORAGE_KEY);
         if (stored) {
@@ -485,6 +497,71 @@ export default function Weibo() {
                 <div className="w-8 h-8 border-2 border-gray-300 border-t-[#E6162D] rounded-full animate-spin mx-auto" />
               </div>
             </div>
+          </div>
+        )}
+
+        {/* 通关后新闻页面 */}
+        {view === 'news' && (
+          <div className="w-full max-w-2xl bg-white rounded-2xl shadow-2xl overflow-hidden">
+            {/* 新闻头部 */}
+            <div className="bg-[#E6162D] px-6 py-4 flex items-center gap-3">
+              <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center p-2">
+                <img src="/icon-weibo.svg" alt="微博" className="w-6 h-6" />
+              </div>
+              <div className="text-white">
+                <h2 className="font-bold">微博热搜</h2>
+                <p className="text-xs text-white/70">实时新闻</p>
+              </div>
+            </div>
+            
+            {/* 新闻内容 */}
+            <div className="p-6">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="bg-red-100 text-red-600 text-xs font-bold px-2 py-0.5 rounded">HOT</span>
+                <span className="text-gray-400 text-xs">刚刚</span>
+              </div>
+              
+              <h3 className="text-xl font-bold text-gray-900 mb-4">
+                恒念药业涉嫌非法人体实验被查封，多名员工正在抢救中
+              </h3>
+              
+              <div className="space-y-4 text-gray-700 text-sm leading-relaxed">
+                <p>
+                  <span className="text-red-500 font-bold">【突发】</span>
+                  据北京市公安局海淀分局通报，位于北京市海淀区的恒念药业股份有限公司因涉嫌非法进行人体实验已被依法查封。
+                </p>
+                
+                <p>
+                  警方在接到匿名举报后，对该公司进行了突击检查，现场发现大量非法实验设备和相关文件资料。
+                  目前，公司创始人田宇等多名高管已被警方控制，正在接受进一步调查。
+                </p>
+                
+                <p>
+                  据了解，在查封过程中，现场发现多名被困员工，目前正在紧急抢救中。
+                  与此同时，警方正在对2023年至今参加"精准镇痛"活动的志愿者遗体进行DNA比对确认工作。
+                </p>
+                
+                <div className="bg-gray-50 border-l-4 border-red-500 p-4 my-4">
+                  <p className="text-gray-600 text-xs">
+                    警方提醒：如有知情人士或受害者家属，请及时与警方联系。举报电话：010-XXXX-XXXX
+                  </p>
+                </div>
+                
+                <p className="text-gray-500 text-xs">
+                  相关话题：#恒念药业# #非法人体实验# #精准镇痛活动#
+                </p>
+              </div>
+              
+              {/* 互动区域 */}
+              <div className="flex items-center justify-between mt-6 pt-4 border-t border-gray-100">
+                <div className="flex items-center gap-6 text-gray-400 text-sm">
+                  <span>📤 转发 12.4万</span>
+                  <span>💬 评论 8.7万</span>
+                  <span>❤️ 点赞 45.2万</span>
+                </div>
+              </div>
+            </div>
+            
           </div>
         )}
       </main>
