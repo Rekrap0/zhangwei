@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import { withBasePath } from '../utils/basePath';
 
 export default function Xiaohongshu() {
     return (
@@ -11,7 +12,7 @@ export default function Xiaohongshu() {
                 {/* 小红书图标 */}
                 <div className="w-16 h-16 bg-[#FF2442] rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-lg shadow-red-200/50">
                     <img
-                        src="/icon-rednote.svg"
+                        src={withBasePath('/icon-rednote.svg')}
                         alt="小红书"
                         className="w-10 h-10"
                         onError={(e) => {
@@ -26,7 +27,7 @@ export default function Xiaohongshu() {
                 {/* 二维码 */}
                 <div className="mx-auto w-56 h-56 bg-gray-50 rounded-xl overflow-hidden flex items-center justify-center border border-gray-100 p-3 m-5">
                     <img
-                        src="/qr-xiaohongshu.png"
+                        src={withBasePath('/qr-xiaohongshu.png')}
                         alt="小红书二维码"
                         className="w-full h-full object-contain p-2"
                         onError={(e) => {

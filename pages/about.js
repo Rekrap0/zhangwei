@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import { withBasePath } from '../utils/basePath';
 
 export default function About() {
     const credits = [
@@ -24,7 +25,7 @@ export default function About() {
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-800 to-gray-900 relative overflow-hidden">
             <Head><title>关于此项目</title></Head>
-            <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-5" />
+            <div className="absolute inset-0 opacity-5" style={{ backgroundImage: `url(${withBasePath('/grid.svg')})` }} />
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
 
             <div className="relative z-10 max-w-2xl mx-auto px-6 py-16">

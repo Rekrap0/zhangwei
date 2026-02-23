@@ -11,6 +11,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { SUMMARY_SYSTEM_PROMPT } from '../data/aiPrompts';
 import { getFallbackReply, inferPersonaFromChatId } from '../data/aiFallback';
+import { withBasePath } from '../utils/basePath';
 
 const STORAGE_PREFIX = 'zhangwei_ai_chat_';
 
@@ -133,7 +134,7 @@ export function useAIChat({
         },
       ];
 
-      const response = await fetch('/api/chat', {
+      const response = await fetch(withBasePath('/api/chat'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ messages: summaryMessages, purpose: 'summarize' }),
@@ -190,7 +191,7 @@ export function useAIChat({
       const apiMessages = buildApiMessages(updatedMessages, summary);
       console.log('[useAIChat] Sending API request, messages count:', apiMessages.length);
 
-      const response = await fetch('/api/chat', {
+      const response = await fetch(withBasePath('/api/chat'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ messages: apiMessages, purpose: 'chat' }),

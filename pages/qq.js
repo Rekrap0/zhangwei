@@ -7,6 +7,7 @@ import { getRelativeDate, getZhangweiBirthday, getZhangweiRealAge, formatDateFul
 import { IoChatbubbleEllipsesSharp, IoPersonSharp, IoCompassSharp, IoSettingsSharp } from 'react-icons/io5';
 import { IoMdArrowBack } from 'react-icons/io';
 import Image from "next/image"
+import { withBasePath } from '../utils/basePath';
 
 // ============ localStorage 存储 ============
 const QQ_MESSAGES_KEY = 'zhangwei_qq_messages';
@@ -213,7 +214,7 @@ function QQAvatar({ contact, size = 'md', className = '' }) {
     // 企鹅图标
     return (
         <div className={`${sizeClasses[size]} rounded-full bg-white border border-gray-200 flex items-center justify-center flex-shrink-0 ${className}`}>
-            <img src="/icon-qq.svg" alt="QQ" className="w-7 h-7" />
+            <img src={withBasePath('/icon-qq.svg')} alt="QQ" className="w-7 h-7" />
         </div>
     );
 }
@@ -306,7 +307,7 @@ function SearchView({ onBack, onSelectQQ }) {
                 setSearchResult({
                     qqNumber,
                     nickname: 'zhangwei',
-                    avatarSrc: '/avatarWei2.png',
+                    avatarSrc: withBasePath('/avatarWei2.png'),
                     isSpecial: true,
                 });
                 setIsSearching(false);
@@ -316,7 +317,7 @@ function SearchView({ onBack, onSelectQQ }) {
                 setSearchResult({
                     qqNumber: LINXIAOLIN_QQ,
                     nickname: '晓琳',
-                    avatarSrc: '/avatarLinxiaolin.png',
+                    avatarSrc: withBasePath('/avatarLinxiaolin.png'),
                     isSpecial: false,
                     isLinxiaolin: true,
                 });
@@ -331,7 +332,7 @@ function SearchView({ onBack, onSelectQQ }) {
                 });
                 setIsSearching(false);
                 // Try to fetch real nickname from QQ portrait API
-                fetch(`/api/qq-portrait?uin=${qqNumber}`)
+                fetch(withBasePath(`/api/qq-portrait?uin=${qqNumber}`))
                     .then(r => r.json())
                     .then(data => {
                         if (data.nickname) {
@@ -416,14 +417,14 @@ function SearchView({ onBack, onSelectQQ }) {
                                 onClick={() => onSelectQQ({
                                     qqNumber: ZHANGWEI_QQ,
                                     nickname: 'zhangwei',
-                                    avatarSrc: '/avatarWei2.png',
+                                    avatarSrc: withBasePath('/avatarWei2.png'),
                                     isSpecial: true,
                                 })}
                                 className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-50 active:bg-gray-100 transition-colors"
                             >
                                 <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 bg-gray-200">
                                     <img
-                                        src="/avatarWei2.png"
+                                        src={withBasePath('/avatarWei2.png')}
                                         alt="zhangwei"
                                         className="w-full h-full object-cover"
                                     />
@@ -438,7 +439,7 @@ function SearchView({ onBack, onSelectQQ }) {
                                 onClick={() => onSelectQQ({
                                     qqNumber: LINXIAOLIN_QQ,
                                     nickname: '晓琳',
-                                    avatarSrc: '/avatarLinxiaolin.png',
+                                    avatarSrc: withBasePath('/avatarLinxiaolin.png'),
                                     isSpecial: false,
                                     isLinxiaolin: true,
                                 })}
@@ -446,7 +447,7 @@ function SearchView({ onBack, onSelectQQ }) {
                             >
                                 <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 bg-gray-200">
                                     <img
-                                        src="/avatarLinxiaolin.png"
+                                        src={withBasePath('/avatarLinxiaolin.png')}
                                         alt="晓琳"
                                         className="w-full h-full object-cover"
                                     />
@@ -585,7 +586,7 @@ function QQChatView({ contact, messages, onBack, onSendMessage, isMobile, disabl
                         <div key={msg.id} className={`flex gap-2 ${isMe ? 'flex-row-reverse' : ''}`}>
                             {isMe ? (
                                 <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
-                                    <img src="/avatarPlayer.jpg" alt="我" className="w-full h-full object-cover" />
+                                    <img src={withBasePath('/avatarPlayer.jpg')} alt="我" className="w-full h-full object-cover" />
                                 </div>
                             ) : msg.avatarImg ? (
                                 <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
@@ -727,7 +728,7 @@ function QQServiceView({ contact, onBack }) {
                                 <h4 className="text-sm font-bold text-gray-900 leading-relaxed mb-2">父爱如磐，静待花开——恒念药业董事长田宇与女儿的渐冻症抗争之路</h4>
                                 <div className="w-full h-40 bg-gray-100 rounded-lg overflow-hidden mb-2 flex items-center justify-center">
                                     <img
-                                        src="/newsTianyu.png"
+                                        src={withBasePath('/newsTianyu.png')}
                                         alt="新闻配图"
                                         className="w-full h-full object-cover"
                                         onError={(e) => {
@@ -827,7 +828,7 @@ function MessageListView({ contacts, onStartSearch, onSelectContact }) {
             <div className="bg-[#EDEDED] px-4 pt-2 pb-1 flex items-center justify-between">
                 <div className="flex items-center gap-1.5">
                     <div className="w-10 h-10 rounded-full overflow-hidden">
-                        <img src="/avatarPlayer.jpg" alt="我" className="w-full h-full object-cover" />
+                        <img src={withBasePath('/avatarPlayer.jpg')} alt="我" className="w-full h-full object-cover" />
                     </div>
                     <div>
                         <span className="text-lg">{(() => { const { playerName: name } = getPlayerCookies(); return name; })()}</span>
@@ -1341,7 +1342,7 @@ function QZonePostItem({ post, nickname, avatarSrc }) {
                     <div className="mt-3 flex items-center">
                         <div className="flex-1 bg-gray-100 rounded-full px-2 py-1.5 flex items-center gap-2">
                             <div className="w-5 h-5 rounded-full overflow-hidden flex-shrink-0">
-                                <img src="/avatarPlayer.jpg" alt="我" className="w-full h-full object-cover" />
+                                <img src={withBasePath('/avatarPlayer.jpg')} alt="我" className="w-full h-full object-cover" />
                             </div>
                             <span className="text-xs text-gray-500">说点什么吧…</span>
                         </div>

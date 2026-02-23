@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { getPlayerCookies } from '../utils/cookies';
 import { IoMdArrowBack } from 'react-icons/io';
+import { withBasePath } from '../utils/basePath';
 
 export default function TxNewsTianyu() {
     const router = useRouter();
@@ -45,7 +46,7 @@ export default function TxNewsTianyu() {
                 {/* 封面图 */}
                 <div className="w-full h-52 bg-gray-100 overflow-hidden">
                     <img
-                        src="/newsTianyu.png"
+                        src={withBasePath('/newsTianyu.png')}
                         alt="新闻配图"
                         className="w-full h-full object-cover"
                         onError={(e) => {

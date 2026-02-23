@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
+import Link from 'next/link';
 import { getPlayerCookies, setCookie, getCookie } from '../utils/cookies';
+import { withBasePath } from '../utils/basePath';
 
 const ADMIN_AUTH_KEY = 'zhangwei_admin_auth';
 
@@ -76,11 +78,11 @@ export default function HengnianAdmin() {
       {/* 顶部 */}
       <header className="bg-white border-b border-gray-200">
         <div className="max-w-lg mx-auto px-6 h-14 flex items-center">
-          <a href="/hengnian" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-            <img src="/iconHengnian.png" alt="恒念药业" className="w-8 h-8 rounded-lg object-cover" />
+          <Link href="/hengnian" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+            <img src={withBasePath('/iconHengnian.png')} alt="恒念药业" className="w-8 h-8 rounded-lg object-cover" />
             <span className="font-bold text-gray-900">恒念药业</span>
             <span className="text-xs text-gray-400">管理系统</span>
-          </a>
+          </Link>
         </div>
       </header>
 

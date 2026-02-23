@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { getPlayerCookies, getCookie, deleteCookie } from '../utils/cookies';
 import { useGameState } from '../hooks/useGameState';
+import { withBasePath } from '../utils/basePath';
 
 const ADMIN_AUTH_KEY = 'zhangwei_admin_auth';
 
@@ -196,7 +197,7 @@ export default function HengnianPanel() {
       <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
         <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <img src="/iconHengnian.png" alt="恒念药业" className="w-8 h-8 rounded-lg object-cover" />
+            <img src={withBasePath('/iconHengnian.png')} alt="恒念药业" className="w-8 h-8 rounded-lg object-cover" />
             <div>
               <span className="font-bold text-gray-900">管理面板</span>
               <span className="text-xs text-gray-400 ml-2">恒念药业内部系统</span>
@@ -204,7 +205,7 @@ export default function HengnianPanel() {
           </div>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2 text-sm text-gray-600">
-              <img src="/avatarLijing.png" alt="李静" className="w-7 h-7 rounded-full object-cover" />
+              <img src={withBasePath('/avatarLijing.png')} alt="李静" className="w-7 h-7 rounded-full object-cover" />
               <span>李静</span>
             </div>
             <button

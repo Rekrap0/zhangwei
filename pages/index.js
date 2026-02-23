@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { getPlayerCookies, setPlayerCookies, clearPlayerCookies } from '../utils/cookies';
+import { withBasePath } from '../utils/basePath';
 
 export default function StartScreen() {
     const router = useRouter();
@@ -181,7 +182,7 @@ export default function StartScreen() {
             )}
 
             {/* 背景效果 */}
-            <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-5" />
+            <div className="absolute inset-0 opacity-5" style={{ backgroundImage: `url(${withBasePath('/grid.svg')})` }} />
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
 
             {/* 主内容区域 */}

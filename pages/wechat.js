@@ -14,6 +14,7 @@ import { HiOutlinePhotograph } from 'react-icons/hi';
 import { FiSettings } from 'react-icons/fi';
 import { useAIChat } from '../hooks/useAIChat';
 import { ZHANGWEI_SYSTEM_PROMPT } from '../data/aiPrompts';
+import { withBasePath } from '../utils/basePath';
 
 // 生成初始消息的函数（会在客户端调用以获取动态日期）
 function getInitialMessages() {
@@ -635,7 +636,7 @@ function MomentsView({ contact, onBack, playerName }) {
             <div className="relative">
                 <div className="h-32 overflow-hidden">
                     <img 
-                        src="/momentsBanner.jpg" 
+                        src={withBasePath('/momentsBanner.jpg')} 
                         alt="朋友圈封面" 
                         className="w-full h-full object-cover"
                     />
@@ -1630,7 +1631,7 @@ export default function Wechat() {
                             <div className="flex items-center gap-4">
                                 {/* 玩家头像 */}
                                 <div className="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0">
-                                    <img src="/avatarPlayer.jpg" alt="头像" className="w-full h-full object-cover" />
+                                    <img src={withBasePath('/avatarPlayer.jpg')} alt="头像" className="w-full h-full object-cover" />
                                 </div>
                                 {/* 昵称 & 状态 */}
                                 <div className="flex-1 min-w-0">
@@ -1785,7 +1786,7 @@ export default function Wechat() {
                     >
                         {/* QQ图标 */}
                         <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden">
-                            <img src="/icon-qq.svg" alt="QQ" className="w-full h-full object-cover" />
+                            <img src={withBasePath('/icon-qq.svg')} alt="QQ" className="w-full h-full object-cover" />
                         </div>
                         {/* 通知内容 */}
                         <div className="flex-1 min-w-0">

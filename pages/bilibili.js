@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import { withBasePath } from '../utils/basePath';
 
 export default function Bilibili() {
     return (
@@ -11,7 +12,7 @@ export default function Bilibili() {
                 {/* B站图标 */}
                 <div className="w-16 h-16 bg-[#FC538A] rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-lg shadow-sky-200/50">
                     <img
-                        src="/icon-bilibili.svg"
+                        src={withBasePath('/icon-bilibili.svg')}
                         alt="哔哩哔哩"
                         className="w-10 h-10"
                         onError={(e) => {
@@ -26,7 +27,7 @@ export default function Bilibili() {
                 {/* 二维码 */}
                 <div className="mx-auto w-56 h-56 bg-gray-50 rounded-xl overflow-hidden flex items-center justify-center border border-gray-100 p-3 m-5">
                     <img
-                        src="/qr-bilibili.png"
+                        src={withBasePath('/qr-bilibili.png')}
                         alt="哔哩哔哩二维码"
                         className="w-full h-full object-contain p-2"
                         onError={(e) => {
