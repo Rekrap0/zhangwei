@@ -1452,7 +1452,7 @@ export default function Wechat() {
 
     // 结束调查（结局2）- 新标签页打开
     const handleEndInvestigation = () => {
-        location.href = '/end2_k1sZyNMYd6';
+        location.href = withBasePath('/end2_k1sZyNMYd6');
         //window.locate('/end2_k1sZyNMYd6', '_blank');
     };
 

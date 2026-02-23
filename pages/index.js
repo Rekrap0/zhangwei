@@ -319,7 +319,7 @@ export default function StartScreen() {
                     )}
                     <div className='flex gap-4'>
                         <button
-                            onClick={() => window.location.href = '/about'}
+                            onClick={() => window.location.href = withBasePath('/about')}
                             className="mt-4 text-gray-300 hover:text-white underline underline-offset-4 decoration-text-gray-300/50 hover:decoration-white transition-colors text-sm"
                         >
                             关于此项目
