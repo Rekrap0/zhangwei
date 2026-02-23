@@ -322,7 +322,7 @@ export default function Chrome() {
 
                   {/* 标题链接 */}
                   <a
-                    href={result.url}
+                    href={result.url.startsWith('http') ? result.url : withBasePath(result.url)}
                     target={result.url.startsWith('http') ? '_blank' : '_self'}
                     rel="noopener noreferrer"
                     className="text-xl text-[#1A0DAB] hover:underline block leading-snug"

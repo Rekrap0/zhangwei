@@ -141,7 +141,7 @@ export default function Desktop() {
   // 打开应用（新标签页）
   const openApp = (route) => {
     console.log('[Desktop] 打开应用:', route);
-    window.open(route, '_blank', 'noopener,noreferrer');
+    window.open(withBasePath(route), '_blank', 'noopener,noreferrer');
   };
 
   // 将应用图标添加到桌面
@@ -355,7 +355,7 @@ export default function Desktop() {
                 {discoveredResults.map((result, idx) => (
                   <button
                     key={idx}
-                    onClick={() => window.open(result.url, '_blank', 'noopener,noreferrer')}
+                    onClick={() => window.open(result.url.startsWith('http') ? result.url : withBasePath(result.url), '_blank', 'noopener,noreferrer')}
                     className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/10 transition-colors text-left group"
                   >
                     <GlobeIcon />

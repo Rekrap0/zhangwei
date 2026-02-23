@@ -258,11 +258,11 @@ function MediaMessage({ message, contact, isMe, onAvatarClick }) {
             <div className={`max-w-[70%] ${isMe ? 'items-end' : 'items-start'}`}>
                 {isImage ? (
                     <div className="bg-white p-2 rounded-lg cursor-pointer" onClick={() => setLightboxOpen(true)}>
-                        <img src={message.content} alt="图片" className="w-40 rounded object-cover" />
+                        <img src={withBasePath(message.content)} alt="图片" className="w-40 rounded object-cover" />
                     </div>
                 ) : (
                     <div className="bg-white p-2 rounded-lg">
-                        <img src={message.content} alt="表情包" className="w-24 h-24 rounded object-cover" />
+                        <img src={withBasePath(message.content)} alt="表情包" className="w-24 h-24 rounded object-cover" />
                     </div>
                 )}
             </div>
@@ -272,7 +272,7 @@ function MediaMessage({ message, contact, isMe, onAvatarClick }) {
                     onClick={() => setLightboxOpen(false)}
                 >
                     <img
-                        src={message.content}
+                        src={withBasePath(message.content)}
                         alt="图片"
                         className="max-w-[90vw] max-h-[90vh] object-contain rounded-lg"
                         onClick={(e) => e.stopPropagation()}

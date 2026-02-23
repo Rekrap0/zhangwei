@@ -173,7 +173,7 @@ function QQAvatar({ contact, size = 'md', className = '' }) {
         return (
             <div className={`${sizeClasses[size]} rounded-full overflow-hidden flex-shrink-0 ${className}`}>
                 <img
-                    src={contact.avatarImg}
+                    src={withBasePath(contact.avatarImg)}
                     alt={contact.name || '头像'}
                     className="w-full h-full object-cover"
                 />
@@ -590,7 +590,7 @@ function QQChatView({ contact, messages, onBack, onSendMessage, isMobile, disabl
                                 </div>
                             ) : msg.avatarImg ? (
                                 <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
-                                    <img src={msg.avatarImg} alt={msg.senderName || ''} className="w-full h-full object-cover" />
+                                    <img src={withBasePath(msg.avatarImg)} alt={msg.senderName || ''} className="w-full h-full object-cover" />
                                 </div>
                             ) : (
                                 <div className="w-8 h-8 rounded-full bg-[#12B7F5] flex items-center justify-center flex-shrink-0">
