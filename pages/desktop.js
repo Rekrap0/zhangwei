@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { getPlayerCookies } from '../utils/cookies';
 import { appList } from '../data/appList';
+import { withBasePath } from '../utils/basePath';
 
 const DESKTOP_ICONS_KEY = 'zhangwei_desktop_icons';
 const DISCOVERED_RESULTS_KEY = 'zhangwei_discovered_results';
@@ -207,7 +208,7 @@ export default function Desktop() {
     <div className="bg-gradient-to-br from-gray-900 via-slate-800 to-gray-900 relative flex flex-col overflow-hidden" style={{ height: '100dvh' }}>
       <Head><title>桌面</title></Head>
       {/* 桌面壁纸效果 */}
-      <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10" />
+      <div className="absolute inset-0 opacity-10" style={{ backgroundImage: `url(${withBasePath('/grid.svg')})` }} />
 
       {/* 顶部搜索栏 */}
       <div className="relative z-20 pt-4 px-4" ref={searchRef}>

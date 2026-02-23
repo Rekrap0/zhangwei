@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { getPlayerCookies } from '../utils/cookies';
+import { withBasePath } from '../utils/basePath';
 
 const WEIBO_STORAGE_KEY = 'zhangwei_weibo_state';
 const HENGNIAN_CHAT_KEY = 'zhangwei_hengnian_chat';
@@ -277,7 +278,7 @@ export default function Weibo() {
       <header className="bg-[#E6162D] py-3 px-4 flex items-center justify-between shadow-md">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center p-1">
-            <img src="/icon-weibo.svg" alt="微博" className="w-5 h-5" />
+            <img src={withBasePath('/icon-weibo.svg')} alt="微博" className="w-5 h-5" />
           </div>
           <span className="text-white font-bold text-lg">微博</span>
         </div>
@@ -290,7 +291,7 @@ export default function Weibo() {
           <div className="w-full max-w-sm bg-white rounded-2xl shadow-2xl p-8">
             <div className="text-center mb-8">
               <div className="w-16 h-16 bg-[#E6162D] rounded-full flex items-center justify-center mx-auto mb-4 p-3">
-                <img src="/icon-weibo.svg" alt="微博" className="w-10 h-10" />
+                <img src={withBasePath('/icon-weibo.svg')} alt="微博" className="w-10 h-10" />
               </div>
               <h2 className="text-2xl font-bold text-gray-900">登录微博</h2>
               <p className="text-gray-500 text-sm mt-1">随时随地发现新鲜事</p>
@@ -506,7 +507,7 @@ export default function Weibo() {
             {/* 新闻头部 */}
             <div className="bg-[#E6162D] px-6 py-4 flex items-center gap-3">
               <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center p-2">
-                <img src="/icon-weibo.svg" alt="微博" className="w-6 h-6" />
+                <img src={withBasePath('/icon-weibo.svg')} alt="微博" className="w-6 h-6" />
               </div>
               <div className="text-white">
                 <h2 className="font-bold">微博热搜</h2>

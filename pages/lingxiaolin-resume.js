@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { getPlayerCookies } from '../utils/cookies';
+import { withBasePath } from '../utils/basePath';
 
 export default function LingxiaolinResume() {
   const router = useRouter();
@@ -50,7 +51,7 @@ export default function LingxiaolinResume() {
             <div className="absolute -bottom-12 left-6">
               <div className="w-24 h-24 rounded-full border-4 border-white bg-gray-200 overflow-hidden shadow-lg">
                 <div className="w-full h-full bg-gradient-to-br from-pink-100 to-pink-200 flex items-center justify-center">
-                  <img src="/avatarLinxiaolin.png" />
+                  <img src={withBasePath('/avatarLinxiaolin.png')} />
                 </div>
               </div>
             </div>

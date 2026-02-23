@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { getPlayerCookies } from '../utils/cookies';
 import searchablePages from '../data/searchablePages.json';
+import { withBasePath } from '../utils/basePath';
 
 const DISCOVERED_RESULTS_KEY = 'zhangwei_discovered_results';
 const DISCOVERED_CHANNEL = 'zhangwei_discovered_sync';
@@ -98,7 +99,7 @@ export default function Chrome() {
 
     try {
       const response = await fetch(
-        `/api/search?query=${encodeURIComponent(query)}`
+        withBasePath(`/api/search?query=${encodeURIComponent(query)}`)
       );
       const data = await response.json();
 

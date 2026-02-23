@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
+import Link from 'next/link';
 import { getPlayerCookies } from '../utils/cookies';
 
 export default function Jingzhun() {
@@ -68,7 +69,7 @@ export default function Jingzhun() {
       <header className="bg-gradient-to-r from-[#4A9CC7] to-[#3A8BB5] text-white">
         <div className="max-w-4xl mx-auto px-6 py-8">
           <div className="flex items-center gap-2 text-sm mb-4 opacity-80">
-            <a href="/hengyao-news" className="hover:underline">首页</a>
+            <Link href="/hengyao-news" className="hover:underline">首页</Link>
             <span>/</span>
             <span>临床研究</span>
             <span>/</span>

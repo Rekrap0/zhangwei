@@ -1,9 +1,11 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
+import Link from 'next/link';
 import { getPlayerCookies } from '../utils/cookies';
 import { useAIChat } from '../hooks/useAIChat';
 import { SY_SYSTEM_PROMPT, LIJING_SYSTEM_PROMPT } from '../data/aiPrompts';
+import { withBasePath } from '../utils/basePath';
 
 // 聊天客服组件
 const CHAT_STORAGE_KEY = 'zhangwei_hengnian_chat';
@@ -260,7 +262,7 @@ function ChatWidget({ forceOpen }) {
           {/* 头部 */}
           <div className={`${headerColor} px-4 py-3 flex items-center justify-between`}>
             <div className="flex items-center gap-2">
-              <img src="/iconHengnian.png" alt="恒念药业" className="w-8 h-8 rounded-full object-cover" />
+              <img src={withBasePath('/iconHengnian.png')} alt="恒念药业" className="w-8 h-8 rounded-full object-cover" />
               <div>
                 <p className="text-white text-sm font-medium">恒念药业在线客服</p>
                 <p className="text-white/60 text-xs">在线</p>
@@ -416,7 +418,7 @@ export default function Hengnian() {
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center gap-3">
-            <img src="/iconHengnian.png" alt="恒念药业" className="w-10 h-10 rounded-lg object-cover" />
+            <img src={withBasePath('/iconHengnian.png')} alt="恒念药业" className="w-10 h-10 rounded-lg object-cover" />
             <div>
               <h1 className="text-lg font-bold text-gray-900 leading-tight">恒念药业</h1>
               <p className="text-[10px] text-gray-400 leading-none tracking-wider">HENGNIAN PHARMA</p>
@@ -427,10 +429,10 @@ export default function Hengnian() {
           <nav className="hidden md:flex items-center gap-8 text-sm">
             <span className="text-[#2E7D32] font-medium cursor-pointer">首页</span>
             <span className="text-gray-600 hover:text-[#2E7D32] cursor-pointer transition-colors">产品与研发</span>
-            <span className="text-gray-600 hover:text-[#2E7D32] cursor-pointer transition-colors"><a href="/hengyao-news">新闻中心</a></span>
+            <span className="text-gray-600 hover:text-[#2E7D32] cursor-pointer transition-colors"><Link href="/hengyao-news">新闻中心</Link></span>
             <span className="text-gray-600 hover:text-[#2E7D32] cursor-pointer transition-colors">社会责任</span>
             <span className="text-gray-600 hover:text-[#2E7D32] cursor-pointer transition-colors">加入我们</span>
-            <a href="/hengnian-admin" className="hover:text-white cursor-pointer"><span className="text-gray-600 hover:text-[#2E7D32] cursor-pointer transition-colors">管理员登录</span></a>
+            <Link href="/hengnian-admin" className="hover:text-white cursor-pointer"><span className="text-gray-600 hover:text-[#2E7D32] cursor-pointer transition-colors">管理员登录</span></Link>
           </nav>
 
           {/* 语言切换 */}
@@ -459,10 +461,10 @@ export default function Hengnian() {
           <nav className="flex flex-col px-6 pb-4 space-y-1 border-t border-gray-100">
             <span className="text-[#2E7D32] font-medium text-sm py-2 cursor-pointer">首页</span>
             <span className="text-gray-600 hover:text-[#2E7D32] text-sm py-2 cursor-pointer transition-colors">产品与研发</span>
-            <span className="text-gray-600 hover:text-[#2E7D32] text-sm py-2 cursor-pointer transition-colors"><a href="/hengyao-news">新闻中心</a></span>
+            <span className="text-gray-600 hover:text-[#2E7D32] text-sm py-2 cursor-pointer transition-colors"><Link href="/hengyao-news">新闻中心</Link></span>
             <span className="text-gray-600 hover:text-[#2E7D32] text-sm py-2 cursor-pointer transition-colors">社会责任</span>
             <span className="text-gray-600 hover:text-[#2E7D32] text-sm py-2 cursor-pointer transition-colors">加入我们</span>
-            <a href="/hengnian-admin" className="hover:text-white cursor-pointer"><span className="text-gray-600 hover:text-[#2E7D32] text-sm py-2 cursor-pointer transition-colors">管理员登录</span></a>
+            <Link href="/hengnian-admin" className="hover:text-white cursor-pointer"><span className="text-gray-600 hover:text-[#2E7D32] text-sm py-2 cursor-pointer transition-colors">管理员登录</span></Link>
             <div className="flex items-center gap-2 text-xs text-gray-500 pt-2 border-t border-gray-100">
               <span className="text-[#2E7D32] font-medium">中文</span>
               <span>/</span>
@@ -658,7 +660,7 @@ export default function Hengnian() {
         <div className="max-w-6xl mx-auto px-6 py-8">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <img src="/iconHengnian.png" alt="恒念药业" className="w-8 h-8 rounded-lg object-cover" />
+              <img src={withBasePath('/iconHengnian.png')} alt="恒念药业" className="w-8 h-8 rounded-lg object-cover" />
               <div>
                 <p className="font-medium">恒念药业股份有限公司</p>
                 <p className="text-xs text-white/60">Hengnian Pharmaceutical Co., Ltd.</p>
@@ -667,7 +669,7 @@ export default function Hengnian() {
             <div className="flex items-center gap-6 text-sm text-white/80">
               <span className="hover:text-white cursor-pointer">法律声明</span>
               <span className="hover:text-white cursor-pointer">隐私政策</span>
-              <a href="/hengnian-admin" className="hover:text-white cursor-pointer"><b>管理员登录</b></a>
+              <Link href="/hengnian-admin" className="hover:text-white cursor-pointer"><b>管理员登录</b></Link>
             </div>
           </div>
           <div className="mt-6 pt-4 border-t border-white/20 text-center text-xs text-white/50">

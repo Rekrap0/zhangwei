@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { getPlayerCookies, setPlayerCookies, clearPlayerCookies } from '../utils/cookies';
+import { withBasePath } from '../utils/basePath';
 
 export default function StartScreen() {
     const router = useRouter();
@@ -181,7 +182,7 @@ export default function StartScreen() {
             )}
 
             {/* 背景效果 */}
-            <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-5" />
+            <div className="absolute inset-0 opacity-5" style={{ backgroundImage: `url(${withBasePath('/grid.svg')})` }} />
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
 
             {/* 主内容区域 */}
@@ -318,7 +319,7 @@ export default function StartScreen() {
                     )}
                     <div className='flex gap-4'>
                         <button
-                            onClick={() => window.location.href = '/about'}
+                            onClick={() => router.push('/about')}
                             className="mt-4 text-gray-300 hover:text-white underline underline-offset-4 decoration-text-gray-300/50 hover:decoration-white transition-colors text-sm"
                         >
                             关于此项目
