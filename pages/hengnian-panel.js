@@ -86,7 +86,7 @@ export default function HengnianPanel() {
       setGlitchActive(true);
       setTimeout(() => {
         const base64 = typeof window !== 'undefined'
-          ? btoa(window.location.origin + '/hengnian-config')
+          ? btoa(window.location.origin + withBasePath('/hengnian-config'))
           : '';
         setSessionId(base64);
         setTimeout(() => {
