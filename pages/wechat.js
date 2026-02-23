@@ -1780,7 +1780,7 @@ export default function Wechat() {
                     <button
                         onClick={() => {
                             setShowQQNotification(false);
-                            window.open('/qq', '_blank');
+                            window.open(withBasePath('/qq'), '_blank');
                         }}
                         className="w-full bg-white rounded-2xl shadow-2xl shadow-black/20 p-4 flex items-start gap-3 text-left hover:bg-gray-50 active:scale-[0.98] transition-all"
                     >

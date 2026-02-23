@@ -50,7 +50,7 @@ function AppIcon({ iconType }) {
   }
   return (
     <div className={`w-10 h-10 ${icon.bg} rounded-lg flex items-center justify-center ${iconType === 'qq' ? 'p-1' : ''}`}>
-      <img src={icon.src} alt={iconType} className="w-6 h-6" />
+      <img src={withBasePath(icon.src)} alt={iconType} className="w-6 h-6" />
     </div>
   );
 }
@@ -61,7 +61,7 @@ function DesktopAppIcon({ iconType }) {
   if (!icon) return null;
   return (
     <div className={`w-16 h-16 ${icon.bg} rounded-xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform ${iconType === 'qq' ? 'p-2' : ''}`}>
-      <img src={icon.src} alt={iconType} className="w-10 h-10" />
+      <img src={withBasePath(icon.src)} alt={iconType} className="w-10 h-10" />
     </div>
   );
 }
@@ -176,7 +176,7 @@ export default function Desktop() {
   const handleWebSearch = () => {
     if (!searchQuery.trim()) return;
     addIconToDesktop('chrome');
-    window.open(`/chrome?q=${encodeURIComponent(searchQuery)}`, '_blank', 'noopener,noreferrer');
+    window.open(`${withBasePath('/chrome')}?q=${encodeURIComponent(searchQuery)}`, '_blank', 'noopener,noreferrer');
     setSearchQuery('');
     setShowSearchResults(false);
   };
