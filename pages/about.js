@@ -104,9 +104,9 @@ export default function About() {
                             <h3 className="text-white font-medium mb-1">LLM 提供商</h3>
                             <p className="text-gray-400 text-sm mb-2">为游戏内 AI 角色提供回复能力</p>
 
-                            <p className="text-green-400 font-medium">GroqCloud</p>
+                            <p className="text-green-400 font-medium">Moonshot</p>
                             <p className="text-gray-400">对话模型：<code className="text-gray-300 bg-white/10 px-2 py-0.5 rounded text-xs inline">moonshotai/kimi-k2-instruct-0905</code></p>
-                            <p className="text-gray-400">总结模型：<code className="text-gray-300 bg-white/10 px-2 py-0.5 rounded text-xs inline">openai/gpt-oss-20b</code></p>
+                            <p className="text-gray-400">总结模型：<code className="text-gray-300 bg-white/10 px-2 py-0.5 rounded text-xs inline">moonshotai/moonshot-v1-8k</code></p>
                         </div>
                     </div>
                 </section>
