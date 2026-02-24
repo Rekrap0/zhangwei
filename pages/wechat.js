@@ -138,7 +138,7 @@ function Avatar({ contact, size = 'md', onClick }) {
                 className={`${sizeClasses[size]} rounded-lg overflow-hidden flex-shrink-0 hover:opacity-90 transition-opacity`}
             >
                 <img
-                    src={contact.avatarImg}
+                    src={withBasePath(contact.avatarImg)}
                     alt={contact.name || '头像'}
                     className="w-full h-full object-cover"
                 />
@@ -492,7 +492,7 @@ function MomentItem({ moment, contact }) {
                         ×
                     </button>
                     <img 
-                        src={lightboxImg.src} 
+                        src={withBasePath(lightboxImg.src)} 
                         alt={lightboxImg.alt || ''} 
                         className="max-w-full max-h-full object-contain"
                         onClick={(e) => e.stopPropagation()}
@@ -523,7 +523,7 @@ function MomentItem({ moment, contact }) {
                                 >
                                     {img.src && !imgErrors[idx] ? (
                                         <img 
-                                            src={img.src} 
+                                            src={withBasePath(img.src)} 
                                             alt={img.alt || ''} 
                                             className="w-full h-full object-cover" 
                                             onError={() => handleImgError(idx)}
@@ -869,7 +869,7 @@ function StrangerProfileView({ contact, onBack }) {
                 <div className="flex items-center gap-4 pb-4 border-b border-gray-200">
                     <div className="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 bg-gray-100">
                         <img
-                            src={contact.avatarImg}
+                            src={withBasePath(contact.avatarImg)}
                             alt={contact.name}
                             className="w-full h-full object-cover"
                         />

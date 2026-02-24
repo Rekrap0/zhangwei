@@ -1286,7 +1286,7 @@ function QZonePostItem({ post, nickname, avatarSrc }) {
                             className="mt-2 block rounded-lg overflow-hidden max-w-[200px]"
                         >
                             <img
-                                src={post.image}
+                                src={withBasePath(post.image)}
                                 alt="图片"
                                 className="w-full h-auto object-cover rounded-lg"
                             />
@@ -1307,7 +1307,7 @@ function QZonePostItem({ post, nickname, avatarSrc }) {
                                 </svg>
                             </button>
                             <img
-                                src={post.image}
+                                src={withBasePath(post.image)}
                                 alt="图片"
                                 className="max-w-[90vw] max-h-[90vh] object-contain rounded-lg shadow-2xl"
                                 onClick={(e) => e.stopPropagation()}
