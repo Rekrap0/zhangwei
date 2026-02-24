@@ -1,6 +1,6 @@
 /**
- * Groq Chat API Route
- * Proxies chat requests to GroqCloud
+ * Moonshot Chat API Route
+ * Proxies chat requests to Moonshot AI (Kimi)
  */
 
 export default async function handler(req, res) {
@@ -16,18 +16,18 @@ export default async function handler(req, res) {
 
   // Select model based on purpose
   const model = purpose === 'summarize'
-    ? 'openai/gpt-oss-20b'
-    : 'moonshotai/kimi-k2-instruct-0905';
+    ? 'moonshot-v1-8k'
+    : 'kimi-k2-0905-preview';
 
-  const apiKey = process.env.GROQ_API_KEY;
+  const apiKey = process.env.MOONSHOT_API_KEY;
   
   if (!apiKey) {
-    console.error('[Chat API] GROQ_API_KEY not configured');
+    console.error('[Chat API] MOONSHOT_API_KEY not configured');
     return res.status(500).json({ error: 'API key not configured' });
   }
 
   try {
-    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    const response = await fetch('https://api.moonshot.cn/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -37,14 +37,14 @@ export default async function handler(req, res) {
         model,
         messages,
         temperature: 0.6,
-        max_tokens: purpose === 'summarize' ? 512 : 1024,
+        max_completion_tokens: purpose === 'summarize' ? 512 : 1024,
       }),
     });
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('[Chat API] Groq API error:', response.status, errorText);
-      return res.status(response.status).json({ error: 'Groq API request failed', details: errorText });
+      console.error('[Chat API] Moonshot API error:', response.status, errorText);
+      return res.status(response.status).json({ error: 'Moonshot API request failed', details: errorText });
     }
 
     const data = await response.json();
@@ -55,7 +55,7 @@ export default async function handler(req, res) {
 
     return res.status(200).json({ content });
   } catch (error) {
-    console.error('[Chat API] Request failed:', error);
+    console.error('[Chat API] Moonshot request failed:', error);
     return res.status(500).json({ error: 'Internal server error' });
   }
 }
