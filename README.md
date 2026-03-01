@@ -4,7 +4,7 @@
 
 > [!IMPORTANT]
 > 本分支使用 **Groq Cloud** 作为 AI 推理服务。Groq Cloud 在部分地区（如中国大陆）**无法直接访问**。
-> 如果你所在的地区无法使用 Groq Cloud，请切换到 [cn-deploy 分支](/cn-deploy)，该分支使用 Moonshot AI（Kimi）API，国内可直接访问。
+> 如果你所在的地区无法使用 Groq Cloud，请切换到 [cn-deploy 分支](https://github.com/Rekrap0/zhangwei/tree/cn-deploy)，该分支使用 Moonshot AI（Kimi）API，国内可直接访问。
 
 ## 技术栈
 
